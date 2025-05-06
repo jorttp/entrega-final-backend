@@ -1,8 +1,8 @@
-package co.edo.co.lilfac.entity;
+package co.edu.co.lilfac.entity;
 
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilNumerico;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilObjeto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 
 public final class UsuarioEntity {
 	private int id;

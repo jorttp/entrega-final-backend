@@ -1,8 +1,8 @@
-package co.edo.co.lilfac.entity;
+package co.edu.co.lilfac.entity;
 import java.util.UUID;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilObjeto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilTexto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilUUID;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public final class DepartamentoEntity {
 	

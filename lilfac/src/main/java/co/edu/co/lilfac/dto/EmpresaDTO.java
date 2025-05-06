@@ -1,11 +1,11 @@
-package co.edo.co.lilfac.dto;
+package co.edu.co.lilfac.dto;
 
 import java.util.UUID;
 
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilNumerico;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilObjeto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilTexto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilUUID;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public final class EmpresaDTO {
 	private UUID id;

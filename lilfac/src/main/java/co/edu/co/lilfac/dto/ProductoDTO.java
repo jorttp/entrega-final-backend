@@ -1,38 +1,38 @@
-package co.edo.co.lilfac.entity;
+package co.edu.co.lilfac.dto;
 
 import java.util.UUID;
 
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilNumerico;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilObjeto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilTexto;
-import co.edu.co.onlinetest.crosscutting.utilitarios.UtilUUID;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
-public final class ProductoEntity {
+public final class ProductoDTO {
 	private UUID id;
 	private String nombre;
 	private int codigo;
 	private String caracteristicas;
 	
-	public ProductoEntity() {
+	public ProductoDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
 		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());		
 	}
 	
-	public ProductoEntity (final UUID id, final String nombre, final int codigo, final String caracteristicas){
+	public ProductoDTO (final UUID id, final String nombre, final int codigo, final String caracteristicas){
 		setId(id);
 		setNombre(nombre);
 		setCodigo(codigo);
 		setCaracteristicas(caracteristicas);
 	}
 	
-	public static ProductoEntity obtenerValorDefecto() {
-		return new ProductoEntity();
+	public static ProductoDTO obtenerValorDefecto() {
+		return new ProductoDTO();
 	}
 	
-	public static ProductoEntity obtenerValorDefecto(final ProductoEntity producto ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(producto, new ProductoEntity());
+	public static ProductoDTO obtenerValorDefecto(final ProductoDTO producto ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(producto, new ProductoDTO());
 	}
 
 	public UUID getId() {
