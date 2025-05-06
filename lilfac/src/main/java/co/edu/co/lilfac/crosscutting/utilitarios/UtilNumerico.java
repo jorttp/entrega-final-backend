@@ -12,19 +12,19 @@ public final class UtilNumerico {
 		return instancia;
 	}
 	
-	public boolean esNula(final int valor) {
+	public boolean esNula(final Integer valor) {
 		return UtilObjeto.getInstance().esNulo(valor);
 	}
 	
-	public static int obtenerValorDefecto(final int valorOriginal, final int valorDefecto) {
+	public static Integer obtenerValorDefecto(final Integer valorOriginal, final Integer valorDefecto) {
 		return UtilObjeto.getInstance().obtenerValorDefecto(valorOriginal, valorDefecto);
 	}
 	
-	public static int obtenerValorDefecto (final int valor) {
+	public static Integer obtenerValorDefecto (final Integer valor) {
 		return obtenerValorDefecto(valor, VACIO);
 	}
 	
-	public int obtenerValorDefecto () {
+	public Integer obtenerValorDefecto () {
 		return VACIO;
 	}
 		

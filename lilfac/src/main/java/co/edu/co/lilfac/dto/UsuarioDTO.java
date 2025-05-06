@@ -4,7 +4,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 
-public final class UsuarioDTO {
+public class UsuarioDTO {
 	private int id;
 	private String nombre;
 	private String apellido;
