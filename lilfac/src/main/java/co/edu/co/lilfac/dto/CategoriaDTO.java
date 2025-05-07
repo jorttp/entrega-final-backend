@@ -8,13 +8,15 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 public final class CategoriaDTO {
 	private UUID id;
 	private String nombre;
+	private String descripcion;
 	
 	public CategoriaDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public CategoriaDTO(final UUID id, final String nombre) {
+	public CategoriaDTO(final UUID id, final String nombre, final String descripcion) {
 		setId(id);
 		setNombre(nombre);
 	}
@@ -33,6 +35,14 @@ public final class CategoriaDTO {
 
 	public void setNombre(String nombre) {
 		this.nombre = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombre);
+	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(descripcion);
 	}
 
 }
