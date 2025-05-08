@@ -17,7 +17,7 @@ public class PedidoDTO {
 	private float restante;
 	private CiudadDTO ciudad;
 	private ClienteDTO cliente;
-	private ProductoDTO producto;
+	private EmpleadoDTO empleado;
 	
 	public PedidoDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -29,10 +29,10 @@ public class PedidoDTO {
 		setRestante(UtilFloat.getInstance().obtenerValorDefecto());
 		setCiudad(CiudadDTO.obtenerValorDefecto());
 		setCliente(ClienteDTO.obtenerValorDefecto());
-		setProducto(ProductoDTO.obtenerValorDefecto());
+		setEmpleado(EmpleadoDTO.obtenerValorDefecto());
 	}
 	
-	public PedidoDTO(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadDTO ciudad, final ClienteDTO cliente, final ProductoDTO producto) {
+	public PedidoDTO(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadDTO ciudad, final ClienteDTO cliente, final EmpleadoDTO empleado) {
 		setId(id);
 		setFechaReserva(fechaReserva);
 		setFechaVencimiento(fechaVencimiento);
@@ -42,7 +42,7 @@ public class PedidoDTO {
 		setRestante(restante);
 		setCiudad(ciudad);
 		setCliente(cliente);
-		setProducto(producto);
+		setEmpleado(empleado);
 	}
 	
 	public static PedidoDTO obtenerValorDefecto() {
@@ -125,12 +125,12 @@ public class PedidoDTO {
 		this.cliente = ClienteDTO.obtenerValorDefecto(cliente);
 	}
 
-	public ProductoDTO getProducto() {
-		return producto;
+	public EmpleadoDTO getEmpleado() {
+		return empleado;
 	}
 
-	public void setProducto(ProductoDTO producto) {
-		this.producto = ProductoDTO.obtenerValorDefecto(producto);
+	public void setEmpleado(EmpleadoDTO empleado) {
+		this.empleado = EmpleadoDTO.obtenerValorDefecto(empleado);
 	}
 
 }

@@ -14,7 +14,7 @@ public class InventarioEntity {
 	private int unidadesDisponibles;
 	private EmpresaEntity empresa;
 	private ProductoEntity producto;
-	private float costoUnitario;
+	private HistorialCostoEntity historialCosto;
 	
 	public InventarioEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -24,10 +24,10 @@ public class InventarioEntity {
 		setUnidadesDisponibles(UtilNumerico.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaEntity.obtenerValorDefecto());
 		setProducto(ProductoEntity.obtenerValorDefecto());
-		setCostoUnitario(UtilFloat.getInstance().obtenerValorDefecto());
+		setHistorialCosto(HistorialCostoEntity.obtenerValorDefecto());
 	}
 	
-	public InventarioEntity(final UUID id, final int totalUnidades, final int unidadesAlquiladas, final int unidadesAfectadas, final int unidadesDisponibles, final EmpresaEntity empresa, final ProductoEntity producto, final float costoUnitario) {
+	public InventarioEntity(final UUID id, final int totalUnidades, final int unidadesAlquiladas, final int unidadesAfectadas, final int unidadesDisponibles, final EmpresaEntity empresa, final ProductoEntity producto, final HistorialCostoEntity historialCosto) {
 		setId(id);
 		setTotalUnidades(totalUnidades);
 		setUnidadesAlquiladas(unidadesAlquiladas);
@@ -35,7 +35,7 @@ public class InventarioEntity {
 		setUnidadesDisponibles(unidadesDisponibles);
 		setEmpresa(empresa);
 		setProducto(producto);
-		setCostoUnitario(costoUnitario);
+		setHistorialCosto(historialCosto);
 	}
 
 	public UUID getId() {
@@ -94,12 +94,12 @@ public class InventarioEntity {
 		this.producto = ProductoEntity.obtenerValorDefecto(producto);
 	}
 
-	public float getCostoUnitario() {
-		return costoUnitario;
+	public HistorialCostoEntity getHistorialCosto() {
+		return historialCosto;
 	}
 
-	public void setCostoUnitario(float costoUnitario) {
-		this.costoUnitario = UtilFloat.obtenerValorDefecto(costoUnitario);
+	public void setHistorialCosto(HistorialCostoEntity historialCosto) {
+		this.historialCosto = HistorialCostoEntity.obtenerValorDefecto(historialCosto);
 	}
 
 }

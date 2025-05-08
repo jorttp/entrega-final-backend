@@ -5,6 +5,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilBoolean;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
@@ -35,6 +36,14 @@ public class HistorialCostoEntity {
 		setEstado(estado);
 		setCosto(costo);
 		setProducto(producto);
+	}
+	
+	public static HistorialCostoEntity obtenerValorDefecto() {
+		return new HistorialCostoEntity();
+	}
+	
+	public static HistorialCostoEntity obtenerValorDefecto(final HistorialCostoEntity historialCosto ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, new HistorialCostoEntity());
 	}
 
 	public UUID getId() {

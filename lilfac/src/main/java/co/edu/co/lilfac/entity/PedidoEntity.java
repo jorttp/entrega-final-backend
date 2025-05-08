@@ -17,7 +17,7 @@ public class PedidoEntity {
 	private float restante;
 	private CiudadEntity ciudad;
 	private ClienteEntity cliente;
-	private ProductoEntity producto;
+	private EmpleadoEntity empleado;
 	
 	public PedidoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -29,10 +29,10 @@ public class PedidoEntity {
 		setRestante(UtilFloat.getInstance().obtenerValorDefecto());
 		setCiudad(CiudadEntity.obtenerValorDefecto());
 		setCliente(ClienteEntity.obtenerValorDefecto());
-		setProducto(ProductoEntity.obtenerValorDefecto());
+		setEmpleado(EmpleadoEntity.obtenerValorDefecto());
 	}
 	
-	public PedidoEntity(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadEntity ciudad, final ClienteEntity cliente, final ProductoEntity producto) {
+	public PedidoEntity(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadEntity ciudad, final ClienteEntity cliente, final EmpleadoEntity empleado) {
 		setId(id);
 		setFechaReserva(fechaReserva);
 		setFechaVencimiento(fechaVencimiento);
@@ -42,7 +42,7 @@ public class PedidoEntity {
 		setRestante(restante);
 		setCiudad(ciudad);
 		setCliente(cliente);
-		setProducto(producto);
+		setEmpleado(empleado);
 	}
 	
 	public static PedidoEntity obtenerValorDefecto() {
@@ -125,12 +125,12 @@ public class PedidoEntity {
 		this.cliente = ClienteEntity.obtenerValorDefecto(cliente);
 	}
 
-	public ProductoEntity getProducto() {
-		return producto;
+	public EmpleadoEntity getEmpleado() {
+		return empleado;
 	}
 
-	public void setProducto(ProductoEntity producto) {
-		this.producto = ProductoEntity.obtenerValorDefecto(producto);
+	public void setEmpleado(EmpleadoEntity empleado) {
+		this.empleado = EmpleadoEntity.obtenerValorDefecto(empleado);
 	}
 
 }

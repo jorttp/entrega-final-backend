@@ -6,7 +6,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
-public class InventarioEntity {
+public class InventarioDTO {
 	private UUID id;
 	private int totalUnidades;
 	private int unidadesAlquiladas;
@@ -14,9 +14,9 @@ public class InventarioEntity {
 	private int unidadesDisponibles;
 	private EmpresaDTO empresa;
 	private ProductoDTO producto;
-	private float costoUnitario;
+	private HistorialCostoDTO historialCosto;
 	
-	public InventarioEntity() {
+	public InventarioDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setTotalUnidades(UtilNumerico.getInstance().obtenerValorDefecto());
 		setUnidadesAlquiladas(UtilNumerico.getInstance().obtenerValorDefecto());
@@ -24,10 +24,10 @@ public class InventarioEntity {
 		setUnidadesDisponibles(UtilNumerico.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaDTO.obtenerValorDefecto());
 		setProducto(ProductoDTO.obtenerValorDefecto());
-		setCostoUnitario(UtilFloat.getInstance().obtenerValorDefecto());
+		setHistorialCosto(HistorialCostoDTO.obtenerValorDefecto());
 	}
 	
-	public InventarioEntity(final UUID id, final int totalUnidades, final int unidadesAlquiladas, final int unidadesAfectadas, final int unidadesDisponibles, final EmpresaDTO empresa, final ProductoDTO producto, final float costoUnitario) {
+	public InventarioDTO(final UUID id, final int totalUnidades, final int unidadesAlquiladas, final int unidadesAfectadas, final int unidadesDisponibles, final EmpresaDTO empresa, final ProductoDTO producto, final HistorialCostoDTO historialCosto) {
 		setId(id);
 		setTotalUnidades(totalUnidades);
 		setUnidadesAlquiladas(unidadesAlquiladas);
@@ -35,7 +35,7 @@ public class InventarioEntity {
 		setUnidadesDisponibles(unidadesDisponibles);
 		setEmpresa(empresa);
 		setProducto(producto);
-		setCostoUnitario(costoUnitario);
+		setHistorialCosto(historialCosto);
 	}
 
 	public UUID getId() {
@@ -94,12 +94,12 @@ public class InventarioEntity {
 		this.producto = ProductoDTO.obtenerValorDefecto(producto);
 	}
 
-	public float getCostoUnitario() {
-		return costoUnitario;
+	public HistorialCostoDTO getHistorialCosto() {
+		return historialCosto;
 	}
 
-	public void setCostoUnitario(float costoUnitario) {
-		this.costoUnitario = UtilFloat.obtenerValorDefecto(costoUnitario);
+	public void setHistorialCosto(HistorialCostoDTO historialCosto) {
+		this.historialCosto = HistorialCostoDTO.obtenerValorDefecto(historialCosto);
 	}
 
 }

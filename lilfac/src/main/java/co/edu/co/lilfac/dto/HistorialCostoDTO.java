@@ -5,8 +5,10 @@ import java.util.UUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilBoolean;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
+import co.edu.co.lilfac.entity.HistorialCostoEntity;
 
 public class HistorialCostoDTO {
 	private UUID id;
@@ -35,6 +37,14 @@ public class HistorialCostoDTO {
 		setEstado(estado);
 		setCosto(costo);
 		setProducto(producto);
+	}
+	
+	public static HistorialCostoDTO obtenerValorDefecto() {
+		return new HistorialCostoDTO();
+	}
+	
+	public static HistorialCostoDTO obtenerValorDefecto(final HistorialCostoDTO historialCosto ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, new HistorialCostoDTO());
 	}
 
 	public UUID getId() {
