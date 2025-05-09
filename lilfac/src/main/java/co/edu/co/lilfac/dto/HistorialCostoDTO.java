@@ -43,63 +43,70 @@ public class HistorialCostoDTO {
 	}
 	
 	public static HistorialCostoDTO obtenerValorDefecto(final HistorialCostoDTO historialCosto ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, new HistorialCostoDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public HistorialCostoDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public int getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(int codigo) {
+	public HistorialCostoDTO setCodigo(int codigo) {
 		this.codigo = UtilNumerico.obtenerValorDefecto(codigo);
+		return this;
 	}
 
 	public String getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(String fechaInicio) {
+	public HistorialCostoDTO setFechaInicio(String fechaInicio) {
 		this.fechaInicio = UtilTexto.getInstance().obtenerValorDefecto(fechaInicio);
+		return this;
 	}
 
 	public String getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(String fechaFin) {
+	public HistorialCostoDTO setFechaFin(String fechaFin) {
 		this.fechaFin = UtilTexto.getInstance().obtenerValorDefecto(fechaFin);
+		return this;
 	}
 
 	public boolean isEstado() {
 		return estado;
 	}
 
-	public void setEstado(boolean estado) {
+	public HistorialCostoDTO setEstado(boolean estado) {
 		this.estado = UtilBoolean.obtenerValorDefecto(estado);
+		return this;
 	}
 
 	public float getCosto() {
 		return costo;
 	}
 
-	public void setCosto(float costo) {
+	public HistorialCostoDTO setCosto(float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
+		return this;
 	}
 
 	public ProductoDTO getProducto() {
 		return producto;
 	}
 
-	public void setProducto(ProductoDTO producto) {
+	public HistorialCostoDTO setProducto(ProductoDTO producto) {
 		this.producto = ProductoDTO.obtenerValorDefecto(producto);
+		return this;
 	}
 
 }

@@ -39,8 +39,8 @@ public class RecepcionEntity {
 		return new RecepcionEntity();
 	}
 	
-	public static RecepcionEntity obtenerValorDefecto(final RecepcionEntity pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new RecepcionEntity());
+	public static RecepcionEntity obtenerValorDefecto(final RecepcionEntity recepcion ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(recepcion, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

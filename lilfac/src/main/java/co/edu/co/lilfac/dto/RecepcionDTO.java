@@ -39,64 +39,71 @@ public class RecepcionDTO {
 		return new RecepcionDTO();
 	}
 	
-	public static RecepcionDTO obtenerValorDefecto(final RecepcionDTO pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new RecepcionDTO());
+	public static RecepcionDTO obtenerValorDefecto(final RecepcionDTO recepcion ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(recepcion, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public RecepcionDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(String fecha) {
+	public RecepcionDTO setFecha(String fecha) {
 		this.fecha = UtilTexto.getInstance().obtenerValorDefecto(fecha);
+		return this;
 	}
 	
 	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public RecepcionDTO setEstado(String estado) {
 		this.estado = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(estado);
+		return this;
 	}
 
 	public String getDireccion() {
 		return direccion;
 	}
 
-	public void setDireccion(String direccion) {
+	public RecepcionDTO setDireccion(String direccion) {
 		this.direccion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccion);
+		return this;
 	}
 
 	public CiudadDTO getCiudad() {
 		return ciudad;
 	}
 
-	public void setCiudad(CiudadDTO ciudad) {
+	public RecepcionDTO setCiudad(CiudadDTO ciudad) {
 		this.ciudad = CiudadDTO.obtenerValorDefecto(ciudad);
+		return this;
 	}
 
 	public EmpleadoDTO getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(EmpleadoDTO empleado) {
+	public RecepcionDTO setEmpleado(EmpleadoDTO empleado) {
 		this.empleado = EmpleadoDTO.obtenerValorDefecto(empleado);
+		return this;
 	}
 
 	public EntregaDTO getEntrega() {
 		return entrega;
 	}
 
-	public void setEntrega(EntregaDTO entrega) {
+	public RecepcionDTO setEntrega(EntregaDTO entrega) {
 		this.entrega = EntregaDTO.obtenerValorDefecto(entrega);
+		return this;
 	}
 
 }

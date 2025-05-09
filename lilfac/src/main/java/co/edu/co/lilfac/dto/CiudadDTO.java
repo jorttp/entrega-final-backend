@@ -34,7 +34,7 @@ public final class CiudadDTO {
 	}
 	
 	public static CiudadDTO obtenerValorDefecto(final CiudadDTO ciudad ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(ciudad, new CiudadDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(ciudad, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

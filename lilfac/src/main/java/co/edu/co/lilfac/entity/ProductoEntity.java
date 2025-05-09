@@ -32,7 +32,7 @@ public final class ProductoEntity {
 	}
 	
 	public static ProductoEntity obtenerValorDefecto(final ProductoEntity producto ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(producto, new ProductoEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(producto, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

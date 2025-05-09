@@ -5,6 +5,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 
 public class CostoAdicionalDTO {
 	private UUID id;
@@ -33,13 +34,22 @@ public class CostoAdicionalDTO {
 		setDescripcion(descripcion);
 		setRecepcion(recepcion);
 	}
+	
+	public static CostoAdicionalDTO obtenerValorDefecto() {
+		return new CostoAdicionalDTO();
+	}
+	
+	public static CostoAdicionalDTO obtenerValorDefecto(final CostoAdicionalDTO costoAdicional ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(costoAdicional , obtenerValorDefecto());
+	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public CostoAdicionalDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 	
 	public float getValor() {

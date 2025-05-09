@@ -5,6 +5,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 
 public class CostoAdicionalEntity {
 	private UUID id;
@@ -32,6 +33,14 @@ public class CostoAdicionalEntity {
 		setValor(valor);
 		setDescripcion(descripcion);
 		setRecepcion(recepcion);
+	}
+	
+	public static CostoAdicionalEntity obtenerValorDefecto() {
+		return new CostoAdicionalEntity();
+	}
+	
+	public static CostoAdicionalEntity obtenerValorDefecto(final CostoAdicionalEntity costoAdicional ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(costoAdicional , obtenerValorDefecto());
 	}
 
 	public UUID getId() {

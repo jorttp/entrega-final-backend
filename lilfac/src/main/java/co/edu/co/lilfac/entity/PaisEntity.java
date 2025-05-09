@@ -31,7 +31,7 @@ public final class PaisEntity {
 	}
 	
 	public static PaisEntity obtenerValorDefecto(final PaisEntity pais ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pais, new PaisEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(pais, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

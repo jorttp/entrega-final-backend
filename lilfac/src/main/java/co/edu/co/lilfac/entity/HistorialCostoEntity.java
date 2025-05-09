@@ -43,7 +43,7 @@ public class HistorialCostoEntity {
 	}
 	
 	public static HistorialCostoEntity obtenerValorDefecto(final HistorialCostoEntity historialCosto ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, new HistorialCostoEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(historialCosto, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

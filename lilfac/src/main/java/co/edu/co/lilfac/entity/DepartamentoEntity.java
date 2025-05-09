@@ -33,7 +33,7 @@ public final class DepartamentoEntity {
 	}
 	
 	public static DepartamentoEntity obtenerValorDefecto(final DepartamentoEntity departamento ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(departamento, new DepartamentoEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(departamento, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

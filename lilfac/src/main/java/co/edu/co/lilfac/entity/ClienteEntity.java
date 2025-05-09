@@ -41,7 +41,7 @@ public class ClienteEntity {
 	}
 	
 	public static ClienteEntity obtenerValorDefecto(final ClienteEntity cliente ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(cliente, new ClienteEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(cliente, obtenerValorDefecto());
 	}
 
 	public int getId() {

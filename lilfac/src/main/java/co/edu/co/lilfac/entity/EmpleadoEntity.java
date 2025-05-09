@@ -36,7 +36,7 @@ public class EmpleadoEntity {
 	}
 	
 	public static EmpleadoEntity obtenerValorDefecto(final EmpleadoEntity empleado ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(empleado, new EmpleadoEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(empleado, obtenerValorDefecto());
 	}
 
 	public int getId() {

@@ -39,8 +39,8 @@ public class EntregaEntity {
 		return new EntregaEntity();
 	}
 	
-	public static EntregaEntity obtenerValorDefecto(final EntregaEntity pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new EntregaEntity());
+	public static EntregaEntity obtenerValorDefecto(final EntregaEntity entrega ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(entrega, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

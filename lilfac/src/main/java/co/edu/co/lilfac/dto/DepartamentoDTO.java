@@ -33,7 +33,7 @@ public final class DepartamentoDTO {
 	}
 	
 	public static DepartamentoDTO obtenerValorDefecto(final DepartamentoDTO departamento ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(departamento, new DepartamentoDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(departamento, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

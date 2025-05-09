@@ -39,64 +39,71 @@ public class EntregaDTO {
 		return new EntregaDTO();
 	}
 	
-	public static EntregaDTO obtenerValorDefecto(final EntregaDTO pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new EntregaDTO());
+	public static EntregaDTO obtenerValorDefecto(final EntregaDTO entrega ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(entrega, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public EntregaDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(String fecha) {
+	public EntregaDTO setFecha(String fecha) {
 		this.fecha = UtilTexto.getInstance().obtenerValorDefecto(fecha);
+		return this;
 	}
 	
 	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public EntregaDTO setEstado(String estado) {
 		this.estado = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(estado);
+		return this;
 	}
 
 	public String getDireccion() {
 		return direccion;
 	}
 
-	public void setDireccion(String direccion) {
+	public EntregaDTO setDireccion(String direccion) {
 		this.direccion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccion);
+		return this;
 	}
 
 	public CiudadDTO getCiudad() {
 		return ciudad;
 	}
 
-	public void setCiudad(CiudadDTO ciudad) {
+	public EntregaDTO setCiudad(CiudadDTO ciudad) {
 		this.ciudad = CiudadDTO.obtenerValorDefecto(ciudad);
+		return this;
 	}
 
 	public EmpleadoDTO getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(EmpleadoDTO empleado) {
+	public EntregaDTO setEmpleado(EmpleadoDTO empleado) {
 		this.empleado = EmpleadoDTO.obtenerValorDefecto(empleado);
+		return this;
 	}
 
 	public PedidoDTO getPedido() {
 		return pedido;
 	}
 
-	public void setPedido(PedidoDTO pedido) {
+	public EntregaDTO setPedido(PedidoDTO pedido) {
 		this.pedido = PedidoDTO.obtenerValorDefecto(pedido);
+		return this;
 	}
 
 }

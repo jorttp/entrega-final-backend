@@ -27,7 +27,7 @@ public final class CategoriaEntity {
 	}
 	
 	public static CategoriaEntity obtenerValorDefecto(final CategoriaEntity categoria ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(categoria, new CategoriaEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(categoria, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

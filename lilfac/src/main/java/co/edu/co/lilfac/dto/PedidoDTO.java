@@ -50,87 +50,97 @@ public class PedidoDTO {
 	}
 	
 	public static PedidoDTO obtenerValorDefecto(final PedidoDTO pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new PedidoDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public PedidoDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public String getFechaReserva() {
 		return fechaReserva;
 	}
 
-	public void setFechaReserva(String fechaReserva) {
+	public PedidoDTO setFechaReserva(String fechaReserva) {
 		this.fechaReserva = UtilTexto.getInstance().obtenerValorDefecto(fechaReserva);
+		return this;
 	}
 
 	public String getFechaVencimiento() {
 		return fechaVencimiento;
 	}
 
-	public void setFechaVencimiento(String fechaVencimiento) {
+	public PedidoDTO setFechaVencimiento(String fechaVencimiento) {
 		this.fechaVencimiento = UtilTexto.getInstance().obtenerValorDefecto(fechaVencimiento);
+		return this;
 	}
 
 	public String getDireccionEntrega() {
 		return direccionEntrega;
 	}
 
-	public void setDireccionEntrega(String direccionEntrega) {
+	public PedidoDTO setDireccionEntrega(String direccionEntrega) {
 		this.direccionEntrega = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionEntrega);
+		return this;
 	}
 
 	public float getCosto() {
 		return costo;
 	}
 
-	public void setCosto(float costo) {
+	public PedidoDTO setCosto(float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
+		return this;
 	}
 
 	public float getAbono() {
 		return abono;
 	}
 
-	public void setAbono(float abono) {
+	public PedidoDTO setAbono(float abono) {
 		this.abono = UtilFloat.obtenerValorDefecto(abono);
+		return this;
 	}
 
 	public float getRestante() {
 		return restante;
 	}
 
-	public void setRestante(float restante) {
+	public PedidoDTO setRestante(float restante) {
 		this.restante = UtilFloat.obtenerValorDefecto(restante);
+		return this;
 	}
 
 	public CiudadDTO getCiudad() {
 		return ciudad;
 	}
 
-	public void setCiudad(CiudadDTO ciudad) {
+	public PedidoDTO setCiudad(CiudadDTO ciudad) {
 		this.ciudad = CiudadDTO.obtenerValorDefecto(ciudad);
+		return this;
 	}
 
 	public ClienteDTO getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(ClienteDTO cliente) {
+	public PedidoDTO setCliente(ClienteDTO cliente) {
 		this.cliente = ClienteDTO.obtenerValorDefecto(cliente);
+		return this;
 	}
 
 	public EmpleadoDTO getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(EmpleadoDTO empleado) {
+	public PedidoDTO setEmpleado(EmpleadoDTO empleado) {
 		this.empleado = EmpleadoDTO.obtenerValorDefecto(empleado);
+		return this;
 	}
 
 }

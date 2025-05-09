@@ -50,7 +50,7 @@ public class PedidoEntity {
 	}
 	
 	public static PedidoEntity obtenerValorDefecto(final PedidoEntity pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new PedidoEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

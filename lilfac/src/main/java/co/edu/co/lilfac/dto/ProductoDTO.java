@@ -32,39 +32,43 @@ public final class ProductoDTO {
 	}
 	
 	public static ProductoDTO obtenerValorDefecto(final ProductoDTO producto ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(producto, new ProductoDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(producto, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(final UUID id) {
+	public ProductoDTO setId(final UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public String getNombre() {
 		return nombre;
 	}
 
-	public void setNombre(final String nombre) {
+	public ProductoDTO setNombre(final String nombre) {
 		this.nombre = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombre);
+		return this;
 	}
 
 	public int getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(final int codigo) {
+	public ProductoDTO setCodigo(final int codigo) {
 		this.codigo = UtilNumerico.obtenerValorDefecto(codigo);
+		return this;
 	}
 
 	public String getCaracteristicas() {
 		return caracteristicas;
 	}
 
-	public void setCaracteristicas(final String caracteristicas) {
+	public ProductoDTO setCaracteristicas(final String caracteristicas) {
 		this.caracteristicas = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(caracteristicas);
+		return this;
 	}
 	
 }

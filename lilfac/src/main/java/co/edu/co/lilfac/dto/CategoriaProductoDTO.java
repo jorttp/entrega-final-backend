@@ -2,6 +2,7 @@ package co.edu.co.lilfac.dto;
 
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 
@@ -29,6 +30,14 @@ public class CategoriaProductoDTO {
 		setCategoria(categoria);
 	}
 
+	public static CategoriaProductoDTO obtenerValorDefecto() {
+		return new CategoriaProductoDTO();
+	}
+	
+	public static CategoriaProductoDTO obtenerValorDefecto(final CategoriaProductoDTO categoriaProducto ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(categoriaProducto, obtenerValorDefecto());
+	}
+	
 	public UUID getId() {
 		return id;
 	}

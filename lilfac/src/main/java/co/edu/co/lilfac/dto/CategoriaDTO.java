@@ -27,31 +27,34 @@ public final class CategoriaDTO {
 	}
 	
 	public static CategoriaDTO obtenerValorDefecto(final CategoriaDTO categoria ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(categoria, new CategoriaDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(categoria, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public CategoriaDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public String getNombre() {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
+	public CategoriaDTO setNombre(String nombre) {
 		this.nombre = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombre);
+		return this;
 	}
 	
 	public String getDescripcion() {
 		return descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+	public CategoriaDTO setDescripcion(String descripcion) {
 		this.descripcion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(descripcion);
+		return this;
 	}
 
 }

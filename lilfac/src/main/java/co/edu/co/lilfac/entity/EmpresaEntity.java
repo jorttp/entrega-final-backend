@@ -40,7 +40,7 @@ public final class EmpresaEntity {
 	}
 	
 	public static EmpresaEntity obtenerValorDefecto(final EmpresaEntity empresa ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(empresa, new EmpresaEntity());
+		return UtilObjeto.getInstance().obtenerValorDefecto(empresa, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

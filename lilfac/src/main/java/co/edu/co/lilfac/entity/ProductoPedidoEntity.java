@@ -3,6 +3,7 @@ package co.edu.co.lilfac.entity;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 
@@ -33,6 +34,15 @@ public class ProductoPedidoEntity {
 		setProducto(producto);
 		setPedido(pedido);
 	}
+	
+	public static ProductoPedidoEntity obtenerValorDefecto() {
+		return new ProductoPedidoEntity();
+	}
+	
+	public static ProductoPedidoEntity obtenerValorDefecto(final ProductoPedidoEntity productoPedido ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(productoPedido, obtenerValorDefecto());
+	}
+
 
 	public UUID getId() {
 		return id;

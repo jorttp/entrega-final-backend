@@ -3,6 +3,7 @@ package co.edu.co.lilfac.dto;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class InventarioDTO {
@@ -36,69 +37,85 @@ public class InventarioDTO {
 		setProducto(producto);
 		setHistorialCosto(historialCosto);
 	}
+	
+	public static InventarioDTO obtenerValorDefecto() {
+		return new InventarioDTO();
+	}
+	
+	public static InventarioDTO obtenerValorDefecto(final InventarioDTO inventario ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(inventario, obtenerValorDefecto());
+	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public InventarioDTO setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
+		return this;
 	}
 
 	public int getTotalUnidades() {
 		return totalUnidades;
 	}
 
-	public void setTotalUnidades(int totalUnidades) {
+	public InventarioDTO setTotalUnidades(int totalUnidades) {
 		this.totalUnidades = UtilNumerico.obtenerValorDefecto(totalUnidades);
+		return this;
 	}
 
 	public int getUnidadesAlquiladas() {
 		return unidadesAlquiladas;
 	}
 
-	public void setUnidadesAlquiladas(int unidadesAlquiladas) {
+	public InventarioDTO setUnidadesAlquiladas(int unidadesAlquiladas) {
 		this.unidadesAlquiladas = UtilNumerico.obtenerValorDefecto(unidadesAlquiladas);
+		return this;
 	}
 
 	public int getUnidadesAfectadas() {
 		return unidadesAfectadas;
 	}
 
-	public void setUnidadesAfectadas(int unidadesAfectadas) {
+	public InventarioDTO setUnidadesAfectadas(int unidadesAfectadas) {
 		this.unidadesAfectadas = UtilNumerico.obtenerValorDefecto(unidadesAfectadas);
+		return this;
 	}
 
 	public int getUnidadesDisponibles() {
 		return unidadesDisponibles;
 	}
 
-	public void setUnidadesDisponibles(int unidadesDisponibles) {
+	public InventarioDTO setUnidadesDisponibles(int unidadesDisponibles) {
 		this.unidadesDisponibles = UtilNumerico.obtenerValorDefecto(unidadesDisponibles);
+		return this;
 	}
 
 	public EmpresaDTO getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(EmpresaDTO empresa) {
+	public InventarioDTO setEmpresa(EmpresaDTO empresa) {
 		this.empresa = EmpresaDTO.obtenerValorDefecto(empresa);
+		return this;
 	}
 
 	public ProductoDTO getProducto() {
 		return producto;
 	}
 
-	public void setProducto(ProductoDTO producto) {
+	public InventarioDTO setProducto(ProductoDTO producto) {
 		this.producto = ProductoDTO.obtenerValorDefecto(producto);
+		return this;
 	}
 
 	public HistorialCostoDTO getHistorialCosto() {
 		return historialCosto;
 	}
 
-	public void setHistorialCosto(HistorialCostoDTO historialCosto) {
+	public InventarioDTO setHistorialCosto(HistorialCostoDTO historialCosto) {
 		this.historialCosto = HistorialCostoDTO.obtenerValorDefecto(historialCosto);
+		return this;
 	}
 
 }

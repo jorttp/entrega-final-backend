@@ -36,7 +36,7 @@ public final class PaisDTO {
 	}
 	
 	public static PaisDTO obtenerValorDefecto(final PaisDTO pais ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pais, new PaisDTO());
+		return UtilObjeto.getInstance().obtenerValorDefecto(pais, obtenerValorDefecto());
 	}
 
 	public UUID getId() {

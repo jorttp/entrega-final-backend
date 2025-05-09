@@ -3,6 +3,7 @@ package co.edu.co.lilfac.entity;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class InventarioEntity {
@@ -35,6 +36,14 @@ public class InventarioEntity {
 		setEmpresa(empresa);
 		setProducto(producto);
 		setHistorialCosto(historialCosto);
+	}
+	
+	public static InventarioEntity obtenerValorDefecto() {
+		return new InventarioEntity();
+	}
+	
+	public static InventarioEntity obtenerValorDefecto(final InventarioEntity inventario ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(inventario, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
