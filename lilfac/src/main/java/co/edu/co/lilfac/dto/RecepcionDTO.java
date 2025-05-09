@@ -2,12 +2,11 @@ package co.edu.co.lilfac.dto;
 
 import java.util.UUID;
 
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
-public class RecepcionEntity {
+public class RecepcionDTO {
 	private UUID id;
 	private String fecha;
 	private String estado;
@@ -16,7 +15,7 @@ public class RecepcionEntity {
 	private EmpleadoDTO empleado;
 	private EntregaDTO entrega;
 	
-	public RecepcionEntity() {
+	public RecepcionDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setFecha(UtilTexto.getInstance().obtenerValorDefecto());
 		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
@@ -26,7 +25,7 @@ public class RecepcionEntity {
 		setEntrega(EntregaDTO.obtenerValorDefecto());
 	}
 	
-	public RecepcionEntity(final UUID id, final String fecha, final String estado, final String direccion, final CiudadDTO ciudad, final EmpleadoDTO empleado, final EntregaDTO entrega) {
+	public RecepcionDTO(final UUID id, final String fecha, final String estado, final String direccion, final CiudadDTO ciudad, final EmpleadoDTO empleado, final EntregaDTO entrega) {
 		setId(id);
 		setFecha(fecha);
 		setEstado(estado);
@@ -36,12 +35,12 @@ public class RecepcionEntity {
 		setEntrega(entrega);
 	}
 	
-	public static RecepcionEntity obtenerValorDefecto() {
-		return new RecepcionEntity();
+	public static RecepcionDTO obtenerValorDefecto() {
+		return new RecepcionDTO();
 	}
 	
-	public static RecepcionEntity obtenerValorDefecto(final RecepcionEntity pedido ) {
-		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new RecepcionEntity());
+	public static RecepcionDTO obtenerValorDefecto(final RecepcionDTO pedido ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(pedido, new RecepcionDTO());
 	}
 
 	public UUID getId() {

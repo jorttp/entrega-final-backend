@@ -8,7 +8,6 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
-import co.edu.co.lilfac.entity.HistorialCostoEntity;
 
 public class HistorialCostoDTO {
 	private UUID id;

@@ -1,0 +1,72 @@
+package co.edu.co.lilfac.dto;
+
+import java.util.UUID;
+
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
+
+public class CostoAdicionalDTO {
+	private UUID id;
+	private float valor;
+	private String descripcion;
+	private RecepcionDTO recepcion;
+	
+	public CostoAdicionalDTO() {
+		setId(UtilUUID.obtenerValorDefecto());
+		setValor(UtilFloat.getInstance().obtenerValorDefecto());
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
+		setRecepcion(RecepcionDTO.obtenerValorDefecto());
+	}
+	
+	public CostoAdicionalDTO(final UUID id) {
+		setId(id);
+		setValor(UtilFloat.getInstance().obtenerValorDefecto());
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
+		setRecepcion(RecepcionDTO.obtenerValorDefecto());
+		
+	}
+	
+	public CostoAdicionalDTO(final UUID id, final float valor, final String descripcion, final RecepcionDTO recepcion) {
+		setId(id);
+		setValor(valor);
+		setDescripcion(descripcion);
+		setRecepcion(recepcion);
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = UtilUUID.obtenerValorDefecto(id);
+	}
+	
+	public float getValor() {
+		return valor;
+	}
+
+	public CostoAdicionalDTO setValor(float valor) {
+		this.valor = UtilFloat.obtenerValorDefecto(valor);
+		return this;
+	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public CostoAdicionalDTO setDescripcion(String descripcion) {
+		this.descripcion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(descripcion);
+		return this;
+	}
+	
+	public RecepcionDTO getRecepcion() {
+		return recepcion;
+	}
+
+	public CostoAdicionalDTO setRecepcion(RecepcionDTO recepcion){
+		this.recepcion = RecepcionDTO.obtenerValorDefecto(recepcion);
+		return this;
+	}
+
+}
