@@ -12,5 +12,7 @@ public interface EmpleadoFacade {
 	void darBajaDefinitivamenteEmpleadoExistente(UUID id);
 	EmpleadoDTO consultarEmpleadoPorId(UUID id);
 	List<EmpleadoDTO> consultarEmpleados(EmpleadoDTO filtro);
+	void confirmarTelefonoEmpleado(Integer telefonoEmpleado);
+	void confirmarCorreoEmpleado(String correoEmpleado);
 
 }

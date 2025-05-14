@@ -9,5 +9,7 @@ public interface EmpresaFacade {
 	void registrarInformacionEmpresa(EmpresaDTO empresa);
 	void modificarEmpresaExistente(UUID id, EmpresaDTO empresa);
 	EmpresaDTO consultarEmpresaPorId(UUID id);
+	void confirmarTelefonoEmpresa(Integer telefonoEmpresa);
+	void confirmarCorreoEmpresa(String correoEmpresa);
 
 }
