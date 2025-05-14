@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.data.dao.entity.ciudad.CiudadDAO;
-import co.edu.co.lilfac.entity.DepartamentoEntity;
+import co.edu.co.lilfac.entity.CiudadEntity;
 
 public class CiudadPostgreSQLDAO implements CiudadDAO{
 	
@@ -16,31 +16,31 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	}
 
 	@Override
-	public void create(DepartamentoEntity entity) {
+	public void create(CiudadEntity entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<DepartamentoEntity> listByFIlter(DepartamentoEntity filter) {
+	public List<CiudadEntity> listByFIlter(CiudadEntity filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<DepartamentoEntity> listAll() {
+	public List<CiudadEntity> listAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DepartamentoEntity listById(UUID id) {
+	public CiudadEntity listById(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void update(UUID id, DepartamentoEntity entity) {
+	public void update(UUID id, CiudadEntity entity) {
 		// TODO Auto-generated method stub
 		
 	}
