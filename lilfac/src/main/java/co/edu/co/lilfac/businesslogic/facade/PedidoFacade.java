@@ -7,7 +7,7 @@ import co.edu.co.lilfac.dto.PedidoDTO;
 
 public interface PedidoFacade {
 	
-	void registrarNuevaPedido(PedidoDTO pedido);
+	void registrarNuevoPedido(PedidoDTO pedido);
 	void modificarPedidoExistente(UUID id, PedidoDTO pedido);
 	void darBajaDefinitivamentePedidoExistente(UUID id);
 	PedidoDTO consultarPedidoPorId(UUID id);

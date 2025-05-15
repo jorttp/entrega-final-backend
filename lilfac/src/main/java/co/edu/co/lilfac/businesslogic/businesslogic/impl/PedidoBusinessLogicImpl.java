@@ -17,7 +17,7 @@ public class PedidoBusinessLogicImpl implements PedidoBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevaPedido(PedidoDomain pedido) {
+	public void registrarNuevoPedido(PedidoDomain pedido) {
 		// TODO Auto-generated method stub
 		
 	}

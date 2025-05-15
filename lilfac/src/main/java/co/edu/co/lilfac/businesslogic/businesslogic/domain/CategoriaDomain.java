@@ -20,6 +20,7 @@ public final class CategoriaDomain {
 	public CategoriaDomain(final UUID id, final String nombre, final String descripcion) {
 		setId(id);
 		setNombre(nombre);
+		setDescripcion(descripcion);
 	}
 	
 	static CategoriaDomain obtenerValorDefecto() {

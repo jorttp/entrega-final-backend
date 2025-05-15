@@ -7,7 +7,7 @@ import co.edu.co.lilfac.businesslogic.businesslogic.domain.PedidoDomain;
 
 public interface PedidoBusinessLogic {
 	
-	void registrarNuevaPedido(PedidoDomain pedido);
+	void registrarNuevoPedido(PedidoDomain pedido);
 	void modificarPedidoExistente(UUID id, PedidoDomain pedido);
 	void darBajaDefinitivamentePedidoExistente(UUID id);
 	PedidoDomain consultarPedidoPorId(UUID id);

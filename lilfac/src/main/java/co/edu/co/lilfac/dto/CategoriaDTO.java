@@ -20,6 +20,7 @@ public final class CategoriaDTO {
 	public CategoriaDTO(final UUID id, final String nombre, final String descripcion) {
 		setId(id);
 		setNombre(nombre);
+		setDescripcion(descripcion);
 	}
 	
 	public static CategoriaDTO obtenerValorDefecto() {

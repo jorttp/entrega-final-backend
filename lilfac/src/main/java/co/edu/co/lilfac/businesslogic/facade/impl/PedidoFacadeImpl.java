@@ -23,7 +23,7 @@ public class PedidoFacadeImpl implements PedidoFacade{
 	
 	
 	@Override
-	public void registrarNuevaPedido(PedidoDTO pedido) {
+	public void registrarNuevoPedido(PedidoDTO pedido) {
 		// TODO Auto-generated method stub
 		
 	}
