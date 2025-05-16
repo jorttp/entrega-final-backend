@@ -51,13 +51,13 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	}
 
 	@Override
-	public void confirmarTelefonoCliente(Integer telefonoCliente) {
+	public void confirmarTelefonoCliente(UUID id, Integer telefonoCliente) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void confirmarCorreoCliente(String correoCliente) {
+	public void confirmarCorreoCliente(UUID id, String correoCliente) {
 		// TODO Auto-generated method stub
 		
 	}

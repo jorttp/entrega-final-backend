@@ -40,13 +40,13 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 	}
 
 	@Override
-	public void confirmarTelefonoEmpresa(Integer telefonoEmpresa) {
+	public void confirmarTelefonoEmpresa(UUID id, Integer telefonoEmpresa) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void confirmarCorreoEmpresa(String correoEmpresa) {
+	public void confirmarCorreoEmpresa(UUID id, String correoEmpresa) {
 		// TODO Auto-generated method stub
 		
 	}

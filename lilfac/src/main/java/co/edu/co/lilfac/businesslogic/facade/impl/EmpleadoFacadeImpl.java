@@ -51,13 +51,13 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	}
 
 	@Override
-	public void confirmarTelefonoEmpleado(Integer telefonoEmpleado) {
+	public void confirmarTelefonoEmpleado(UUID id, Integer telefonoEmpleado) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void confirmarCorreoEmpleado(String correoEmpleado) {
+	public void confirmarCorreoEmpleado(UUID id, String correoEmpleado) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -12,7 +12,7 @@ public interface ClienteFacade {
 	void darBajaDefinitivamenteClienteExistente(UUID id);
 	ClienteDTO consultarClientePorId(UUID id);
 	List<ClienteDTO> consultarClientes(ClienteDTO filtro);
-	void confirmarTelefonoCliente(Integer telefonoCliente);
-	void confirmarCorreoCliente(String correoCliente);
+	void confirmarTelefonoCliente(UUID id, Integer telefonoCliente);
+	void confirmarCorreoCliente(UUID id, String correoCliente);
 
 }
