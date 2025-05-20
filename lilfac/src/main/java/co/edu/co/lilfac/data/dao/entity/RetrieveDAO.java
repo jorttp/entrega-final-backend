@@ -2,13 +2,15 @@ package co.edu.co.lilfac.data.dao.entity;
 
 import java.util.List;
 
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+
 public interface RetrieveDAO<E, ID> {
 	
-	List<E> listByFIlter(E filter);
+	List<E> listByFIlter(E filter)throws LilfacException;
 	
-	List<E> listAll();
+	List<E> listAll()throws LilfacException;
 	
-	E listById(ID id);
+	E listById(ID id)throws LilfacException;
 	
 
 }

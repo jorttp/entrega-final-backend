@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EntregaBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EntregaDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.EntregaEntity;
 
@@ -41,7 +42,7 @@ public class EntregaBusinessLogicImpl implements EntregaBusinessLogic {
 	}
 
 	@Override
-	public List<EntregaDomain> consultarEntregas(EntregaDomain filtro) {
+	public List<EntregaDomain> consultarEntregas(EntregaDomain filtro) throws LilfacException {
 		
 		EntregaEntity EntregaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<EntregaEntity> EntregaEntities = factory.getEntregaDAO().listByFIlter(EntregaFilter);

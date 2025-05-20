@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.CategoriaBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CategoriaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CategoriaFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.CategoriaDTO;
@@ -15,7 +16,7 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	private DAOFactory daoFactory;
 	private CategoriaBusinessLogic categoriaBusinessLogic;
 	
-	public CategoriaFacadeImpl() {
+	public CategoriaFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		categoriaBusinessLogic = new CategoriaBusinessLogicImpl(daoFactory);
 	} 

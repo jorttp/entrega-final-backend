@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.RecepcionBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.RecepcionDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.RecepcionEntity;
 
@@ -42,7 +43,7 @@ public class RecepcionBusinessLogicImpl implements RecepcionBusinessLogic{
 	}
 
 	@Override
-	public List<RecepcionDomain> consultarRecepciones(RecepcionDomain filtro) {
+	public List<RecepcionDomain> consultarRecepciones(RecepcionDomain filtro) throws LilfacException {
 		
 		RecepcionEntity RecepcionFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<RecepcionEntity> RecepcionEntities = factory.getRecepcionDAO().listByFIlter(RecepcionFilter);

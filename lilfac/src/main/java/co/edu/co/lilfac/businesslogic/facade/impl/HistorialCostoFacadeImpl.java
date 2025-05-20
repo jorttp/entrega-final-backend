@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.HistorialCostoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.HistorialCostoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.HistorialCostoFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.HistorialCostoDTO;
@@ -16,7 +17,7 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 	private DAOFactory daoFactory;
 	private HistorialCostoBusinessLogic historialCostoBusinessLogic;
 	
-	public HistorialCostoFacadeImpl() {
+	public HistorialCostoFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		historialCostoBusinessLogic = new HistorialCostoBusinessLogicImpl(daoFactory);
 	} 

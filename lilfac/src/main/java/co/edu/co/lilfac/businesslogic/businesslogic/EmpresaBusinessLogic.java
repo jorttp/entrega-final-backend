@@ -3,13 +3,14 @@ package co.edu.co.lilfac.businesslogic.businesslogic;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpresaDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 
 public interface EmpresaBusinessLogic {
 	
-	void registrarInformacionEmpresa(EmpresaDomain empresa);
-	void modificarEmpresaExistente(UUID id, EmpresaDomain empresa);
-	EmpresaDomain consultarEmpresaPorId(UUID id);
-	void confirmarTelefonoEmpresa(Integer telefonoEmpresa);
-	void confirmarCorreoEmpresa(String correoEmpresa);
+	void registrarInformacionEmpresa(EmpresaDomain empresa)throws LilfacException;
+	void modificarEmpresaExistente(UUID id, EmpresaDomain empresa)throws LilfacException;
+	EmpresaDomain consultarEmpresaPorId(UUID id)throws LilfacException;
+	void confirmarTelefonoEmpresa(Integer telefonoEmpresa)throws LilfacException;
+	void confirmarCorreoEmpresa(String correoEmpresa)throws LilfacException;
 
 }

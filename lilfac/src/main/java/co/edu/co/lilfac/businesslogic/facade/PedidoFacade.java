@@ -3,14 +3,15 @@ package co.edu.co.lilfac.businesslogic.facade;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.dto.PedidoDTO;
 
 public interface PedidoFacade {
 	
-	void registrarNuevoPedido(PedidoDTO pedido);
-	void modificarPedidoExistente(UUID id, PedidoDTO pedido);
-	void darBajaDefinitivamentePedidoExistente(UUID id);
+	void registrarNuevoPedido(PedidoDTO pedido)throws LilfacException;
+	void modificarPedidoExistente(UUID id, PedidoDTO pedido)throws LilfacException;
+	void darBajaDefinitivamentePedidoExistente(UUID id)throws LilfacException;
 	PedidoDTO consultarPedidoPorId(UUID id);
-	List<PedidoDTO> consultarPedidos(PedidoDTO filtro);
+	List<PedidoDTO> consultarPedidos(PedidoDTO filtro)throws LilfacException;
 
 }

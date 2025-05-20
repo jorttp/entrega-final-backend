@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.DepartamentoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.DepartamentoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.DepartamentoFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.DepartamentoDTO;
@@ -15,7 +16,7 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 	private DAOFactory daoFactory;
 	private DepartamentoBusinessLogic departamentoBusinessLogic;
 	
-	public DepartamentoFacadeImpl() {
+	public DepartamentoFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		departamentoBusinessLogic = new DepartamentoBusinessLogicImpl(daoFactory);
 	} 

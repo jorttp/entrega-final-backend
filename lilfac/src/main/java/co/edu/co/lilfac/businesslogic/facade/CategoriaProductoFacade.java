@@ -3,14 +3,15 @@ package co.edu.co.lilfac.businesslogic.facade;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.dto.CategoriaProductoDTO;
 
 public interface CategoriaProductoFacade {
 	
-	void registrarNuevaCategoriaProducto(CategoriaProductoDTO categoriaProducto);
-	void modificarCategoriaProductoExistente(UUID id, CategoriaProductoDTO categoriaProducto);
-	void darBajaDefinitivamenteCategoriaProductoExistente(UUID id);
-	CategoriaProductoDTO consultarCategoriaProductoPorId(UUID id);
-	List<CategoriaProductoDTO> consultarCategoriasProducto(CategoriaProductoDTO filtro);
+	void registrarNuevaCategoriaProducto(CategoriaProductoDTO categoriaProducto)throws LilfacException;
+	void modificarCategoriaProductoExistente(UUID id, CategoriaProductoDTO categoriaProducto)throws LilfacException;
+	void darBajaDefinitivamenteCategoriaProductoExistente(UUID id)throws LilfacException;
+	CategoriaProductoDTO consultarCategoriaProductoPorId(UUID id)throws LilfacException;
+	List<CategoriaProductoDTO> consultarCategoriasProducto(CategoriaProductoDTO filtro)throws LilfacException;
 
 }

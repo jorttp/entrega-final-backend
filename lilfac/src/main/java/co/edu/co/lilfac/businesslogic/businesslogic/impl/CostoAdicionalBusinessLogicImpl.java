@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CostoAdicionalBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CostoAdicionalDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.CostoAdicionalEntity;
 
@@ -41,7 +42,7 @@ public class CostoAdicionalBusinessLogicImpl implements CostoAdicionalBusinessLo
 	}
 
 	@Override
-	public List<CostoAdicionalDomain> consultarCostosAdicionales(CostoAdicionalDomain filtro) {
+	public List<CostoAdicionalDomain> consultarCostosAdicionales(CostoAdicionalDomain filtro) throws LilfacException {
 		
 		CostoAdicionalEntity CostoAdicionalFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<CostoAdicionalEntity> CostoAdicionalEntities = factory.getCostoAdicionalDAO().listByFIlter(CostoAdicionalFilter);

@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CategoriaDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 
 public interface CategoriaBusinessLogic {
 	
-	void registrarNuevaCategoria(CategoriaDomain categoria);
-	void modificarCategoriaExistente(UUID id, CategoriaDomain categoria);
-	void darBajaDefinitivamenteCategoriaExistente(UUID id);
-	CategoriaDomain consultarCategoriaPorId(UUID id);
-	List<CategoriaDomain> consultarCategorias(CategoriaDomain filtro);
+	void registrarNuevaCategoria(CategoriaDomain categoria) throws LilfacException;
+	void modificarCategoriaExistente(UUID id, CategoriaDomain categoria)throws LilfacException;
+	void darBajaDefinitivamenteCategoriaExistente(UUID id)throws LilfacException;
+	CategoriaDomain consultarCategoriaPorId(UUID id)throws LilfacException;
+	List<CategoriaDomain> consultarCategorias(CategoriaDomain filtro)throws LilfacException;
 
 }

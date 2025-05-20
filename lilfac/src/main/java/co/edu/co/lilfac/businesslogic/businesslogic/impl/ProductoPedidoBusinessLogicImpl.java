@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.ProductoPedidoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ProductoPedidoDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.ProductoPedidoEntity;
 
@@ -41,7 +42,7 @@ public class ProductoPedidoBusinessLogicImpl implements ProductoPedidoBusinessLo
 	}
 
 	@Override
-	public List<ProductoPedidoDomain> consultarProductosPedidos(ProductoPedidoDomain filtro) {
+	public List<ProductoPedidoDomain> consultarProductosPedidos(ProductoPedidoDomain filtro) throws LilfacException {
 		
 		ProductoPedidoEntity ProductoPedidoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<ProductoPedidoEntity> ProductoPedidoEntities = factory.getProductoPedidoDAO().listByFIlter(ProductoPedidoFilter);

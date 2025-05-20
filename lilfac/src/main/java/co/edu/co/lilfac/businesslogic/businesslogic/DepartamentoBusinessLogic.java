@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.DepartamentoDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 
 public interface DepartamentoBusinessLogic {
 	
-	void registrarNuevoDepartamento(DepartamentoDomain departamento);
-	void modificarDepartamentoExistente(UUID id, DepartamentoDomain departamento);
-	void darBajaDefinitivamenteDepartamentoExistente(UUID id);
-	DepartamentoDomain consultarDepartamentoPorId(UUID id);
-	List<DepartamentoDomain> consultarDepartamentos(DepartamentoDomain filtro);
+	void registrarNuevoDepartamento(DepartamentoDomain departamento)throws LilfacException;
+	void modificarDepartamentoExistente(UUID id, DepartamentoDomain departamento)throws LilfacException;
+	void darBajaDefinitivamenteDepartamentoExistente(UUID id)throws LilfacException;
+	DepartamentoDomain consultarDepartamentoPorId(UUID id)throws LilfacException;
+	List<DepartamentoDomain> consultarDepartamentos(DepartamentoDomain filtro)throws LilfacException;
 
 }

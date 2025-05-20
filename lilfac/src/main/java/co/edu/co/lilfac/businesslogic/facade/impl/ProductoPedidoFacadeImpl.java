@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.ProductoPedidoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.ProductoPedidoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.ProductoPedidoFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.ProductoPedidoDTO;
@@ -15,7 +16,7 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 	private DAOFactory daoFactory;
 	private ProductoPedidoBusinessLogic productoPedidoBusinessLogic;
 	
-	public ProductoPedidoFacadeImpl() {
+	public ProductoPedidoFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		productoPedidoBusinessLogic = new ProductoPedidoBusinessLogicImpl(daoFactory);
 	} 

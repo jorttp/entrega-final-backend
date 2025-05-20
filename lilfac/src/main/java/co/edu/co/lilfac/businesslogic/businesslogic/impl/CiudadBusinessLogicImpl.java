@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CiudadBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CiudadDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.CiudadEntity;
 
@@ -41,7 +42,7 @@ public class CiudadBusinessLogicImpl implements CiudadBusinessLogic {
 	}
 
 	@Override
-	public List<CiudadDomain> consultarCiudades(CiudadDomain filtro) {
+	public List<CiudadDomain> consultarCiudades(CiudadDomain filtro) throws LilfacException {
 		
 		CiudadEntity CiudadFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<CiudadEntity> CiudadEntities = factory.getCiudadDAO().listByFIlter(CiudadFilter);

@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.FacturaBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.FacturaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.FacturaFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.FacturaDTO;
@@ -16,7 +17,7 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	private DAOFactory daoFactory;
 	private FacturaBusinessLogic facturaBusinessLogic;
 	
-	public FacturaFacadeImpl() {
+	public FacturaFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		facturaBusinessLogic = new FacturaBusinessLogicImpl(daoFactory);
 	} 

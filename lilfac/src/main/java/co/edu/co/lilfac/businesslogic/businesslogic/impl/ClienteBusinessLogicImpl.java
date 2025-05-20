@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.ClienteBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ClienteDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.ClienteEntity;
 
@@ -41,7 +42,7 @@ private DAOFactory factory;
 	}
 
 	@Override
-	public List<ClienteDomain> consultarClientes(ClienteDomain filtro) {
+	public List<ClienteDomain> consultarClientes(ClienteDomain filtro) throws LilfacException {
 		
 		ClienteEntity ClienteFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<ClienteEntity> ClienteEntities = factory.getClienteDAO().listByFIlter(ClienteFilter);

@@ -1,11 +1,14 @@
 package co.edu.co.lilfac.dto;
 
+import java.util.UUID;
+
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class ClienteDTO {
-	private int id;
+	private UUID id;
 	private String nombre;
 	private String apellido;
 	private int cedula;
@@ -15,7 +18,7 @@ public class ClienteDTO {
 	private CiudadDTO ciudad;
 	
 	public ClienteDTO () {
-		setId(UtilNumerico.getInstance().obtenerValorDefecto());
+		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
 		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
@@ -25,7 +28,7 @@ public class ClienteDTO {
 		setCiudad(CiudadDTO.obtenerValorDefecto());
 	}
 	
-	public ClienteDTO (final int id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public ClienteDTO (final UUID id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -44,12 +47,12 @@ public class ClienteDTO {
 		return UtilObjeto.getInstance().obtenerValorDefecto(cliente, obtenerValorDefecto());
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public ClienteDTO setId(final int id) {
-		this.id = UtilNumerico.obtenerValorDefecto(id);
+	public ClienteDTO setId(final UUID id) {
+		this.id = UtilUUID.obtenerValorDefecto(id);
 		return this;
 	}
 

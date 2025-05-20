@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.FacturaBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.FacturaDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.FacturaEntity;
 
@@ -41,7 +42,7 @@ public class FacturaBusinessLogicImpl implements FacturaBusinessLogic {
 	}
 
 	@Override
-	public List<FacturaDomain> consultarFacturas(FacturaDomain filtro) {
+	public List<FacturaDomain> consultarFacturas(FacturaDomain filtro) throws LilfacException {
 		
 		FacturaEntity FacturaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<FacturaEntity> FacturaEntities = factory.getFacturaDAO().listByFIlter(FacturaFilter);

@@ -1,11 +1,14 @@
 package co.edu.co.lilfac.entity;
 
+import java.util.UUID;
+
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class ClienteEntity {
-	private int id;
+	private UUID id;
 	private String nombre;
 	private String apellido;
 	private int cedula;
@@ -15,7 +18,7 @@ public class ClienteEntity {
 	private CiudadEntity ciudad;
 	
 	public ClienteEntity () {
-		setId(UtilNumerico.getInstance().obtenerValorDefecto());
+		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
 		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
@@ -25,7 +28,7 @@ public class ClienteEntity {
 		setCiudad(CiudadEntity.obtenerValorDefecto());
 	}
 	
-	public ClienteEntity (final int id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public ClienteEntity (final UUID id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -44,12 +47,12 @@ public class ClienteEntity {
 		return UtilObjeto.getInstance().obtenerValorDefecto(cliente, obtenerValorDefecto());
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(final int id) {
-		this.id = UtilNumerico.obtenerValorDefecto(id);
+	public void setId(final UUID id) {
+		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
 	public String getNombre() {

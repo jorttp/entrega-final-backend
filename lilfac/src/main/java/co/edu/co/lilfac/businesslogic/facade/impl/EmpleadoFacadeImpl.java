@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpleadoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EmpleadoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EmpleadoFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.EmpleadoDTO;
@@ -15,7 +16,7 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	private DAOFactory daoFactory;
 	private EmpleadoBusinessLogic empleadoBusinessLogic;
 	
-	public EmpleadoFacadeImpl() {
+	public EmpleadoFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		empleadoBusinessLogic = new EmpleadoBusinessLogicImpl(daoFactory);
 	} 

@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CiudadDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 
 public interface CiudadBusinessLogic {
 	
-	void registrarNuevaCiudad(CiudadDomain ciudad);
-	void modificarCiudadExistente(UUID id, CiudadDomain ciudad);
-	void darBajaDefinitivamenteCiudadExistente(UUID id);
-	CiudadDomain consultarCiudadPorId(UUID id);
-	List<CiudadDomain> consultarCiudades(CiudadDomain filtro);
+	void registrarNuevaCiudad(CiudadDomain ciudad)throws LilfacException;
+	void modificarCiudadExistente(UUID id, CiudadDomain ciudad)throws LilfacException;
+	void darBajaDefinitivamenteCiudadExistente(UUID id)throws LilfacException;
+	CiudadDomain consultarCiudadPorId(UUID id)throws LilfacException;
+	List<CiudadDomain> consultarCiudades(CiudadDomain filtro)throws LilfacException;
 
 }

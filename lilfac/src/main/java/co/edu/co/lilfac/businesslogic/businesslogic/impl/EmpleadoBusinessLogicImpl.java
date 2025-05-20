@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpleadoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpleadoDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.EmpleadoEntity;
 
@@ -41,7 +42,7 @@ public class EmpleadoBusinessLogicImpl implements EmpleadoBusinessLogic {
 	}
 
 	@Override
-	public List<EmpleadoDomain> consultarEmpleados(EmpleadoDomain filtro) {
+	public List<EmpleadoDomain> consultarEmpleados(EmpleadoDomain filtro) throws LilfacException {
 		EmpleadoEntity EmpleadoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<EmpleadoEntity> EmpleadoEntities = factory.getEmpleadoDAO().listByFIlter(EmpleadoFilter);
 		

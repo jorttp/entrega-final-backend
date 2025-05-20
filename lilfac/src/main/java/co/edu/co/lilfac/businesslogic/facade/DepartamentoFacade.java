@@ -3,14 +3,15 @@ package co.edu.co.lilfac.businesslogic.facade;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.dto.DepartamentoDTO;
 
 public interface DepartamentoFacade {
 	
-	void registrarNuevoDepartamento(DepartamentoDTO departamento);
-	void modificarDepartamentoExistente(UUID id, DepartamentoDTO departamento);
-	void darBajaDefinitivamenteDepartamentoExistente(UUID id);
-	DepartamentoDTO consultarDepartamentoPorId(UUID id);
-	List<DepartamentoDTO> consultarDepartamentos(DepartamentoDTO filtro);
+	void registrarNuevoDepartamento(DepartamentoDTO departamento)throws LilfacException;
+	void modificarDepartamentoExistente(UUID id, DepartamentoDTO departamento)throws LilfacException;
+	void darBajaDefinitivamenteDepartamentoExistente(UUID id)throws LilfacException;
+	DepartamentoDTO consultarDepartamentoPorId(UUID id)throws LilfacException;
+	List<DepartamentoDTO> consultarDepartamentos(DepartamentoDTO filtro)throws LilfacException;
 
 }

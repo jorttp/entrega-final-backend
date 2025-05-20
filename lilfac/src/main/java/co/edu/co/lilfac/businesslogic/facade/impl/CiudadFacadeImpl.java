@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.CiudadBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CiudadBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CiudadFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.CiudadDTO;
@@ -15,7 +16,7 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	private DAOFactory daoFactory;
 	private CiudadBusinessLogic ciudadBusinessLogic;
 	
-	public CiudadFacadeImpl() {
+	public CiudadFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		ciudadBusinessLogic = new CiudadBusinessLogicImpl(daoFactory);
 	} 

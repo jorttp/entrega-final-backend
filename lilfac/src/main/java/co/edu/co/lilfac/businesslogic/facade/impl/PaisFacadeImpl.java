@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.PaisBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.PaisBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.PaisFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.PaisDTO;
@@ -15,7 +16,7 @@ public class PaisFacadeImpl implements PaisFacade{
 	private DAOFactory daoFactory;
 	private PaisBusinessLogic paisBusinessLogic;
 	
-	public PaisFacadeImpl() {
+	public PaisFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		paisBusinessLogic = new PaisBusinessLogicImpl(daoFactory);
 	} 

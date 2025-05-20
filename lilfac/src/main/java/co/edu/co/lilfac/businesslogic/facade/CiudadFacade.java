@@ -3,14 +3,15 @@ package co.edu.co.lilfac.businesslogic.facade;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.dto.CiudadDTO;
 
 public interface CiudadFacade {
 	
-	void registrarNuevaCiudad(CiudadDTO ciudad);
-	void modificarCiudadExistente(UUID id, CiudadDTO ciudad);
-	void darBajaDefinitivamenteCiudadExistente(UUID id);
-	CiudadDTO consultarCiudadPorId(UUID id);
-	List<CiudadDTO> consultarCiudades(CiudadDTO filtro);
+	void registrarNuevaCiudad(CiudadDTO ciudad)throws LilfacException;
+	void modificarCiudadExistente(UUID id, CiudadDTO ciudad)throws LilfacException;
+	void darBajaDefinitivamenteCiudadExistente(UUID id)throws LilfacException;
+	CiudadDTO consultarCiudadPorId(UUID id)throws LilfacException;
+	List<CiudadDTO> consultarCiudades(CiudadDTO filtro)throws LilfacException;
 
 }

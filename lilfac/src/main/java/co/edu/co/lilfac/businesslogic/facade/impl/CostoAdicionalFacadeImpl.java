@@ -6,6 +6,7 @@ import java.util.UUID;
 import co.edu.co.lilfac.businesslogic.businesslogic.CostoAdicionalBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CostoAdicionalBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CostoAdicionalFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
 import co.edu.co.lilfac.dto.CostoAdicionalDTO;
@@ -16,7 +17,7 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 	private DAOFactory daoFactory;
 	private CostoAdicionalBusinessLogic costoAdicionalBusinessLogic;
 	
-	public CostoAdicionalFacadeImpl() {
+	public CostoAdicionalFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		costoAdicionalBusinessLogic = new CostoAdicionalBusinessLogicImpl(daoFactory);
 	} 

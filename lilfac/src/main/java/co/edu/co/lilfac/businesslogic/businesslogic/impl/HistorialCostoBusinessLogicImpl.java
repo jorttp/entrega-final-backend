@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.HistorialCostoBusinessLogic;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.HistorialCostoDomain;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.HistorialCostoEntity;
 
@@ -42,7 +43,7 @@ public class HistorialCostoBusinessLogicImpl implements HistorialCostoBusinessLo
 	}
 
 	@Override
-	public List<HistorialCostoDomain> consultarHistorialesCosto(HistorialCostoDomain filtro) {
+	public List<HistorialCostoDomain> consultarHistorialesCosto(HistorialCostoDomain filtro) throws LilfacException {
 		
 		HistorialCostoEntity HistorialCostoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
 		List<HistorialCostoEntity> HistorialCostoEntities = factory.getHistorialCostoDAO().listByFIlter(HistorialCostoFilter);
