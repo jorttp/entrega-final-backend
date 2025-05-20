@@ -1,11 +1,16 @@
 package co.edu.co.lilfac.data.dao.entity.historialcosto.impl.postgresql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.historialcosto.HistorialCostoDAO;
 import co.edu.co.lilfac.entity.HistorialCostoEntity;
+import co.edu.co.lilfac.entity.ProductoEntity;
 
 public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	
@@ -16,9 +21,35 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	}
 
 	@Override
-	public void create(HistorialCostoEntity entity) {
-		// TODO Auto-generated method stub
+	public void create(HistorialCostoEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("INSERT INTO HistorialCosto (id, codigo, fechaInicio, fechaFin, estado, costo, producto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, entity.getId());
+			sentenciaPreparada.setInt(2, entity.getCodigo());
+			sentenciaPreparada.setString(3, entity.getFechaInicio());
+			sentenciaPreparada.setString(4, entity.getFechaFin());
+			sentenciaPreparada.setBoolean(5, entity.getEstado());
+			sentenciaPreparada.setFloat(6, entity.getCosto());
+			sentenciaPreparada.setObject(7, entity.getProducto().getId());
+			
+			
+			sentenciaPreparada.executeUpdate();
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de registrar la información de un nuevo historial de costos";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un INSERT en la tabla HistorialCosto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de un nuevo historial de costos";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un INSERT en la tabla HistorialCosto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	@Override
@@ -34,21 +65,99 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	}
 
 	@Override
-	public HistorialCostoEntity listById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public HistorialCostoEntity listById(UUID id) throws LilfacException {
+		var historialCostoEntityRetorno=new HistorialCostoEntity();
+		var sentenciaSQL = new StringBuilder();
+		
+		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.producto AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE H.id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()){
+				
+				if (cursorResultados.next()) {
+					historialCostoEntityRetorno.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+					historialCostoEntityRetorno.setCodigo(cursorResultados.getInt("codigo"));
+					historialCostoEntityRetorno.setFechaInicio(cursorResultados.getString("fechaInicio"));
+					historialCostoEntityRetorno.setFechaFin(cursorResultados.getString("fechaFin"));
+					historialCostoEntityRetorno.setEstado(cursorResultados.getBoolean("estado"));
+					historialCostoEntityRetorno.setCosto(cursorResultados.getFloat("costo"));
+					var producto = new ProductoEntity();
+					producto.setNombre(cursorResultados.getString("nombre_producto"));
+					historialCostoEntityRetorno.setProducto(producto);
+				}
+				
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de consultar la información del historial de costos con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla HistorialCosto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información del historial de costos con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un SELECT en la tabla HistorialCosto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return historialCostoEntityRetorno;
 	}
 
 	@Override
-	public void update(UUID id, HistorialCostoEntity entity) {
-		// TODO Auto-generated method stub
+	public void update(UUID id, HistorialCostoEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("UPDATE HistorialCosto SET codigo = ?, fechaInicio = ?, fechaFin = ?, estado = ?, costo = ?, producto = ? WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setInt(1,  entity.getCodigo());
+			sentenciaPreparada.setString(2, entity.getFechaInicio());
+			sentenciaPreparada.setString(3, entity.getFechaFin());
+			sentenciaPreparada.setBoolean(4, entity.getEstado());
+			sentenciaPreparada.setFloat(5,  entity.getCosto());
+			sentenciaPreparada.setObject(6,  entity.getProducto().getId());
+			sentenciaPreparada.setObject(7,  id);
+			
+			
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un historial de costos con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un UPDATE en la tabla HistorialCosto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de actualizar la información de un historial de costos con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un UPDATE en la tabla HistorialCosto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	@Override
-	public void delete(UUID id) {
-		// TODO Auto-generated method stub
+	public void delete(UUID id) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("DELETE FROM HistorialCosto WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un historial de costos con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un DELETE en la tabla HistorialCosto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de eliminar la información de un historial de costos con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un DELETE en la tabla HistorialCosto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

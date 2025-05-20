@@ -1,11 +1,17 @@
 package co.edu.co.lilfac.data.dao.entity.categoriaproducto.impl.postgresql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.categoriaproducto.CategoriaProductoDAO;
+import co.edu.co.lilfac.entity.CategoriaEntity;
 import co.edu.co.lilfac.entity.CategoriaProductoEntity;
+import co.edu.co.lilfac.entity.ProductoEntity;
 
 public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	
@@ -16,9 +22,29 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	}
 
 	@Override
-	public void create(CategoriaProductoEntity entity) {
-		// TODO Auto-generated method stub
+	public void create(CategoriaProductoEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("INSERT INTO CategoriaProducto (id, producto, categoria) VALUES (?, ?, ?)");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, entity.getId());
+			sentenciaPreparada.setObject(2, entity.getProducto().getId());
+			sentenciaPreparada.setObject(3, entity.getCategoria().getId());
+			sentenciaPreparada.executeUpdate();
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de registrar la información de una nueva categoría de producto";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un INSERT en la tabla CategoriaProducto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva categoría de producto";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un INSERT en la tabla CategoriaProducto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	@Override
@@ -34,21 +60,93 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	}
 
 	@Override
-	public CategoriaProductoEntity listById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CategoriaProductoEntity listById(UUID id) throws LilfacException {
+		var categoriaProductoEntityRetorno=new CategoriaProductoEntity();
+		var sentenciaSQL = new StringBuilder();
+		
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM CategoriaProducto CP JOIN Producto P ON CP.producto = P.id JOIN Categoria C ON CP.categoria = C.id WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()){
+				
+				if (cursorResultados.next()) {
+					categoriaProductoEntityRetorno.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+					
+					var producto = new ProductoEntity();
+					producto.setNombre(cursorResultados.getString("nombre_producto"));
+					categoriaProductoEntityRetorno.setProducto(producto);
+					
+					var categoria = new CategoriaEntity();
+					categoria.setNombre(cursorResultados.getString("nombre_categoria"));
+					categoriaProductoEntityRetorno.setCategoria(categoria);
+				}
+				
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de consultar la información de la categoría de producto con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla CategoriaProducto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de la categoría de producto con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un SELECT en la tabla CategoriaProducto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return categoriaProductoEntityRetorno;
 	}
 
 	@Override
-	public void update(UUID id, CategoriaProductoEntity entity) {
-		// TODO Auto-generated method stub
+	public void update(UUID id, CategoriaProductoEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("UPDATE CategoriaProducto SET producto = ?,  categoria = ? WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, entity.getProducto().getId());
+			sentenciaPreparada.setObject(2, entity.getCategoria().getId());
+			sentenciaPreparada.setObject(3, id);
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de una categoría de producto con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un UPDATE en la tabla CategoriaProducto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de actualizar la información de una categoría de producto con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un UPDATE en la tabla CategoriaProducto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	@Override
-	public void delete(UUID id) {
-		// TODO Auto-generated method stub
+	public void delete(UUID id) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("DELETE FROM CategoriaProducto WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de una categoría de producto con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un DELETE en la tabla CategoriaProducto,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de eliminar la información de una categoría de producto con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un DELETE en la tabla CategoriaProducto";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

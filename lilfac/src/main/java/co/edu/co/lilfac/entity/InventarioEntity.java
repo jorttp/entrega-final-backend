@@ -99,7 +99,7 @@ public class InventarioEntity {
 	}
 
 	public void setProducto(ProductoEntity producto) {
-		this.producto = ProductoEntity.obtenerValorDefecto(producto);
+		this.producto = ProductoEntity.obtenerValorDefecto();
 	}
 
 	public HistorialCostoEntity getHistorialCosto() {

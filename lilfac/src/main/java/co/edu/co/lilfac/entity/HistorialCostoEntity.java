@@ -78,7 +78,7 @@ public class HistorialCostoEntity {
 		this.fechaFin = UtilTexto.getInstance().obtenerValorDefecto(fechaFin);
 	}
 
-	public boolean isEstado() {
+	public boolean getEstado() {
 		return estado;
 	}
 

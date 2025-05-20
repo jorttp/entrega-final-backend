@@ -80,7 +80,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 				if (cursorResultados.next()) {
 					clienteEntityRetorno.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
 					clienteEntityRetorno.setNombre(cursorResultados.getString("nombre"));
-					clienteEntityRetorno.setApellido(cursorResultados.getString("nombre"));
+					clienteEntityRetorno.setApellido(cursorResultados.getString("apellido"));
 					clienteEntityRetorno.setCedula(cursorResultados.getInt("cedula"));
 					clienteEntityRetorno.setTelefono(cursorResultados.getInt("telefono"));
 					clienteEntityRetorno.setCorreo(cursorResultados.getString("correo"));

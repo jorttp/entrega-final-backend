@@ -12,19 +12,22 @@ public final class ProductoEntity {
 	private String nombre;
 	private int codigo;
 	private String caracteristicas;
+	private String estado;
 	
 	public ProductoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
-		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());		
+		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());	
+		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public ProductoEntity (final UUID id, final String nombre, final int codigo, final String caracteristicas){
+	public ProductoEntity (final UUID id, final String nombre, final int codigo, final String caracteristicas, final String estado){
 		setId(id);
 		setNombre(nombre);
 		setCodigo(codigo);
 		setCaracteristicas(caracteristicas);
+		setEstado(estado);
 	}
 	
 	public static ProductoEntity obtenerValorDefecto() {
@@ -66,5 +69,14 @@ public final class ProductoEntity {
 	public void setCaracteristicas(final String caracteristicas) {
 		this.caracteristicas = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(caracteristicas);
 	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(estado);
+	}
+	
 	
 }

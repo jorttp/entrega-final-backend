@@ -12,19 +12,22 @@ public final class ProductoDTO {
 	private String nombre;
 	private int codigo;
 	private String caracteristicas;
+	private String estado;
 	
 	public ProductoDTO() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
-		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());		
+		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());
+		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public ProductoDTO (final UUID id, final String nombre, final int codigo, final String caracteristicas){
+	public ProductoDTO (final UUID id, final String nombre, final int codigo, final String caracteristicas, final String estado){
 		setId(id);
 		setNombre(nombre);
 		setCodigo(codigo);
 		setCaracteristicas(caracteristicas);
+		setEstado(estado);
 	}
 	
 	public static ProductoDTO obtenerValorDefecto() {
@@ -70,5 +73,15 @@ public final class ProductoDTO {
 		this.caracteristicas = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(caracteristicas);
 		return this;
 	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public ProductoDTO setEstado(final String estado) {
+		this.estado = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(estado);
+		return this;
+	}
+	
 	
 }

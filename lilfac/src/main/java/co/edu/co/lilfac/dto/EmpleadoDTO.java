@@ -1,11 +1,14 @@
 package co.edu.co.lilfac.dto;
 
+import java.util.UUID;
+
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class EmpleadoDTO {
-	private int id;
+	private UUID id;
 	private String nombre;
 	private String apellido;
 	private int cedula;
@@ -13,7 +16,7 @@ public class EmpleadoDTO {
 	private String correo;
 	
 	public EmpleadoDTO () {
-		setId(UtilNumerico.getInstance().obtenerValorDefecto());
+		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
 		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
@@ -21,7 +24,7 @@ public class EmpleadoDTO {
 		setCorreo(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public EmpleadoDTO (final int id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public EmpleadoDTO (final UUID id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -39,12 +42,12 @@ public class EmpleadoDTO {
 		return UtilObjeto.getInstance().obtenerValorDefecto(empleado, obtenerValorDefecto());
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public EmpleadoDTO setId(final int id) {
-		this.id = UtilNumerico.obtenerValorDefecto(id);
+	public EmpleadoDTO setId(final UUID id) {
+		this.id = UtilUUID.obtenerValorDefecto(id);
 		return this;
 	}
 
