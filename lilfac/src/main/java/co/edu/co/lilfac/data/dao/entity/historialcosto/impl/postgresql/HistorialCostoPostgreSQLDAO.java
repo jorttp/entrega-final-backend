@@ -69,7 +69,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 		var historialCostoEntityRetorno=new HistorialCostoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.producto AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE H.id = ?");
+		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE H.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

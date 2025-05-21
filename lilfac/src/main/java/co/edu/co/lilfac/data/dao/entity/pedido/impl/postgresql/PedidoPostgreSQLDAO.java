@@ -38,8 +38,8 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 			sentenciaPreparada.setFloat(6,  entity.getAbono());
 			sentenciaPreparada.setFloat(7,  entity.getRestante());
 			sentenciaPreparada.setObject(8,  entity.getCiudad().getId());
-			sentenciaPreparada.setObject(8,  entity.getCliente().getId());
-			sentenciaPreparada.setObject(8,  entity.getEmpleado().getId());
+			sentenciaPreparada.setObject(9,  entity.getCliente().getId());
+			sentenciaPreparada.setObject(10,  entity.getEmpleado().getId());
 			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
@@ -98,7 +98,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 					pedidoEntityRetorno.setCliente(cliente);
 					
 					var empleado = new EmpleadoEntity();
-					empleado.setNombre(cursorResultados.getString("empleado"));
+					empleado.setNombre(cursorResultados.getString("nombre_empleado"));
 					pedidoEntityRetorno.setEmpleado(empleado);
 				}
 				

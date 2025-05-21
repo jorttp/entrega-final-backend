@@ -25,7 +25,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	public void create(EmpresaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Ciudad (id, nombre, nit, telefono, correo, direccion, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO Empresa (id, nombre, nit, telefono, correo, direccion, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
