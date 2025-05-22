@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.historialcosto.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,9 +60,42 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	}
 
 	@Override
-	public List<HistorialCostoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<HistorialCostoEntity> listAll() throws LilfacException {
+	    List<HistorialCostoEntity> listaHistorialesCosto = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var historialCosto = new HistorialCostoEntity();
+	            historialCosto.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            historialCosto.setCodigo(resultados.getInt("codigo"));
+	            historialCosto.setFechaInicio(resultados.getString("fechaInicio"));
+	            historialCosto.setFechaFin(resultados.getString("fechaFin"));
+	            historialCosto.setEstado(resultados.getBoolean("estado"));
+	            historialCosto.setCosto(resultados.getFloat("costo"));
+
+	            var producto = new ProductoEntity();
+	            producto.setNombre(resultados.getString("nombre_producto"));
+	            historialCosto.setProducto(producto);
+
+	            listaHistorialesCosto.add(historialCosto);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los historiales de costo";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla HistorialCosto";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los historiales de costo";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla HistorialCosto";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaHistorialesCosto;
 	}
 
 	@Override
@@ -121,6 +155,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 			sentenciaPreparada.setFloat(5,  entity.getCosto());
 			sentenciaPreparada.setObject(6,  entity.getProducto().getId());
 			sentenciaPreparada.setObject(7,  id);
+			sentenciaPreparada.executeUpdate();
 			
 			
 			
@@ -146,6 +181,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un historial de costos con el identificador ingresado";

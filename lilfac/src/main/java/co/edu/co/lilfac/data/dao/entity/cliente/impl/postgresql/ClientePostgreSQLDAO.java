@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.cliente.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,9 +60,43 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	}
 
 	@Override
-	public List<ClienteEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ClienteEntity> listAll() throws LilfacException {
+	    List<ClienteEntity> listaClientes = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM Cliente CL JOIN Ciudad C ON CL.ciudad = C.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var cliente = new ClienteEntity();
+	            cliente.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            cliente.setNombre(resultados.getString("nombre"));
+	            cliente.setApellido(resultados.getString("apellido"));
+	            cliente.setCedula(resultados.getInt("cedula"));
+	            cliente.setTelefono(resultados.getInt("telefono"));
+	            cliente.setCorreo(resultados.getString("correo"));
+	            cliente.setDireccionResidencia(resultados.getString("direccionResidencia"));
+
+	            var ciudad = new CiudadEntity();
+	            ciudad.setNombre(resultados.getString("nombre_ciudad"));
+	            cliente.setCiudad(ciudad);
+
+	            listaClientes.add(cliente);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los clientes";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Cliente";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los clientes";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Cliente";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaClientes;
 	}
 
 	@Override
@@ -123,6 +158,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 			sentenciaPreparada.setString(6,  entity.getDireccionResidencia());
 			sentenciaPreparada.setObject(7,  entity.getCiudad().getId());
 			sentenciaPreparada.setObject(8, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un cliente con el identificador ingresado";
@@ -147,6 +183,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un cliente con el identificador ingresado";

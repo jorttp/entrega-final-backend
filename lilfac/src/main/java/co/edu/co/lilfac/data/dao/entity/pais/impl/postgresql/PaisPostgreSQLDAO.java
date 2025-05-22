@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.pais.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,9 +53,34 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	}
 
 	@Override
-	public List<PaisEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PaisEntity> listAll() throws LilfacException {
+	    List<PaisEntity> listaPaises = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT id, nombre FROM Pais");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var pais = new PaisEntity();
+	            pais.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            pais.setNombre(resultados.getString("nombre"));
+
+	            listaPaises.add(pais);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los paises";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Pais";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los paises";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Pais";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaPaises;
 	}
 
 	@Override
@@ -103,6 +129,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 			
 			sentenciaPreparada.setString(1, entity.getNombre());
 			sentenciaPreparada.setObject(2, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un país con el identificador ingresado";
@@ -127,6 +154,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un país con el identificador ingresado";

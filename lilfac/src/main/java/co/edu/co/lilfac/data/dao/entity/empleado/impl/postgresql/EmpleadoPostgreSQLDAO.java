@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.empleado.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,9 +57,38 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	}
 
 	@Override
-	public List<EmpleadoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmpleadoEntity> listAll() throws LilfacException {
+	    List<EmpleadoEntity> listaEmpleados = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var empleado = new EmpleadoEntity();
+	            empleado.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            empleado.setNombre(resultados.getString("nombre"));
+	            empleado.setApellido(resultados.getString("apellido"));
+	            empleado.setCedula(resultados.getInt("cedula"));
+	            empleado.setTelefono(resultados.getInt("telefono"));
+	            empleado.setCorreo(resultados.getString("correo"));
+
+	            listaEmpleados.add(empleado);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los empleados";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Empleado";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los empleados";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Empleado";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaEmpleados;
 	}
 
 	@Override
@@ -114,6 +144,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 			sentenciaPreparada.setInt(4, entity.getTelefono());
 			sentenciaPreparada.setString(5, entity.getCorreo());
 			sentenciaPreparada.setObject(6, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un empleado con el identificador ingresado";
@@ -138,6 +169,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un empleado con el identificador ingresado";

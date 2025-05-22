@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.producto.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,9 +57,37 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	}
 
 	@Override
-	public List<ProductoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoEntity> listAll() throws LilfacException {
+	    List<ProductoEntity> listaProductos = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var producto = new ProductoEntity();
+	            producto.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            producto.setNombre(resultados.getString("nombre"));
+	            producto.setCodigo(resultados.getInt("codigo"));
+	            producto.setCaracteristicas(resultados.getString("caracteristicas"));
+	            producto.setEstado(resultados.getString("estado"));
+
+	            listaProductos.add(producto);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los productos";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Producto";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los productos";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Producto";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaProductos;
 	}
 
 	@Override
@@ -71,6 +100,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+
 			
 			try (var cursorResultados = sentenciaPreparada.executeQuery()){
 				
@@ -111,6 +141,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 			sentenciaPreparada.setString(3, entity.getCaracteristicas());
 			sentenciaPreparada.setString(4, entity.getEstado());
 			sentenciaPreparada.setObject(5, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un producto con el identificador ingresado";
@@ -134,6 +165,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un producto con el identificador ingresado";

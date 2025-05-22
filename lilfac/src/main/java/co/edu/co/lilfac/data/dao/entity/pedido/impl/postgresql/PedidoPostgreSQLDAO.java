@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.pedido.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,9 +63,51 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	}
 
 	@Override
-	public List<PedidoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PedidoEntity> listAll() throws LilfacException {
+	    List<PedidoEntity> listaPedidos = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM Pedido P JOIN Ciudad C ON P.ciudad = C.id JOIN Cliente CL ON P.cliente = CL.id JOIN Empleado E ON P.empleado = E.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var pedido = new PedidoEntity();
+	            pedido.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            pedido.setFechaReserva(resultados.getString("fechaReserva"));
+	            pedido.setFechaVencimiento(resultados.getString("fechaVencimiento"));
+	            pedido.setDireccionEntrega(resultados.getString("direccionEntrega"));
+	            pedido.setCosto(resultados.getFloat("costo"));
+	            pedido.setAbono(resultados.getFloat("abono"));
+	            pedido.setRestante(resultados.getFloat("restante"));
+
+	            var ciudad = new CiudadEntity();
+	            ciudad.setNombre(resultados.getString("nombre_ciudad"));
+	            pedido.setCiudad(ciudad);
+
+	            var cliente = new ClienteEntity();
+	            cliente.setNombre(resultados.getString("nombre_cliente"));
+	            pedido.setCliente(cliente);
+
+	            var empleado = new EmpleadoEntity();
+	            empleado.setNombre(resultados.getString("nombre_empleado"));
+	            pedido.setEmpleado(empleado);
+
+	            listaPedidos.add(pedido);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los pedidos";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Pedido";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los pedidos";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Pedido";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaPedidos;
 	}
 
 	@Override
@@ -137,6 +180,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 			sentenciaPreparada.setObject(8,  entity.getCliente().getId());
 			sentenciaPreparada.setObject(9,  entity.getEmpleado().getId());
 			sentenciaPreparada.setObject(10, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un pedido con el identificador ingresado";
@@ -161,6 +205,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un pedido con el identificador ingresado";

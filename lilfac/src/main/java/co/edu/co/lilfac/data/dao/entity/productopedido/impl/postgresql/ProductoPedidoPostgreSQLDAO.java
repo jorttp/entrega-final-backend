@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.productopedido.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,9 +56,42 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	}
 
 	@Override
-	public List<ProductoPedidoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoPedidoEntity> listAll() throws LilfacException {
+	    List<ProductoPedidoEntity> listaProductosPedidos = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM ProductoPedido PP JOIN Producto PR ON PP.producto = PR.id JOIN Pedido PE ON PP.pedido = PE.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var productoPedido = new ProductoPedidoEntity();
+	            productoPedido.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            productoPedido.setCantidad(resultados.getInt("cantidad"));
+
+	            var producto = new ProductoEntity();
+	            producto.setNombre(resultados.getString("nombre_producto"));
+	            productoPedido.setProducto(producto);
+	            
+	            var pedido = new PedidoEntity();
+	            pedido.setId(UtilUUID.convertirAUUID(resultados.getString("pedido")));
+	            productoPedido.setPedido(pedido);
+
+	            listaProductosPedidos.add(productoPedido);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los productos pedidos";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla ProductoPedido";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los productos pedidos";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla ProductoPedido";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaProductosPedidos;
 	}
 
 	@Override
@@ -116,6 +150,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 			sentenciaPreparada.setObject(2, entity.getProducto().getId());
 			sentenciaPreparada.setObject(3,  entity.getPedido().getId());
 			sentenciaPreparada.setObject(4, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un producto pedido con el identificador ingresado";
@@ -139,6 +174,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un producto pedido con el identificador ingresado";

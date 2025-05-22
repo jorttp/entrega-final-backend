@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.ciudad.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,9 +55,38 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	}
 
 	@Override
-	public List<CiudadEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CiudadEntity> listAll() throws LilfacException {
+	    List<CiudadEntity> listaCiudades = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM Ciudad C JOIN Departamento D ON C.departamento = D.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var ciudad = new CiudadEntity();
+	            ciudad.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            ciudad.setNombre(resultados.getString("nombre"));
+
+	            var departamento = new DepartamentoEntity();
+	            departamento.setNombre(resultados.getString("nombre_departamento"));
+	            ciudad.setDepartamento(departamento);
+
+	            listaCiudades.add(ciudad);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de las ciudades";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Ciudad";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de las ciudades";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Ciudad";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaCiudades;
 	}
 
 	@Override
@@ -108,6 +138,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 			sentenciaPreparada.setString(1, entity.getNombre());
 			sentenciaPreparada.setObject(2, entity.getDepartamento().getId());
 			sentenciaPreparada.setObject(3, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de una ciudad con el identificador ingresado";
@@ -132,6 +163,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de una ciudad con el identificador ingresado";

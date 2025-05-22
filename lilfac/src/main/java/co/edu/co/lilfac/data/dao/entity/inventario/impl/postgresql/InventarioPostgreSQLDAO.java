@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.inventario.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,9 +62,49 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	}
 
 	@Override
-	public List<InventarioEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<InventarioEntity> listAll() throws LilfacException {
+	    List<InventarioEntity> listaInventario = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM Inventario I JOIN Empresa E ON I.empresa = E.id JOIN Producto P ON I.producto = P.id JOIN HistorialCosto H ON I.historialCosto = H.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var inventario = new InventarioEntity();
+	            inventario.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            inventario.setTotalUnidades(resultados.getInt("totalUnidades"));
+	            inventario.setUnidadesAlquiladas(resultados.getInt("unidadesAlquiladas"));
+	            inventario.setUnidadesAfectadas(resultados.getInt("unidadesAfectadas"));
+	            inventario.setUnidadesDisponibles(resultados.getInt("unidadesDisponibles"));
+
+	            var empresa = new EmpresaEntity();
+	            empresa.setNombre(resultados.getString("nombre_empresa"));
+	            inventario.setEmpresa(empresa);
+
+	            var producto = new ProductoEntity();
+	            producto.setNombre(resultados.getString("nombre_producto"));
+	            inventario.setProducto(producto);
+
+	            var historialCosto = new HistorialCostoEntity();
+	            historialCosto.setCosto(resultados.getInt("costo"));
+	            inventario.setHistorialCosto(historialCosto);
+
+	            listaInventario.add(inventario);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información del inventario";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Inventario";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información del inventario";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Inventario";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaInventario;
 	}
 
 	@Override
@@ -132,6 +173,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 			sentenciaPreparada.setObject(6,  entity.getProducto().getId());
 			sentenciaPreparada.setObject(7,  entity.getHistorialCosto().getId());
 			sentenciaPreparada.setObject(8, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un inventario con el identificador ingresado";
@@ -155,6 +197,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un inventario con el identificador ingresado";

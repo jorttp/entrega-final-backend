@@ -1,11 +1,21 @@
 package co.edu.co.lilfac.data.dao.entity.factura.impl.postgresql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
+import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.factura.FacturaDAO;
+import co.edu.co.lilfac.entity.ClienteEntity;
+import co.edu.co.lilfac.entity.CostoAdicionalEntity;
+import co.edu.co.lilfac.entity.EmpleadoEntity;
+import co.edu.co.lilfac.entity.EmpresaEntity;
 import co.edu.co.lilfac.entity.FacturaEntity;
+import co.edu.co.lilfac.entity.PedidoEntity;
 
 public class FacturaPostgreSQLDAO implements FacturaDAO{
 	
@@ -16,9 +26,36 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	}
 
 	@Override
-	public void create(FacturaEntity entity) {
-		// TODO Auto-generated method stub
+	public void create(FacturaEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("INSERT INTO Factura (id, codigo, fechaGeneracion, costoTotal, empresa, empleado, cliente, costoAdicional, pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, entity.getId());
+			sentenciaPreparada.setString(2,  entity.getCodigo());
+			sentenciaPreparada.setString(3, entity.getFechaGeneracion());
+			sentenciaPreparada.setFloat(4, entity.getCostoTotal());
+			sentenciaPreparada.setObject(5, entity.getEmpresa().getId());
+			sentenciaPreparada.setObject(6, entity.getEmpleado().getId());
+			sentenciaPreparada.setObject(7, entity.getCliente().getId());
+			sentenciaPreparada.setObject(8, entity.getCostoAdicional().getId());
+			sentenciaPreparada.setObject(9, entity.getPedido().getId());
+			
+			sentenciaPreparada.executeUpdate();
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de registrar la información de una nueva factura";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un INSERT en la tabla Factura,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva factura";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un INSERT en la tabla Factura";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	@Override
@@ -28,27 +65,171 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	}
 
 	@Override
-	public List<FacturaEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FacturaEntity> listAll() throws LilfacException {
+	    List<FacturaEntity> listaFacturas = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var factura = new FacturaEntity();
+	            factura.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            factura.setCodigo(resultados.getString("codigo"));
+	            factura.setFechaGeneracion(resultados.getString("fechaGeneracion"));
+	            factura.setCostoTotal(resultados.getFloat("costoTotal"));
+
+	            var empresa = new EmpresaEntity();
+	            empresa.setNombre(resultados.getString("nombre_empresa"));
+	            factura.setEmpresa(empresa);
+
+	            var empleado = new EmpleadoEntity();
+	            empleado.setNombre(resultados.getString("nombre_empleado"));
+	            factura.setEmpleado(empleado);
+
+	            var cliente = new ClienteEntity();
+	            cliente.setNombre(resultados.getString("nombre_cliente"));
+	            factura.setCliente(cliente);
+
+	            var costoAdicional = new CostoAdicionalEntity();
+	            costoAdicional.setValor(resultados.getFloat("costo_adicional"));
+	            factura.setCostoAdicional(costoAdicional);
+
+	            var pedido = new PedidoEntity();
+	            pedido.setId(UtilUUID.convertirAUUID(resultados.getString("pedido")));
+	            factura.setPedido(pedido);
+
+	            listaFacturas.add(factura);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de las facturas";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Factura";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de las facturas";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Factura";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaFacturas;
 	}
 
-	@Override
-	public FacturaEntity listById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public void update(UUID id, FacturaEntity entity) {
-		// TODO Auto-generated method stub
+	public FacturaEntity listById(UUID id) throws LilfacException {
+		var facturaEntityRetorno=new FacturaEntity();
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id WHERE F.id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()){
+				
+				if (cursorResultados.next()) {
+					facturaEntityRetorno.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+					facturaEntityRetorno.setCodigo(cursorResultados.getString("codigo"));
+					facturaEntityRetorno.setFechaGeneracion(cursorResultados.getString("fechaGeneracion"));
+					facturaEntityRetorno.setCostoTotal(cursorResultados.getFloat("costoTotal"));
+					
+					var empresa = new EmpresaEntity();
+					empresa.setNombre(cursorResultados.getString("nombre_empresa"));
+					facturaEntityRetorno.setEmpresa(empresa);
+					
+					var empleado = new EmpleadoEntity();
+					empleado.setNombre(cursorResultados.getString("nombre_empleado"));
+					facturaEntityRetorno.setEmpleado(empleado);
+	
+					var cliente = new ClienteEntity();
+					cliente.setNombre(cursorResultados.getString("nombre_cliente"));
+					facturaEntityRetorno.setCliente(cliente);
+					
+					var costoAdicional = new CostoAdicionalEntity();
+					costoAdicional.setValor(cursorResultados.getFloat("costo_adicional"));
+					facturaEntityRetorno.setCostoAdicional(costoAdicional);
+					
+					var pedido = new PedidoEntity();
+					pedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("pedido")));
+					facturaEntityRetorno.setPedido(pedido);
+					
+				}
+				
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de consultar la información de la factura con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Factura,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de la factura con el identificador deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un SELECT en la tabla Factura";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return facturaEntityRetorno;
 	}
 
 	@Override
-	public void delete(UUID id) {
-		// TODO Auto-generated method stub
+	public void update(UUID id, FacturaEntity entity) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
 		
+		sentenciaSQL.append("UPDATE Factura SET  codigo = ?, fechaGeneracion = ?, costoTotal = ?, empresa = ?, empleado = ?, cliente = ?, costoAdicional = ?, pedido = ? WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setString(1, entity.getCodigo());
+			sentenciaPreparada.setString(2, entity.getFechaGeneracion());
+			sentenciaPreparada.setFloat(3,  entity.getCostoTotal());
+			sentenciaPreparada.setObject(4,  entity.getEmpresa().getId());
+			sentenciaPreparada.setObject(5,  entity.getEmpleado().getId());
+			sentenciaPreparada.setObject(6,  entity.getCliente().getId());
+			sentenciaPreparada.setObject(7,  entity.getCostoAdicional().getId());
+			sentenciaPreparada.setObject(8,  entity.getPedido().getId());
+			sentenciaPreparada.setObject(9, id);
+			sentenciaPreparada.executeUpdate();
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de una factura con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un UPDATE en la tabla Factura,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de actualizar la información de una factura con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un UPDATE en la tabla Factura";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+	}
+
+	@Override
+	public void delete(UUID id) throws LilfacException {
+		var sentenciaSQL = new StringBuilder();
+		
+		sentenciaSQL.append("DELETE FROM Factura WHERE id = ?");
+		
+		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de una factura con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción de tipo SQLexception tratando de hacer un DELETE en la tabla Factura,  para tener más detalles revise el log de errores";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de eliminar la información de una factura pedido con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de hacer un DELETE en la tabla Factura";
+			
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

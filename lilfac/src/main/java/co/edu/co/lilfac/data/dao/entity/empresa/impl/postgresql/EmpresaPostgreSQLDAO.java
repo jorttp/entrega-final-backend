@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.empresa.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,9 +60,41 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	}
 
 	@Override
-	public List<EmpresaEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmpresaEntity> listAll() throws LilfacException {
+	    List<EmpresaEntity> listaEmpresas = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM Empresa E JOIN Ciudad C ON E.ciudad = C.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var empresa = new EmpresaEntity();
+	            empresa.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            empresa.setNit(resultados.getInt("nit"));
+	            empresa.setTelefono(resultados.getInt("telefono"));
+	            empresa.setCorreo(resultados.getString("correo"));
+	            empresa.setDireccion(resultados.getString("direccion"));
+
+	            var ciudad = new CiudadEntity();
+	            ciudad.setNombre(resultados.getString("nombre_ciudad"));
+	            empresa.setCiudad(ciudad);
+
+	            listaEmpresas.add(empresa);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de las empresas";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Empresa";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de las empresas";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Empresa";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaEmpresas;
 	}
 
 	@Override
@@ -121,6 +154,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 			sentenciaPreparada.setString(5,  entity.getDireccion());
 			sentenciaPreparada.setObject(6, entity.getCiudad().getId());
 			sentenciaPreparada.setObject(7, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de una empresa con el identificador ingresado";
@@ -145,6 +179,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de una empresa con el identificador ingresado";

@@ -1,5 +1,6 @@
 package co.edu.co.lilfac.entity;
 
+import java.text.ParseException;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
@@ -21,7 +22,7 @@ public class FacturaEntity {
 	public FacturaEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setCodigo(UtilTexto.getInstance().obtenerValorDefecto());
-		setFechaGeneracion(UtilTexto.getInstance().obtenerValorDefecto());
+		setFechaGeneracion(fechaGeneracion);
 		setCostoTotal(UtilNumerico.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaEntity.obtenerValorDefecto());
 		setEmpleado(EmpleadoEntity.obtenerValorDefecto());
@@ -30,7 +31,7 @@ public class FacturaEntity {
 		setPedido(PedidoEntity.obtenerValorDefecto());
 	}
 	
-	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) {
+	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) throws ParseException {
 		setId(id);
 		setCodigo(codigo);
 		setFechaGeneracion(fechaGeneracion);

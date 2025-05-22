@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.departamento.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,9 +55,38 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	}
 
 	@Override
-	public List<DepartamentoEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DepartamentoEntity> listAll() throws LilfacException {
+	    List<DepartamentoEntity> listaDepartamentos = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM Departamento D JOIN Pais P ON D.pais = P.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var departamento = new DepartamentoEntity();
+	            departamento.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            departamento.setNombre(resultados.getString("nombre"));
+
+	            var pais = new PaisEntity();
+	            pais.setNombre(resultados.getString("nombre_pais"));
+	            departamento.setPais(pais);
+
+	            listaDepartamentos.add(departamento);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de los departamentos";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Departamento";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de los departamentos";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Departamento";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaDepartamentos;
 	}
 
 	@Override
@@ -108,6 +138,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 			sentenciaPreparada.setString(1, entity.getNombre());
 			sentenciaPreparada.setObject(2, entity.getPais().getId());
 			sentenciaPreparada.setObject(3, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de un departamento con el identificador ingresado";
@@ -132,6 +163,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de un departamento con el identificador ingresado";

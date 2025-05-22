@@ -2,6 +2,7 @@ package co.edu.co.lilfac.data.dao.entity.entrega.impl.postgresql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,9 +61,48 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	}
 
 	@Override
-	public List<EntregaEntity> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EntregaEntity> listAll() throws LilfacException {
+	    List<EntregaEntity> listaEntregas = new ArrayList<>();
+	    var sentenciaSQL = new StringBuilder();
+
+	    sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM Entrega E JOIN Ciudad C ON E.ciudad = C.id JOIN Empleado EM ON E.empleado = EM.id JOIN Pedido P ON E.pedido = P.id");
+
+	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
+	         var resultados = sentenciaPreparada.executeQuery()) {
+
+	        while (resultados.next()) {
+	            var entrega = new EntregaEntity();
+	            entrega.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
+	            entrega.setFecha(resultados.getString("fecha"));
+	            entrega.setEstado(resultados.getString("Estado"));
+	            entrega.setDireccion(resultados.getString("direccion"));
+
+	            var ciudad = new CiudadEntity();
+	            ciudad.setNombre(resultados.getString("nombre_ciudad"));
+	            entrega.setCiudad(ciudad);
+
+	            var empleado = new EmpleadoEntity();
+	            empleado.setNombre(resultados.getString("nombre_empleado"));
+	            entrega.setEmpleado(empleado);
+
+	            var pedido = new PedidoEntity();
+	            pedido.setId(UtilUUID.convertirAUUID(resultados.getString("pedido")));
+	            entrega.setPedido(pedido);
+
+	            listaEntregas.add(entrega);
+	        }
+
+	    } catch (SQLException exception) {
+	        var mensajeUsuario = "Se ha presentado un problema tratando de consultar la información de las entregas";
+	        var mensajeTecnico = "Se presentó una excepción de tipo SQLexception tratando de hacer un SELECT en la tabla Entrega";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    } catch (Exception exception) {
+	        var mensajeUsuario = "Se ha presentado un problema INESPERADO tratando de consultar la información de las entregas";
+	        var mensajeTecnico = "Excepción NO CONTROLADA al hacer SELECT en la tabla Entrega";
+	        throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+	    }
+
+	    return listaEntregas;
 	}
 
 	@Override
@@ -130,6 +170,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 			sentenciaPreparada.setObject(5,  entity.getEmpleado().getId());
 			sentenciaPreparada.setObject(6,  entity.getPedido().getId());
 			sentenciaPreparada.setObject(7, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de actualizar la información de una entrega con el identificador ingresado";
@@ -153,6 +194,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
 			sentenciaPreparada.setObject(1, id);
+			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
 			var mensajeUsuario="Se ha presentado un problema tratando de eliminar la información de una entrega con el identificador ingresado";
