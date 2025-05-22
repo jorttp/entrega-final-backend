@@ -11,11 +11,11 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class HistorialCostoEntity {
 	private UUID id;
-	private int codigo;
+	private Integer codigo;
 	private String fechaInicio;
 	private String fechaFin;
-	private boolean estado;
-	private float costo;
+	private Boolean estado;
+	private Float costo;
 	private ProductoEntity producto;
 	
 	public HistorialCostoEntity() {
@@ -28,7 +28,7 @@ public class HistorialCostoEntity {
 		setProducto(ProductoEntity.obtenerValorDefecto());
 	}
 	
-	public HistorialCostoEntity(final UUID id, final int codigo, final String fechaInicio, final String fechaFin, final boolean estado, final float costo, final ProductoEntity producto) {
+	public HistorialCostoEntity(final UUID id, final Integer codigo, final String fechaInicio, final String fechaFin, final Boolean estado, final Float costo, final ProductoEntity producto) {
 		setId(id);
 		setCodigo(codigo);
 		setFechaInicio(fechaInicio);
@@ -54,11 +54,11 @@ public class HistorialCostoEntity {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
-	public int getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(int codigo) {
+	public void setCodigo(Integer codigo) {
 		this.codigo = UtilNumerico.obtenerValorDefecto(codigo);
 	}
 
@@ -78,19 +78,19 @@ public class HistorialCostoEntity {
 		this.fechaFin = UtilTexto.getInstance().obtenerValorDefecto(fechaFin);
 	}
 
-	public boolean getEstado() {
+	public Boolean getEstado() {
 		return estado;
 	}
 
-	public void setEstado(boolean estado) {
+	public void setEstado(Boolean estado) {
 		this.estado = UtilBoolean.obtenerValorDefecto(estado);
 	}
 
-	public float getCosto() {
+	public Float getCosto() {
 		return costo;
 	}
 
-	public void setCosto(float costo) {
+	public void setCosto(Float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
 	}
 

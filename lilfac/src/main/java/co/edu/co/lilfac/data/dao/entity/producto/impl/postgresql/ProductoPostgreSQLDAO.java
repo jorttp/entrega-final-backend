@@ -51,9 +51,79 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	}
 
 	@Override
-	public List<ProductoEntity> listByFIlter(ProductoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoEntity> listByFIlter(ProductoEntity filter) throws LilfacException {
+		var listaProductos = new java.util.ArrayList<ProductoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getCodigo() != null) {
+				sentenciaSQL.append(" AND codigo = ?");
+			}
+			if (filter.getCaracteristicas() != null && !filter.getCaracteristicas().isBlank()) {
+				sentenciaSQL.append(" AND caracteristicas LIKE ?");
+			}
+			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+				sentenciaSQL.append(" AND estado LIKE ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getCodigo() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getCodigo());
+				}
+				if (filter.getCaracteristicas() != null && !filter.getCaracteristicas().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCaracteristicas() + "%");
+				}
+				if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getEstado() + "%");
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var producto = new ProductoEntity();
+		            producto.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            producto.setNombre(cursorResultados.getString("nombre"));
+		            producto.setCodigo(cursorResultados.getInt("codigo"));
+		            producto.setCaracteristicas(cursorResultados.getString("caracteristicas"));
+		            producto.setEstado(cursorResultados.getString("estado"));
+
+		            listaProductos.add(producto);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los productos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Producto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los productos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Producto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaProductos;
 	}
 
 	@Override

@@ -49,9 +49,75 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	}
 
 	@Override
-	public List<CostoAdicionalEntity> listByFIlter(CostoAdicionalEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CostoAdicionalEntity> listByFIlter(CostoAdicionalEntity filter) throws LilfacException {
+		var listaCostosAdicionales = new java.util.ArrayList<CostoAdicionalEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM CostoAdicional CA JOIN Recepcion R ON CA.recepcion = R.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getValor() != null) {
+				sentenciaSQL.append(" AND valor = ?");
+			}
+			if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+				sentenciaSQL.append(" AND descripcion LIKE ?");
+			}
+			if (filter.getRecepcion() != null) {
+				sentenciaSQL.append(" AND recepcion = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getValor() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getValor());
+				}
+				if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDescripcion() + "%");
+				}
+				if (filter.getRecepcion() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getRecepcion().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var costoAdicional = new CostoAdicionalEntity();
+		            costoAdicional.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            costoAdicional.setValor(cursorResultados.getFloat("valor"));
+		            costoAdicional.setDescripcion(cursorResultados.getString("descripcion"));
+
+		            var recepcion = new RecepcionEntity();
+		            recepcion.setId(UtilUUID.convertirAUUID(cursorResultados.getString("recepcion")));
+		            costoAdicional.setRecepcion(recepcion);
+
+		            listaCostosAdicionales.add(costoAdicional);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los costos adicionales con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla CostoAdicional.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los costos adicionales con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla CostoAdicional.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaCostosAdicionales;
 	}
 
 	@Override

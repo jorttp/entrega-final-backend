@@ -55,9 +55,103 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	}
 
 	@Override
-	public List<EntregaEntity> listByFIlter(EntregaEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EntregaEntity> listByFIlter(EntregaEntity filter) throws LilfacException {
+		var listaEntregas = new java.util.ArrayList<EntregaEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM Entrega E JOIN Ciudad C ON E.ciudad = C.id JOIN Empleado EM ON E.empleado = EM.id JOIN Pedido P ON E.pedido = P.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
+				sentenciaSQL.append(" AND fecha LIKE ?");
+			}
+			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+				sentenciaSQL.append(" AND estado LIKE ?");
+			}
+			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+				sentenciaSQL.append(" AND direccion LIKE ?");
+			}
+			if (filter.getCiudad() != null) {
+				sentenciaSQL.append(" AND ciudad = ?");
+			}
+			if (filter.getEmpleado() != null) {
+				sentenciaSQL.append(" AND empleado = ?");
+			}
+			if (filter.getPedido() != null) {
+				sentenciaSQL.append(" AND pedido = ?");
+			}
+			
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFecha() + "%");
+				}
+				if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getEstado() + "%");
+				}
+				if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccion() + "%");
+				}
+				if (filter.getCiudad() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+				}
+				if (filter.getEmpleado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+				}
+				if (filter.getPedido() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var entrega = new EntregaEntity();
+		            entrega.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            entrega.setFecha(cursorResultados.getString("fecha"));
+		            entrega.setEstado(cursorResultados.getString("Estado"));
+		            entrega.setDireccion(cursorResultados.getString("direccion"));
+
+		            var ciudad = new CiudadEntity();
+		            ciudad.setNombre(cursorResultados.getString("nombre_ciudad"));
+		            entrega.setCiudad(ciudad);
+
+		            var empleado = new EmpleadoEntity();
+		            empleado.setNombre(cursorResultados.getString("nombre_empleado"));
+		            entrega.setEmpleado(empleado);
+
+		            var pedido = new PedidoEntity();
+		            pedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("pedido")));
+		            entrega.setPedido(pedido);
+
+		            listaEntregas.add(entrega);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las entregas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Entrega.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las entregas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Entrega.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaEntregas;
 	}
 
 	@Override

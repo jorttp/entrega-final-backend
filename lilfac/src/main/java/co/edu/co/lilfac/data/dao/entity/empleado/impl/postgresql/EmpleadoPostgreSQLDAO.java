@@ -51,9 +51,86 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	}
 
 	@Override
-	public List<EmpleadoEntity> listByFIlter(EmpleadoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmpleadoEntity> listByFIlter(EmpleadoEntity filter) throws LilfacException {
+		var listaEmpleados = new java.util.ArrayList<EmpleadoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getApellido() != null && !filter.getApellido().isBlank()) {
+				sentenciaSQL.append(" AND apellido LIKE ?");
+			}
+			if (filter.getCedula() != null) {
+				sentenciaSQL.append(" AND cedula = ?");
+			}
+			if (filter.getTelefono() != null) {
+				sentenciaSQL.append(" AND telefono = ?");
+			}
+			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+				sentenciaSQL.append(" AND correo LIKE ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getApellido() != null && !filter.getApellido().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getApellido() + "%");
+				}
+				if (filter.getCedula() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getCedula());
+				}
+				if (filter.getTelefono() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getTelefono());
+				}
+				if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCorreo() + "%");
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var empleado = new EmpleadoEntity();
+		            empleado.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            empleado.setNombre(cursorResultados.getString("nombre"));
+		            empleado.setApellido(cursorResultados.getString("apellido"));
+		            empleado.setCedula(cursorResultados.getInt("cedula"));
+		            empleado.setTelefono(cursorResultados.getInt("telefono"));
+		            empleado.setCorreo(cursorResultados.getString("correo"));
+
+		            listaEmpleados.add(empleado);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los empleados con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Empleado.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los empleados con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Empleado.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaEmpleados;
 	}
 
 	@Override

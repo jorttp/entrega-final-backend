@@ -54,9 +54,96 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	}
 
 	@Override
-	public List<HistorialCostoEntity> listByFIlter(HistorialCostoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<HistorialCostoEntity> listByFIlter(HistorialCostoEntity filter) throws LilfacException {
+		var listaHistorialesCosto = new java.util.ArrayList<HistorialCostoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getCodigo() != null) {
+				sentenciaSQL.append(" AND codigo = ?");
+			}
+			if (filter.getFechaInicio() != null && !filter.getFechaInicio().isBlank()) {
+				sentenciaSQL.append(" AND fechaInicio LIKE ?");
+			}
+			if (filter.getFechaFin() != null && !filter.getFechaFin().isBlank()) {
+				sentenciaSQL.append(" AND fechaFin LIKE ?");
+			}
+			if (filter.getEstado() != null) {
+				sentenciaSQL.append(" AND estado = ?");
+			}
+			if (filter.getCosto() != null) {
+				sentenciaSQL.append(" AND costo = ?");
+			}
+			if (filter.getProducto() != null) {
+				sentenciaSQL.append(" AND producto = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getCodigo() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCodigo());
+				}
+				if (filter.getFechaInicio() != null && !filter.getFechaInicio().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaInicio() + "%");
+				}
+				if (filter.getFechaFin() != null && !filter.getFechaFin().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaFin() + "%");
+				}
+				if (filter.getEstado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEstado());
+				}
+				if (filter.getCosto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCosto());
+				}
+				if (filter.getProducto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var historialCosto = new HistorialCostoEntity();
+		            historialCosto.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            historialCosto.setCodigo(cursorResultados.getInt("codigo"));
+		            historialCosto.setFechaInicio(cursorResultados.getString("fechaInicio"));
+		            historialCosto.setFechaFin(cursorResultados.getString("fechaFin"));
+		            historialCosto.setEstado(cursorResultados.getBoolean("estado"));
+		            historialCosto.setCosto(cursorResultados.getFloat("costo"));
+
+		            var producto = new ProductoEntity();
+		            producto.setNombre(cursorResultados.getString("nombre_producto"));
+		            historialCosto.setProducto(producto);
+
+		            listaHistorialesCosto.add(historialCosto);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los historiales de costo con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla HistorialCosto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los historiales de costo con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla HistorialCosto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaHistorialesCosto;
 	}
 
 	@Override

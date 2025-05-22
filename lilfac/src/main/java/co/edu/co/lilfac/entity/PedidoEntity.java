@@ -12,9 +12,9 @@ public class PedidoEntity {
 	private String fechaReserva;
 	private String fechaVencimiento;
 	private String direccionEntrega;
-	private float costo;
-	private float abono;
-	private float restante;
+	private Float costo;
+	private Float abono;
+	private Float restante;
 	private CiudadEntity ciudad;
 	private ClienteEntity cliente;
 	private EmpleadoEntity empleado;
@@ -32,7 +32,7 @@ public class PedidoEntity {
 		setEmpleado(EmpleadoEntity.obtenerValorDefecto());
 	}
 	
-	public PedidoEntity(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadEntity ciudad, final ClienteEntity cliente, final EmpleadoEntity empleado) {
+	public PedidoEntity(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final Float costo, final Float abono, final Float restante, final CiudadEntity ciudad, final ClienteEntity cliente, final EmpleadoEntity empleado) {
 		setId(id);
 		setFechaReserva(fechaReserva);
 		setFechaVencimiento(fechaVencimiento);
@@ -85,27 +85,27 @@ public class PedidoEntity {
 		this.direccionEntrega = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionEntrega);
 	}
 
-	public float getCosto() {
+	public Float getCosto() {
 		return costo;
 	}
 
-	public void setCosto(float costo) {
+	public void setCosto(Float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
 	}
 
-	public float getAbono() {
+	public Float getAbono() {
 		return abono;
 	}
 
-	public void setAbono(float abono) {
+	public void setAbono(Float abono) {
 		this.abono = UtilFloat.obtenerValorDefecto(abono);
 	}
 
-	public float getRestante() {
+	public Float getRestante() {
 		return restante;
 	}
 
-	public void setRestante(float restante) {
+	public void setRestante(Float restante) {
 		this.restante = UtilFloat.obtenerValorDefecto(restante);
 	}
 

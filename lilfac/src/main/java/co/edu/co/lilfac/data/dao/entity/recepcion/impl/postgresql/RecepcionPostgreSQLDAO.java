@@ -55,9 +55,104 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	}
 
 	@Override
-	public List<RecepcionEntity> listByFIlter(RecepcionEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RecepcionEntity> listByFIlter(RecepcionEntity filter) throws LilfacException {
+		var listaRecepciones = new java.util.ArrayList<RecepcionEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM Recepcion R JOIN Entrega E ON R.entrega = E.id JOIN Ciudad C ON R.ciudad = C.id JOIN Empleado EM ON R.empleado = EM.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getEntrega() != null) {
+				sentenciaSQL.append(" AND entrega = ?");
+			}
+			if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
+				sentenciaSQL.append(" AND fecha LIKE ?");
+			}
+			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+				sentenciaSQL.append(" AND estado LIKE ?");
+			}
+			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+				sentenciaSQL.append(" AND direccion LIKE ?");
+			}
+			if (filter.getCiudad() != null) {
+				sentenciaSQL.append(" AND ciudad = ?");
+			}
+			if (filter.getEmpleado() != null) {
+				sentenciaSQL.append(" AND empleado = ?");
+			}
+			
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getEntrega() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEntrega().getId());
+				}
+				if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFecha() + "%");
+				}
+				if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getEstado() + "%");
+				}
+				if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccion() + "%");
+				}
+				if (filter.getCiudad() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+				}
+				if (filter.getEmpleado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+				}
+				
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var recepcion = new RecepcionEntity();
+		            recepcion.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            recepcion.setFecha(cursorResultados.getString("fecha"));
+		            recepcion.setEstado(cursorResultados.getString("Estado"));
+		            recepcion.setDireccion(cursorResultados.getString("direccion"));
+
+		            var ciudad = new CiudadEntity();
+		            ciudad.setNombre(cursorResultados.getString("nombre_ciudad"));
+		            recepcion.setCiudad(ciudad);
+
+		            var empleado = new EmpleadoEntity();
+		            empleado.setNombre(cursorResultados.getString("nombre_empleado"));
+		            recepcion.setEmpleado(empleado);
+
+		            var entrega = new EntregaEntity();
+		            entrega.setId(UtilUUID.convertirAUUID(cursorResultados.getString("entrega")));
+		            recepcion.setEntrega(entrega);
+
+		            listaRecepciones.add(recepcion);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las recepciones con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Recepcion.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las recepciones con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Recepcion.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaRecepciones;
 	}
 
 	@Override

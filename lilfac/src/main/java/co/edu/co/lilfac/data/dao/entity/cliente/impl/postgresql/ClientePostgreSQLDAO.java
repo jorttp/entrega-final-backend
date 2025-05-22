@@ -54,9 +54,103 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	}
 
 	@Override
-	public List<ClienteEntity> listByFIlter(ClienteEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ClienteEntity> listByFIlter(ClienteEntity filter) throws LilfacException {
+		var listaClientes = new java.util.ArrayList<ClienteEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM Cliente CL JOIN Ciudad C ON CL.ciudad = C.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getApellido() != null && !filter.getApellido().isBlank()) {
+				sentenciaSQL.append(" AND apellido LIKE ?");
+			}
+			if (filter.getCedula() != null) {
+				sentenciaSQL.append(" AND cedula = ?");
+			}
+			if (filter.getTelefono() != null) {
+				sentenciaSQL.append(" AND telefono = ?");
+			}
+			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+				sentenciaSQL.append(" AND correo LIKE ?");
+			}
+			if (filter.getDireccionResidencia() != null && !filter.getDireccionResidencia().isBlank()) {
+				sentenciaSQL.append(" AND direccionResidencia LIKE ?");
+			}
+			if (filter.getCiudad() != null) {
+				sentenciaSQL.append(" AND ciudad = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getApellido() != null && !filter.getApellido().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getApellido() + "%");
+				}
+				if (filter.getCedula() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getCedula());
+				}
+				if (filter.getTelefono() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getTelefono());
+				}
+				if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCorreo() + "%");
+				}
+				if (filter.getDireccionResidencia() != null && !filter.getDireccionResidencia().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccionResidencia() + "%");
+				}
+				if (filter.getCiudad() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var cliente = new ClienteEntity();
+		            cliente.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            cliente.setNombre(cursorResultados.getString("nombre"));
+		            cliente.setApellido(cursorResultados.getString("apellido"));
+		            cliente.setCedula(cursorResultados.getInt("cedula"));
+		            cliente.setTelefono(cursorResultados.getInt("telefono"));
+		            cliente.setCorreo(cursorResultados.getString("correo"));
+		            cliente.setDireccionResidencia(cursorResultados.getString("direccionResidencia"));
+
+		            var ciudad = new CiudadEntity();
+		            ciudad.setNombre(cursorResultados.getString("nombre_ciudad"));
+		            cliente.setCiudad(ciudad);
+
+		            listaClientes.add(cliente);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los clientes con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Cliente.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los clientes con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Cliente.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaClientes;
 	}
 
 	@Override

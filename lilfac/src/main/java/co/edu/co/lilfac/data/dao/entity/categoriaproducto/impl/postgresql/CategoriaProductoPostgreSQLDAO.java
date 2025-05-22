@@ -49,9 +49,71 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	}
 
 	@Override
-	public List<CategoriaProductoEntity> listByFIlter(CategoriaProductoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CategoriaProductoEntity> listByFIlter(CategoriaProductoEntity filter) throws LilfacException {
+		var listaCategoriaProducto = new java.util.ArrayList<CategoriaProductoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM CategoriaProducto CP JOIN Producto P ON CP.producto = P.id JOIN Categoria C ON CP.categoria = C.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getProducto() != null) {
+				sentenciaSQL.append(" AND producto = ?");
+			}
+			if (filter.getCategoria() != null) {
+				sentenciaSQL.append(" AND categoria = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getProducto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+				}
+				if (filter.getCategoria() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCategoria().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var categoriaProducto = new CategoriaProductoEntity();
+		            categoriaProducto.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+
+		            var producto = new ProductoEntity();
+		            producto.setNombre(cursorResultados.getString("nombre_producto"));
+		            categoriaProducto.setProducto(producto);
+
+		            var categoria = new CategoriaEntity();
+		            categoria.setNombre(cursorResultados.getString("nombre_categoria"));
+		            categoriaProducto.setCategoria(categoria);
+
+		            listaCategoriaProducto.add(categoriaProducto);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las categorias de producto con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla CategoriaProducto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las categorias de producto con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla CategoriaProducto.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaCategoriaProducto;
 	}
 
 	@Override

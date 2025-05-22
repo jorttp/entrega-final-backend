@@ -59,9 +59,124 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	}
 
 	@Override
-	public List<FacturaEntity> listByFIlter(FacturaEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FacturaEntity> listByFIlter(FacturaEntity filter) throws LilfacException {
+		var listaFacturas = new java.util.ArrayList<FacturaEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getCodigo() != null) {
+				sentenciaSQL.append(" AND codigo = ?");
+			}
+			if (filter.getFechaGeneracion() != null && !filter.getFechaGeneracion().isBlank()) {
+				sentenciaSQL.append(" AND fechaGeneracion LIKE ?");
+			}
+			if (filter.getCostoTotal() != null) {
+				sentenciaSQL.append(" AND costoTotal = ?");
+			}
+			if (filter.getEmpresa() != null) {
+				sentenciaSQL.append(" AND empresa = ?");
+			}
+			if (filter.getEmpleado() != null) {
+				sentenciaSQL.append(" AND empleado = ?");
+			}
+			if (filter.getCliente() != null) {
+				sentenciaSQL.append(" AND cliente = ?");
+			}
+			if (filter.getCostoAdicional() != null) {
+				sentenciaSQL.append(" AND costoAdicional = ?");
+			}
+			if (filter.getPedido() != null) {
+				sentenciaSQL.append(" AND pedido = ?");
+			}
+
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getCodigo() != null) {
+					sentenciaPreparada.setString(indiceParametro++, filter.getCodigo());
+				}
+				if (filter.getFechaGeneracion() != null && !filter.getFechaGeneracion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaGeneracion() + "%");
+				}
+				if (filter.getCostoTotal() != null) {
+					sentenciaPreparada.setFloat(indiceParametro++, filter.getCostoTotal());
+				}
+				if (filter.getEmpresa() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getId());
+				}
+				if (filter.getEmpleado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+				}
+				if (filter.getCliente() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getId());
+				}
+				if (filter.getCostoAdicional() != null){
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCostoAdicional().getId());
+				}
+				if (filter.getPedido() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
+				}
+				
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var factura = new FacturaEntity();
+		            factura.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            factura.setCodigo(cursorResultados.getString("codigo"));
+		            factura.setFechaGeneracion(cursorResultados.getString("fechaGeneracion"));
+		            factura.setCostoTotal(cursorResultados.getFloat("costoTotal"));
+
+		            var empresa = new EmpresaEntity();
+		            empresa.setNombre(cursorResultados.getString("nombre_empresa"));
+		            factura.setEmpresa(empresa);
+
+		            var empleado = new EmpleadoEntity();
+		            empleado.setNombre(cursorResultados.getString("nombre_empleado"));
+		            factura.setEmpleado(empleado);
+
+		            var cliente = new ClienteEntity();
+		            cliente.setNombre(cursorResultados.getString("nombre_cliente"));
+		            factura.setCliente(cliente);
+
+		            var costoAdicional = new CostoAdicionalEntity();
+		            costoAdicional.setValor(cursorResultados.getFloat("costo_adicional"));
+		            factura.setCostoAdicional(costoAdicional);
+
+		            var pedido = new PedidoEntity();
+		            pedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("pedido")));
+		            factura.setPedido(pedido);
+
+		            listaFacturas.add(factura);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las facturas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Factura.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las facturas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Factura.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaFacturas;
 	}
 
 	@Override

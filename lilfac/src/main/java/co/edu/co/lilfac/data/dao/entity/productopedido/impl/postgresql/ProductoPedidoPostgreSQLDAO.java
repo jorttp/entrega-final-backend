@@ -50,9 +50,78 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	}
 
 	@Override
-	public List<ProductoPedidoEntity> listByFIlter(ProductoPedidoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoPedidoEntity> listByFIlter(ProductoPedidoEntity filter) throws LilfacException {
+		var listaProductosPedidos = new java.util.ArrayList<ProductoPedidoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM ProductoPedido PP JOIN Producto PR ON PP.producto = PR.id JOIN Pedido PE ON PP.pedido = PE.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getCantidad() != null) {
+				sentenciaSQL.append(" AND cantidad = ?");
+			}		
+			if (filter.getProducto() != null) {
+				sentenciaSQL.append(" AND producto = ?");
+			}
+			if (filter.getPedido() != null) {
+				sentenciaSQL.append(" AND pedido = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getCantidad() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getCantidad());
+				}		
+				if (filter.getProducto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+				}
+				if (filter.getPedido() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var productoPedido = new ProductoPedidoEntity();
+		            productoPedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            productoPedido.setCantidad(cursorResultados.getInt("cantidad"));
+
+		            var producto = new ProductoEntity();
+		            producto.setNombre(cursorResultados.getString("nombre_producto"));
+		            productoPedido.setProducto(producto);
+		            
+		            var pedido = new PedidoEntity();
+		            pedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("pedido")));
+		            productoPedido.setPedido(pedido);
+
+		            listaProductosPedidos.add(productoPedido);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los productos pedidos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla ProductoPedido.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los productos pedidos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla ProductoPedido.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaProductosPedidos;
 	}
 
 	@Override

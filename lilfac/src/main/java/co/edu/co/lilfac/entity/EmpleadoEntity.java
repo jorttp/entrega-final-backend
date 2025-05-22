@@ -11,8 +11,8 @@ public class EmpleadoEntity {
 	private UUID id;
 	private String nombre;
 	private String apellido;
-	private int cedula;
-	private int telefono;
+	private Integer cedula;
+	private Integer telefono;
 	private String correo;
 	
 	public EmpleadoEntity () {
@@ -24,7 +24,7 @@ public class EmpleadoEntity {
 		setCorreo(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public EmpleadoEntity (final UUID id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public EmpleadoEntity (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -66,19 +66,19 @@ public class EmpleadoEntity {
 		this.apellido = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(apellido);
 	}
 
-	public int getCedula() {
+	public Integer getCedula() {
 		return cedula;
 	}
 
-	public void setCedula(final int cedula) {
+	public void setCedula(final Integer cedula) {
 		this.cedula = UtilNumerico.obtenerValorDefecto(cedula);
 	}
 
-	public int getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(final int telefono) {
+	public void setTelefono(final Integer telefono) {
 		this.telefono = UtilNumerico.obtenerValorDefecto(telefono);
 	}
 

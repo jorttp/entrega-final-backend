@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
@@ -12,7 +11,7 @@ public class FacturaEntity {
 	private UUID id;
 	private String codigo;
 	private String fechaGeneracion;
-	private float costoTotal;
+	private Float costoTotal;
 	private EmpresaEntity empresa;
 	private EmpleadoEntity empleado;
 	private ClienteEntity cliente;
@@ -23,7 +22,7 @@ public class FacturaEntity {
 		setId(UtilUUID.obtenerValorDefecto());
 		setCodigo(UtilTexto.getInstance().obtenerValorDefecto());
 		setFechaGeneracion(fechaGeneracion);
-		setCostoTotal(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCostoTotal(UtilFloat.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaEntity.obtenerValorDefecto());
 		setEmpleado(EmpleadoEntity.obtenerValorDefecto());
 		setCliente(ClienteEntity.obtenerValorDefecto());
@@ -31,7 +30,7 @@ public class FacturaEntity {
 		setPedido(PedidoEntity.obtenerValorDefecto());
 	}
 	
-	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) throws ParseException {
+	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final Float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) throws ParseException {
 		setId(id);
 		setCodigo(codigo);
 		setFechaGeneracion(fechaGeneracion);
@@ -67,11 +66,11 @@ public class FacturaEntity {
 		this.fechaGeneracion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(fechaGeneracion);
 	}
 
-	public float getCostoTotal() {
+	public Float getCostoTotal() {
 		return costoTotal;
 	}
 
-	public void setCostoTotal(float costoTotal) {
+	public void setCostoTotal(Float costoTotal) {
 		this.costoTotal = UtilFloat.obtenerValorDefecto(costoTotal);
 	}
 

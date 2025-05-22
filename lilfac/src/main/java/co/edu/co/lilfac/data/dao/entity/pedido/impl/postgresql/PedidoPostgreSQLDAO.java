@@ -57,9 +57,123 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	}
 
 	@Override
-	public List<PedidoEntity> listByFIlter(PedidoEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PedidoEntity> listByFIlter(PedidoEntity filter) throws LilfacException {
+		var listaPedidos = new java.util.ArrayList<PedidoEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM Pedido P JOIN Ciudad C ON P.ciudad = C.id JOIN Cliente CL ON P.cliente = CL.id JOIN Empleado E ON P.empleado = E.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getFechaReserva() != null && !filter.getFechaReserva().isBlank()) {
+				sentenciaSQL.append(" AND fechaReserva LIKE ?");
+			}
+			if (filter.getFechaVencimiento() != null && !filter.getFechaVencimiento().isBlank()) {
+				sentenciaSQL.append(" AND fechaVencimiento LIKE ?");
+			}
+			if (filter.getDireccionEntrega() != null && !filter.getDireccionEntrega().isBlank()) {
+				sentenciaSQL.append(" AND direccionEntrega LIKE ?");
+			}
+			if (filter.getCosto() != null) {
+				sentenciaSQL.append(" AND costo = ?");
+			}
+			if (filter.getAbono() != null) {
+				sentenciaSQL.append(" AND abono = ?");
+			}
+			if (filter.getRestante() != null) {
+				sentenciaSQL.append(" AND restante = ?");
+			}
+			if (filter.getCiudad() != null) {
+				sentenciaSQL.append(" AND ciudad = ?");
+			}
+			if (filter.getCliente() != null) {
+				sentenciaSQL.append(" AND cliente = ?");
+			}
+			if (filter.getEmpleado() != null) {
+				sentenciaSQL.append(" AND empleado = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getFechaReserva() != null && !filter.getFechaReserva().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaReserva() + "%");
+				}
+				if (filter.getFechaVencimiento() != null && !filter.getFechaVencimiento().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaVencimiento() + "%");
+				}
+				if (filter.getDireccionEntrega() != null && !filter.getDireccionEntrega().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccionEntrega() + "%");
+				}
+				if (filter.getCosto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCosto());
+				}
+				if (filter.getAbono() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getAbono());
+				}
+				if (filter.getRestante() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getRestante());
+				}
+				if (filter.getCiudad() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+				}
+				if (filter.getCliente() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getId());
+				}
+				if (filter.getEmpleado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var pedido = new PedidoEntity();
+		            pedido.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            pedido.setFechaReserva(cursorResultados.getString("fechaReserva"));
+		            pedido.setFechaVencimiento(cursorResultados.getString("fechaVencimiento"));
+		            pedido.setDireccionEntrega(cursorResultados.getString("direccionEntrega"));
+		            pedido.setCosto(cursorResultados.getFloat("costo"));
+		            pedido.setAbono(cursorResultados.getFloat("abono"));
+		            pedido.setRestante(cursorResultados.getFloat("restante"));
+
+		            var ciudad = new CiudadEntity();
+		            ciudad.setNombre(cursorResultados.getString("nombre_ciudad"));
+		            pedido.setCiudad(ciudad);
+
+		            var cliente = new ClienteEntity();
+		            cliente.setNombre(cursorResultados.getString("nombre_cliente"));
+		            pedido.setCliente(cliente);
+
+		            var empleado = new EmpleadoEntity();
+		            empleado.setNombre(cursorResultados.getString("nombre_empleado"));
+		            pedido.setEmpleado(empleado);
+
+		            listaPedidos.add(pedido);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los pedidos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Pedido.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los pedidos con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Pedido.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaPedidos;
 	}
 
 	@Override

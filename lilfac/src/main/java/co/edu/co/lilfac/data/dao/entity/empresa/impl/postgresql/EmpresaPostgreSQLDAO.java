@@ -54,9 +54,95 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	}
 
 	@Override
-	public List<EmpresaEntity> listByFIlter(EmpresaEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmpresaEntity> listByFIlter(EmpresaEntity filter) throws LilfacException {
+		var listaEmpresas = new java.util.ArrayList<EmpresaEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM Empresa E JOIN Ciudad C ON E.ciudad = C.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getNit() != null) {
+				sentenciaSQL.append(" AND nit = ?");
+			}
+			if (filter.getTelefono() != null) {
+				sentenciaSQL.append(" AND telefono = ?");
+			}
+			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+				sentenciaSQL.append(" AND correo LIKE ?");
+			}
+			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+				sentenciaSQL.append(" AND direccion LIKE ?");
+			}
+			if (filter.getCiudad() != null) {
+				sentenciaSQL.append(" AND ciudad = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getNit() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getNit());
+				}
+				if (filter.getTelefono() != null) {
+					sentenciaPreparada.setInt(indiceParametro++, filter.getTelefono());
+				}
+				if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, filter.getCorreo());
+				}
+				if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, filter.getDireccion());
+				}
+				if (filter.getCiudad() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var empresa = new EmpresaEntity();
+		            empresa.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            empresa.setNit(cursorResultados.getInt("nit"));
+		            empresa.setTelefono(cursorResultados.getInt("telefono"));
+		            empresa.setCorreo(cursorResultados.getString("correo"));
+		            empresa.setDireccion(cursorResultados.getString("direccion"));
+
+		            var ciudad = new CiudadEntity();
+		            ciudad.setNombre(cursorResultados.getString("nombre_ciudad"));
+		            empresa.setCiudad(ciudad);
+
+		            listaEmpresas.add(empresa);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las empresas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Empresa.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las empresas con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Empresa.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaEmpresas;
 	}
 
 	@Override

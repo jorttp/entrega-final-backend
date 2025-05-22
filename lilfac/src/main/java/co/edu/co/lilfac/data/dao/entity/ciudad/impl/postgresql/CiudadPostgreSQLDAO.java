@@ -49,9 +49,68 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	}
 
 	@Override
-	public List<CiudadEntity> listByFIlter(CiudadEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CiudadEntity> listByFIlter(CiudadEntity filter) throws LilfacException {
+		var listaCiudades = new java.util.ArrayList<CiudadEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM Ciudad C JOIN Departamento D ON C.departamento = D.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getDepartamento() != null) {
+				sentenciaSQL.append(" AND departamento = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getDepartamento() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getDepartamento().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+					var ciudad = new CiudadEntity();
+					ciudad.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+					ciudad.setNombre(cursorResultados.getString("nombre"));
+					
+					var departamento = new DepartamentoEntity();
+		            departamento.setNombre(cursorResultados.getString("nombre_departamento"));
+		            ciudad.setDepartamento(departamento);
+					
+					listaCiudades.add(ciudad);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las ciudades con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Ciudad.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las ciudades con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Ciudad.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaCiudades;
 	}
 
 	@Override

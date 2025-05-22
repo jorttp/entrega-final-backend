@@ -56,9 +56,109 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	}
 
 	@Override
-	public List<InventarioEntity> listByFIlter(InventarioEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<InventarioEntity> listByFIlter(InventarioEntity filter) throws LilfacException {
+		var listaInventario = new java.util.ArrayList<InventarioEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM Inventario I JOIN Empresa E ON I.empresa = E.id JOIN Producto P ON I.producto = P.id JOIN HistorialCosto H ON I.historialCosto = H.id WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getTotalUnidades() != null) {
+				sentenciaSQL.append(" AND totalUnidades = ?");
+			}
+			if (filter.getUnidadesAlquiladas() != null) {
+				sentenciaSQL.append(" AND unidadesAlquiladas = ?");
+			}
+			if (filter.getUnidadesAfectadas() != null) {
+				sentenciaSQL.append(" AND unidadesAfectadas = ?");
+			}
+			if (filter.getUnidadesDisponibles() != null) {
+				sentenciaSQL.append(" AND UnidadesDisponibles = ?");
+			}
+			if (filter.getEmpresa() != null) {
+				sentenciaSQL.append(" AND empresa = ?");
+			}
+			if (filter.getProducto() != null) {
+				sentenciaSQL.append(" AND producto = ?");
+			}
+			if (filter.getHistorialCosto() != null) {
+				sentenciaSQL.append(" AND historialCosto = ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getTotalUnidades() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getTotalUnidades());
+				}
+				if (filter.getUnidadesAlquiladas() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getUnidadesAlquiladas());
+				}
+				if (filter.getUnidadesAfectadas() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getUnidadesAfectadas());
+				}
+				if (filter.getUnidadesDisponibles() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getUnidadesDisponibles());
+				}
+				if (filter.getEmpresa() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getId());
+				}
+				if (filter.getProducto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+				}
+				if (filter.getHistorialCosto() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getHistorialCosto().getId());
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var inventario = new InventarioEntity();
+		            inventario.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            inventario.setTotalUnidades(cursorResultados.getInt("totalUnidades"));
+		            inventario.setUnidadesAlquiladas(cursorResultados.getInt("unidadesAlquiladas"));
+		            inventario.setUnidadesAfectadas(cursorResultados.getInt("unidadesAfectadas"));
+		            inventario.setUnidadesDisponibles(cursorResultados.getInt("unidadesDisponibles"));
+
+		            var empresa = new EmpresaEntity();
+		            empresa.setNombre(cursorResultados.getString("nombre_empresa"));
+		            inventario.setEmpresa(empresa);
+
+		            var producto = new ProductoEntity();
+		            producto.setNombre(cursorResultados.getString("nombre_producto"));
+		            inventario.setProducto(producto);
+
+		            var historialCosto = new HistorialCostoEntity();
+		            historialCosto.setCosto(cursorResultados.getFloat("costo"));
+		            inventario.setHistorialCosto(historialCosto);
+
+		            listaInventario.add(inventario);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar el inventario con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Inventario.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar inventario con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Inventario.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaInventario;
 	}
 
 	@Override
@@ -88,7 +188,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	            inventario.setProducto(producto);
 
 	            var historialCosto = new HistorialCostoEntity();
-	            historialCosto.setCosto(resultados.getInt("costo"));
+	            historialCosto.setCosto(resultados.getFloat("costo"));
 	            inventario.setHistorialCosto(historialCosto);
 
 	            listaInventario.add(inventario);

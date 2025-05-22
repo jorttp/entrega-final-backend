@@ -49,9 +49,65 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 
 
 	@Override
-	public List<CategoriaEntity> listByFIlter(CategoriaEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CategoriaEntity> listByFIlter(CategoriaEntity filter) throws LilfacException {
+		var listaCategorias = new java.util.ArrayList<CategoriaEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT id, nombre, descripcion FROM Categoria WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+			if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+				sentenciaSQL.append(" AND descripcion LIKE ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+				if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDescripcion() + "%");
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+		            var categoria = new CategoriaEntity();
+		            categoria.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+		            categoria.setNombre(cursorResultados.getString("nombre"));
+		            categoria.setDescripcion(cursorResultados.getString("descripcion"));
+
+		            listaCategorias.add(categoria);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar las categorias con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Categoria.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar las categorias con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Categoria.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaCategorias;
 	}
 
 	@Override
