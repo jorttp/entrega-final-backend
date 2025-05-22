@@ -47,9 +47,59 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	}
 
 	@Override
-	public List<PaisEntity> listByFIlter(PaisEntity filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PaisEntity> listByFIlter(PaisEntity filter) throws LilfacException {
+		
+		var listaPaises = new java.util.ArrayList<PaisEntity>();
+		var sentenciaSQL = new StringBuilder();
+		sentenciaSQL.append("SELECT id, nombre FROM Pais WHERE 1=1");
+		
+		if (filter != null) {
+			if (filter.getId() != null) {
+				sentenciaSQL.append(" AND id = ?");
+			}
+			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				sentenciaSQL.append(" AND nombre LIKE ?");
+			}
+		}
+		
+		try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())) {
+			
+			var indiceParametro = 1;
+			
+			if (filter != null) {
+				if (filter.getId() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
+				}
+				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+				}
+			}
+			
+			try (var cursorResultados = sentenciaPreparada.executeQuery()) {
+				
+				while (cursorResultados.next()) {
+					var paisEntity = new PaisEntity();
+					paisEntity.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
+					paisEntity.setNombre(cursorResultados.getString("nombre"));
+					
+					listaPaises.add(paisEntity);
+				}
+			}
+			
+		} catch (SQLException exception) {
+			var mensajeUsuario = "Se ha presentado un problema tratando de consultar los países con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción SQLException ejecutando SELECT con filtros en la tabla Pais.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+			
+		} catch (Exception exception) {
+			var mensajeUsuario = "Se ha presentado un problema inesperado tratando de consultar los países con los filtros deseados.";
+			var mensajeTecnico = "Se presentó una excepción NO CONTROLADA ejecutando SELECT con filtros en la tabla Pais.";
+
+			throw DataLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+		
+		return listaPaises;
 	}
 
 	@Override
