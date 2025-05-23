@@ -17,6 +17,7 @@ public class FacturaEntity {
 	private ClienteEntity cliente;
 	private CostoAdicionalEntity costoAdicional;
 	private PedidoEntity pedido;
+	private boolean objetoVacio;
 	
 	public FacturaEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -112,6 +113,9 @@ public class FacturaEntity {
 
 	public void setPedido(PedidoEntity pedido) {
 		this.pedido = PedidoEntity.obtenerValorDefecto(pedido);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

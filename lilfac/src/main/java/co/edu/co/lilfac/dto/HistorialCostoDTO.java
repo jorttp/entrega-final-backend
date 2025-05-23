@@ -11,11 +11,11 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class HistorialCostoDTO {
 	private UUID id;
-	private int codigo;
+	private Integer codigo;
 	private String fechaInicio;
 	private String fechaFin;
-	private boolean estado;
-	private float costo;
+	private Boolean estado;
+	private Float costo;
 	private ProductoDTO producto;
 	
 	public HistorialCostoDTO() {
@@ -28,7 +28,7 @@ public class HistorialCostoDTO {
 		setProducto(ProductoDTO.obtenerValorDefecto());
 	}
 	
-	public HistorialCostoDTO(final UUID id, final int codigo, final String fechaInicio, final String fechaFin, final boolean estado, final float costo, final ProductoDTO producto) {
+	public HistorialCostoDTO(final UUID id, final Integer codigo, final String fechaInicio, final String fechaFin, final Boolean estado, final Float costo, final ProductoDTO producto) {
 		setId(id);
 		setCodigo(codigo);
 		setFechaInicio(fechaInicio);
@@ -55,11 +55,11 @@ public class HistorialCostoDTO {
 		return this;
 	}
 
-	public int getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
 
-	public HistorialCostoDTO setCodigo(int codigo) {
+	public HistorialCostoDTO setCodigo(Integer codigo) {
 		this.codigo = UtilNumerico.obtenerValorDefecto(codigo);
 		return this;
 	}
@@ -82,21 +82,21 @@ public class HistorialCostoDTO {
 		return this;
 	}
 
-	public boolean getEstado() {
+	public Boolean getEstado() {
 		return estado;
 	}
 
-	public HistorialCostoDTO setEstado(boolean estado) {
+	public HistorialCostoDTO setEstado(Boolean estado) {
 		this.estado = UtilBoolean.obtenerValorDefecto(estado);
 		return this;
 	}
 
-	public float getCosto() {
+	public Float getCosto() {
 		return costo;
 	}
 
-	public HistorialCostoDTO setCosto(float costo) {
-		this.costo = UtilFloat.obtenerValorDefecto(costo);
+	public HistorialCostoDTO setCosto(Float Float) {
+		this.costo = UtilFloat.obtenerValorDefecto(Float);
 		return this;
 	}
 

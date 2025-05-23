@@ -11,8 +11,8 @@ public class EmpleadoDTO {
 	private UUID id;
 	private String nombre;
 	private String apellido;
-	private int cedula;
-	private int telefono;
+	private Integer cedula;
+	private Integer telefono;
 	private String correo;
 	
 	public EmpleadoDTO () {
@@ -24,7 +24,7 @@ public class EmpleadoDTO {
 		setCorreo(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public EmpleadoDTO (final UUID id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public EmpleadoDTO (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -69,20 +69,20 @@ public class EmpleadoDTO {
 		return this;
 	}
 
-	public int getCedula() {
+	public Integer getCedula() {
 		return cedula;
 	}
 
-	public EmpleadoDTO setCedula(final int cedula) {
+	public EmpleadoDTO setCedula(final Integer cedula) {
 		this.cedula = UtilNumerico.obtenerValorDefecto(cedula);
 		return this;
 	}
 
-	public int getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public EmpleadoDTO setTelefono(final int telefono) {
+	public EmpleadoDTO setTelefono(final Integer telefono) {
 		this.telefono = UtilNumerico.obtenerValorDefecto(telefono);
 		return this;
 	}

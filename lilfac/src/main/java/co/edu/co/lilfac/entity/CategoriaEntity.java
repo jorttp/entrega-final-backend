@@ -10,6 +10,7 @@ public final class CategoriaEntity {
 	private UUID id;
 	private String nombre;
 	private String descripcion;
+	private boolean objetoVacio;
 	
 	public CategoriaEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -53,6 +54,10 @@ public final class CategoriaEntity {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(descripcion);
+	}
+	
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

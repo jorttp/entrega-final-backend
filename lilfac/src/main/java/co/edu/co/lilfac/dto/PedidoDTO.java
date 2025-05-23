@@ -12,9 +12,9 @@ public class PedidoDTO {
 	private String fechaReserva;
 	private String fechaVencimiento;
 	private String direccionEntrega;
-	private float costo;
-	private float abono;
-	private float restante;
+	private Float costo;
+	private Float abono;
+	private Float restante;
 	private CiudadDTO ciudad;
 	private ClienteDTO cliente;
 	private EmpleadoDTO empleado;
@@ -32,7 +32,7 @@ public class PedidoDTO {
 		setEmpleado(EmpleadoDTO.obtenerValorDefecto());
 	}
 	
-	public PedidoDTO(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadDTO ciudad, final ClienteDTO cliente, final EmpleadoDTO empleado) {
+	public PedidoDTO(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final Float costo, final Float abono, final Float restante, final CiudadDTO ciudad, final ClienteDTO cliente, final EmpleadoDTO empleado) {
 		setId(id);
 		setFechaReserva(fechaReserva);
 		setFechaVencimiento(fechaVencimiento);
@@ -89,29 +89,29 @@ public class PedidoDTO {
 		return this;
 	}
 
-	public float getCosto() {
+	public Float getCosto() {
 		return costo;
 	}
 
-	public PedidoDTO setCosto(float costo) {
+	public PedidoDTO setCosto(Float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
 		return this;
 	}
 
-	public float getAbono() {
+	public Float getAbono() {
 		return abono;
 	}
 
-	public PedidoDTO setAbono(float abono) {
+	public PedidoDTO setAbono(Float abono) {
 		this.abono = UtilFloat.obtenerValorDefecto(abono);
 		return this;
 	}
 
-	public float getRestante() {
+	public Float getRestante() {
 		return restante;
 	}
 
-	public PedidoDTO setRestante(float restante) {
+	public PedidoDTO setRestante(Float restante) {
 		this.restante = UtilFloat.obtenerValorDefecto(restante);
 		return this;
 	}

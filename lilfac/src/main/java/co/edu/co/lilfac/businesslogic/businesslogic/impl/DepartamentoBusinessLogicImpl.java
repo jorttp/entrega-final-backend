@@ -18,27 +18,30 @@ public class DepartamentoBusinessLogicImpl implements DepartamentoBusinessLogic 
 	}
 	
 	@Override
-	public void registrarNuevoDepartamento(DepartamentoDomain departamento) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoDepartamento(DepartamentoDomain departamento) throws LilfacException {
+		DepartamentoEntity departamentoEntity = null;
+		factory.getDepartamentoDAO().create(departamentoEntity);
 	}
 
 	@Override
-	public void modificarDepartamentoExistente(UUID id, DepartamentoDomain departamento) {
-		// TODO Auto-generated method stub
-		
+	public void modificarDepartamentoExistente(UUID id, DepartamentoDomain departamento) throws LilfacException {
+		DepartamentoEntity departamentoEntity = null;
+		factory.getDepartamentoDAO().update(id, departamentoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteDepartamentoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteDepartamentoExistente(UUID id) throws LilfacException {
+		DepartamentoEntity departamentoEntity = null;
+		factory.getDepartamentoDAO().delete(id);
 	}
 
 	@Override
-	public DepartamentoDomain consultarDepartamentoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public DepartamentoDomain consultarDepartamentoPorId(UUID id) throws LilfacException {
+		DepartamentoEntity DepartamentoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		DepartamentoEntity Departamentontities = factory.getDepartamentoDAO().listById(id);
+		
+		DepartamentoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

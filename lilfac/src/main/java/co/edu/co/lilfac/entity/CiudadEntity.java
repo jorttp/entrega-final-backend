@@ -10,6 +10,7 @@ public final class CiudadEntity {
 	private UUID id;
 	private String nombre;
 	private DepartamentoEntity departamento;
+	private boolean objetoVacio;
 	
 	public CiudadEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -59,6 +60,9 @@ public final class CiudadEntity {
 
 	public void setDepartamento(final DepartamentoEntity departamento) {
 		this.departamento = DepartamentoEntity.obtenerValorDefecto(departamento);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

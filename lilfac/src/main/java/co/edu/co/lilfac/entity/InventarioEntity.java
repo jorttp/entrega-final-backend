@@ -15,6 +15,7 @@ public class InventarioEntity {
 	private EmpresaEntity empresa;
 	private ProductoEntity producto;
 	private HistorialCostoEntity historialCosto;
+	private boolean objetoVacio;
 	
 	public InventarioEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -108,6 +109,9 @@ public class InventarioEntity {
 
 	public void setHistorialCosto(HistorialCostoEntity historialCosto) {
 		this.historialCosto = HistorialCostoEntity.obtenerValorDefecto(historialCosto);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

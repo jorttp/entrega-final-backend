@@ -18,27 +18,30 @@ public class PedidoBusinessLogicImpl implements PedidoBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevoPedido(PedidoDomain pedido) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoPedido(PedidoDomain pedido) throws LilfacException {
+		PedidoEntity pedidoEntity = null;
+		factory.getPedidoDAO().create(pedidoEntity);
 	}
 
 	@Override
-	public void modificarPedidoExistente(UUID id, PedidoDomain pedido) {
-		// TODO Auto-generated method stub
-		
+	public void modificarPedidoExistente(UUID id, PedidoDomain pedido) throws LilfacException {
+		PedidoEntity pedidoEntity = null;
+		factory.getPedidoDAO().update(id, pedidoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamentePedidoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamentePedidoExistente(UUID id) throws LilfacException {
+		PedidoEntity pedidoEntity = null;
+		factory.getPedidoDAO().delete(id);
 	}
 
 	@Override
-	public PedidoDomain consultarPedidoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public PedidoDomain consultarPedidoPorId(UUID id) throws LilfacException {
+		PedidoEntity PedidoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		PedidoEntity PedidoEntity = factory.getPedidoDAO().listById(id);
+		
+		PedidoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

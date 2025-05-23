@@ -12,6 +12,7 @@ public class CostoAdicionalEntity {
 	private Float valor;
 	private String descripcion;
 	private RecepcionEntity recepcion;
+	private boolean objetoVacio;
 	
 	public CostoAdicionalEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -73,6 +74,9 @@ public class CostoAdicionalEntity {
 
 	public void setRecepcion(RecepcionEntity recepcion) {
 		this.recepcion = RecepcionEntity.obtenerValorDefecto(recepcion);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

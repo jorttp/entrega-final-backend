@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CiudadBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.domain.CiudadDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CiudadBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CiudadFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
@@ -23,27 +25,82 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	
 	
 	@Override
-	public void registrarNuevaCiudad(CiudadDTO ciudad) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaCiudad(CiudadDTO ciudad) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CiudadDomain ciudadDomain = null; //pasar de dto a domain
+			ciudadBusinessLogic.registrarNuevaCiudad(ciudadDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva ciudad";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de registrar la información de una nueva ciudad";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void modificarCiudadExistente(UUID id, CiudadDTO ciudad) {
-		// TODO Auto-generated method stub
-		
+	public void modificarCiudadExistente(UUID id, CiudadDTO ciudad) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CiudadDomain ciudadDomain = null; //pasar de dto a domain
+			ciudadBusinessLogic.modificarCiudadExistente(id, ciudadDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la informacion de la ciudad con el id ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la informacion de la ciudad con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void darBajaDefinitivamenteCiudadExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteCiudadExistente(UUID id) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CiudadDomain ciudadDomain = null; //pasar de dto a domain
+			ciudadBusinessLogic.darBajaDefinitivamenteCiudadExistente(id);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de borrar la informacion de la ciudad con el id ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de borrar la informacion de la ciudad con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public CiudadDTO consultarCiudadPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CiudadDTO consultarCiudadPorId(UUID id) throws LilfacException {
+		try {
+			var ciudadDomainResultado = ciudadBusinessLogic.consultarCiudadPorId(id);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de una ciudad con el id deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de una ciudad con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
+		
+		return null;//convertir de domain a dto
 	}
 
 	@Override

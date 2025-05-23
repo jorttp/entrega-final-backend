@@ -10,6 +10,7 @@ public final class PaisEntity {
 	
 	private UUID id;
 	private String nombre;
+	private boolean objetoVacio;
 	
 	public PaisEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -49,6 +50,8 @@ public final class PaisEntity {
 	public void setNombre(final String nombre) {
 		this.nombre = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombre);
 	}
-
+	public boolean isObjetoVacio() {
+		return objetoVacio;
+	}
 
 }

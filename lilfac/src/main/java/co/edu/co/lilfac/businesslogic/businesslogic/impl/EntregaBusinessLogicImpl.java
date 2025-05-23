@@ -18,27 +18,30 @@ public class EntregaBusinessLogicImpl implements EntregaBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevaEntrega(EntregaDomain entrega) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaEntrega(EntregaDomain entrega) throws LilfacException {
+		EntregaEntity entregaEntity = null;
+		factory.getEntregaDAO().create(entregaEntity);
 	}
 
 	@Override
-	public void modificarEntregaExistente(UUID id, EntregaDomain entrega) {
-		// TODO Auto-generated method stub
-		
+	public void modificarEntregaExistente(UUID id, EntregaDomain entrega) throws LilfacException {
+		EntregaEntity entregaEntity = null;
+		factory.getEntregaDAO().update(id, entregaEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteEntregaExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteEntregaExistente(UUID id) throws LilfacException {
+		EntregaEntity entregaEntity = null;
+		factory.getEntregaDAO().delete(id);
 	}
 
 	@Override
-	public EntregaDomain consultarEntregaPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public EntregaDomain consultarEntregaPorId(UUID id) throws LilfacException {
+		EntregaEntity EntregaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		EntregaEntity EntregaEntity = factory.getEntregaDAO().listById(id);
+		
+		EntregaDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

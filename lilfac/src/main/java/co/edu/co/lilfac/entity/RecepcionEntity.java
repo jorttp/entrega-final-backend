@@ -14,6 +14,7 @@ public class RecepcionEntity {
 	private CiudadEntity ciudad;
 	private EmpleadoEntity empleado;
 	private EntregaEntity entrega;
+	private boolean objetoVacio;
 	
 	public RecepcionEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -97,6 +98,9 @@ public class RecepcionEntity {
 
 	public void setEntrega(EntregaEntity entrega) {
 		this.entrega = EntregaEntity.obtenerValorDefecto(entrega);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

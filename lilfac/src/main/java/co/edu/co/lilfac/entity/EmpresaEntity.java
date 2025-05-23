@@ -15,6 +15,7 @@ public final class EmpresaEntity {
 	private String correo;
 	private String direccion;
 	private CiudadEntity ciudad;
+	private boolean objetoVacio;
 	
 	public EmpresaEntity () {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -98,6 +99,8 @@ public final class EmpresaEntity {
 	public void setCiudad(final CiudadEntity ciudad) {
 		this.ciudad = CiudadEntity.obtenerValorDefecto(ciudad);
 	}
-
+	public boolean isObjetoVacio() {
+		return objetoVacio;
+	}
 
 }

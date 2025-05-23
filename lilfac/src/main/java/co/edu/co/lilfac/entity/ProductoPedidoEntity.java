@@ -13,6 +13,7 @@ public class ProductoPedidoEntity {
 	private Integer cantidad; 
 	private ProductoEntity producto;
 	private PedidoEntity pedido;
+	private boolean objetoVacio;
 	
 	public ProductoPedidoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -74,6 +75,9 @@ public class ProductoPedidoEntity {
 
 	public void setPedido(PedidoEntity pedido) {
 		this.pedido = PedidoEntity.obtenerValorDefecto(pedido);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

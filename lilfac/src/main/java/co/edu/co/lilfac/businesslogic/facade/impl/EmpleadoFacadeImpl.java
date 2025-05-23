@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpleadoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpleadoDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EmpleadoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EmpleadoFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
@@ -22,27 +24,82 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	} 
 	
 	@Override
-	public void registrarNuevoEmpleado(EmpleadoDTO empleado) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoEmpleado(EmpleadoDTO empleado) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
+			empleadoBusinessLogic.registrarNuevoEmpleado(empleadoDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de un nuevo empleado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de registrar la información de un nuevo empleado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void modificarEmpleadoExistente(UUID id, EmpleadoDTO empleado) {
-		// TODO Auto-generated method stub
-		
+	public void modificarEmpleadoExistente(UUID id, EmpleadoDTO empleado) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
+			empleadoBusinessLogic.modificarEmpleadoExistente(id, empleadoDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la información de el empleado con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la información de el empleado con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void darBajaDefinitivamenteEmpleadoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteEmpleadoExistente(UUID id) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
+			empleadoBusinessLogic.darBajaDefinitivamenteEmpleadoExistente(id);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de borrar la información de un nuevo empleado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de borrar la información de un nuevo empleado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public EmpleadoDTO consultarEmpleadoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public EmpleadoDTO consultarEmpleadoPorId(UUID id) throws LilfacException {
+		try {
+			var empleadoDomainResultado = empleadoBusinessLogic.consultarEmpleadoPorId(id);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de un empleado con el id deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de un empleado con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
+		
+		return null;//convertir de domain a dto
 	}
 
 	@Override

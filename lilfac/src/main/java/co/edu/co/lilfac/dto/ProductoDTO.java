@@ -10,7 +10,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 public final class ProductoDTO {
 	private UUID id;
 	private String nombre;
-	private int codigo;
+	private Integer codigo;
 	private String caracteristicas;
 	private String estado;
 	
@@ -22,7 +22,7 @@ public final class ProductoDTO {
 		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
-	public ProductoDTO (final UUID id, final String nombre, final int codigo, final String caracteristicas, final String estado){
+	public ProductoDTO (final UUID id, final String nombre, final Integer codigo, final String caracteristicas, final String estado){
 		setId(id);
 		setNombre(nombre);
 		setCodigo(codigo);
@@ -56,11 +56,11 @@ public final class ProductoDTO {
 		return this;
 	}
 
-	public int getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
 
-	public ProductoDTO setCodigo(final int codigo) {
+	public ProductoDTO setCodigo(final Integer codigo) {
 		this.codigo = UtilNumerico.obtenerValorDefecto(codigo);
 		return this;
 	}

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CategoriaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.domain.CategoriaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CategoriaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CategoriaFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
@@ -22,27 +24,82 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	} 
 
 	@Override
-	public void registrarNuevaCategoria(CategoriaDTO categoria) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaCategoria(CategoriaDTO categoria) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
+			categoriaBusinessLogic.registrarNuevaCategoria(categoriaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva categoria";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de registrar la información de una nueva categoria";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void modificarCategoriaExistente(UUID id, CategoriaDTO categoria) {
-		// TODO Auto-generated method stub
-		
+	public void modificarCategoriaExistente(UUID id, CategoriaDTO categoria) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
+			categoriaBusinessLogic.modificarCategoriaExistente(id, categoriaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la información de una categoria con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la información de una categoria con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void darBajaDefinitivamenteCategoriaExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteCategoriaExistente(UUID id) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
+			categoriaBusinessLogic.darBajaDefinitivamenteCategoriaExistente(id);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la información de la categoria con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la información de la categoria con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public CategoriaDTO consultarCategoriaPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CategoriaDTO consultarCategoriaPorId(UUID id) throws LilfacException {
+		try {
+			var categoriaDomainResultado = categoriaBusinessLogic.consultarCategoriaPorId(id);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de borrar la información de la categoria con el id deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de borrar la informacion de la categoria con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
+		
+		return null;//convertir de domain a dto
 	}
 
 	@Override

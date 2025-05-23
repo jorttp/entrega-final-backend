@@ -9,7 +9,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 
 public class CostoAdicionalDTO {
 	private UUID id;
-	private float valor;
+	private Float valor;
 	private String descripcion;
 	private RecepcionDTO recepcion;
 	
@@ -28,7 +28,7 @@ public class CostoAdicionalDTO {
 		
 	}
 	
-	public CostoAdicionalDTO(final UUID id, final float valor, final String descripcion, final RecepcionDTO recepcion) {
+	public CostoAdicionalDTO(final UUID id, final Float valor, final String descripcion, final RecepcionDTO recepcion) {
 		setId(id);
 		setValor(valor);
 		setDescripcion(descripcion);
@@ -52,11 +52,11 @@ public class CostoAdicionalDTO {
 		return this;
 	}
 	
-	public float getValor() {
+	public Float getValor() {
 		return valor;
 	}
 
-	public CostoAdicionalDTO setValor(float valor) {
+	public CostoAdicionalDTO setValor(Float valor) {
 		this.valor = UtilFloat.obtenerValorDefecto(valor);
 		return this;
 	}

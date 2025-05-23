@@ -11,7 +11,7 @@ public final class PaisDomain {
 	private UUID id;
 	private String nombre;
 	
-	PaisDomain() {
+	public PaisDomain() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 	}

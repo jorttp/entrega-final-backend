@@ -18,27 +18,30 @@ public class CategoriaProductoBusinessLogicImpl implements CategoriaProductoBusi
 	}
 	
 	@Override
-	public void registrarNuevaCategoriaProducto(CategoriaProductoDomain categoriaProducto) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaCategoriaProducto(CategoriaProductoDomain categoriaProducto) throws LilfacException {
+		CategoriaProductoEntity categoriaProdcutoEntity = null;
+		factory.getCategoriaProductoDAO().create(categoriaProdcutoEntity);
 	}
 
 	@Override
-	public void modificarCategoriaProductoExistente(UUID id, CategoriaProductoDomain categoriaProducto) {
-		// TODO Auto-generated method stub
-		
+	public void modificarCategoriaProductoExistente(UUID id, CategoriaProductoDomain categoriaProducto) throws LilfacException {
+		CategoriaProductoEntity categoriaProdcutoEntity = null;
+		factory.getCategoriaProductoDAO().update(id, categoriaProdcutoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteCategoriaProductoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteCategoriaProductoExistente(UUID id) throws LilfacException {
+		CategoriaProductoEntity categoriaProdcutoEntity = null;
+		factory.getCategoriaProductoDAO().delete(id);
 	}
 
 	@Override
-	public CategoriaProductoDomain consultarCategoriaProductoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CategoriaProductoDomain consultarCategoriaProductoPorId(UUID id) throws LilfacException {
+		CategoriaProductoEntity categoriaProductoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		CategoriaProductoEntity categoriaProductoEntity = factory.getCategoriaProductoDAO().listById(id);
+		
+		CategoriaProductoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

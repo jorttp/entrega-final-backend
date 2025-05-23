@@ -18,27 +18,30 @@ public class ProductoPedidoBusinessLogicImpl implements ProductoPedidoBusinessLo
 	}
 	
 	@Override
-	public void registrarNuevoProductoPedido(ProductoPedidoDomain productoPedido) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoProductoPedido(ProductoPedidoDomain productoPedido) throws LilfacException {
+		ProductoPedidoEntity productopedidoEntity = null;
+		factory.getProductoPedidoDAO().create(productopedidoEntity);
 	}
 
 	@Override
-	public void modificarProductoPedidoExistente(UUID id, ProductoPedidoDomain productoPedido) {
-		// TODO Auto-generated method stub
-		
+	public void modificarProductoPedidoExistente(UUID id, ProductoPedidoDomain productoPedido) throws LilfacException {
+		ProductoPedidoEntity productopedidoEntity = null;
+		factory.getProductoPedidoDAO().update(id, productopedidoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteProductoPedidoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteProductoPedidoExistente(UUID id) throws LilfacException {
+		ProductoPedidoEntity productopedidoEntity = null;
+		factory.getProductoPedidoDAO().delete(id);
 	}
 
 	@Override
-	public ProductoPedidoDomain consultarProductoPedidoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductoPedidoDomain consultarProductoPedidoPorId(UUID id) throws LilfacException {
+		ProductoPedidoEntity ProductoPedidoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		ProductoPedidoEntity ProductoPedidoEntity = factory.getProductoPedidoDAO().listById(id);
+		
+		ProductoPedidoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

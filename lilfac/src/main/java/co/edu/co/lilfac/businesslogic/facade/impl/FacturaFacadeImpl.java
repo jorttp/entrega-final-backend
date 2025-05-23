@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.FacturaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.domain.FacturaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.FacturaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.FacturaFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
@@ -24,27 +26,82 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	
 	
 	@Override
-	public void registrarNuevaFactura(FacturaDTO factura) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaFactura(FacturaDTO factura) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			FacturaDomain facturaDomain = null; //pasar de dto a domain
+			facturaBusinessLogic.registrarNuevaFactura(facturaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva factura";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de registrar la información de una nueva factura";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void modificarFacturaExistente(UUID id, FacturaDTO factura) {
-		// TODO Auto-generated method stub
-		
+	public void modificarFacturaExistente(UUID id, FacturaDTO factura) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			FacturaDomain facturaDomain = null; //pasar de dto a domain
+			facturaBusinessLogic.modificarFacturaExistente(id, facturaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la información de la factura con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la información de la factura con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void darBajaDefinitivamenteFacturaExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteFacturaExistente(UUID id) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			FacturaDomain facturaDomain = null; //pasar de dto a domain
+			facturaBusinessLogic.darBajaDefinitivamenteFacturaExistente(id);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de borrar la información de la factura con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de borrar la información de la factura con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public FacturaDTO consultarFacturaPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public FacturaDTO consultarFacturaPorId(UUID id) throws LilfacException {
+		try {
+			var facturaDomainResultado = facturaBusinessLogic.consultarFacturaPorId(id);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de una factura con el id deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de una factura con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
+		
+		return null;//convertir de domain a dto
 	}
 
 	@Override

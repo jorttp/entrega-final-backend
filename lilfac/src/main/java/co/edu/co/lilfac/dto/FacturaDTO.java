@@ -3,7 +3,6 @@ package co.edu.co.lilfac.dto;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
@@ -11,7 +10,7 @@ public class FacturaDTO {
 	private UUID id;
 	private String codigo;
 	private String fechaGeneracion;
-	private float costoTotal;
+	private Float costoTotal;
 	private EmpresaDTO empresa;
 	private EmpleadoDTO empleado;
 	private ClienteDTO cliente;
@@ -22,7 +21,7 @@ public class FacturaDTO {
 		setId(UtilUUID.obtenerValorDefecto());
 		setCodigo(UtilTexto.getInstance().obtenerValorDefecto());
 		setFechaGeneracion(UtilTexto.getInstance().obtenerValorDefecto());
-		setCostoTotal(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCostoTotal(UtilFloat.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaDTO.obtenerValorDefecto());
 		setEmpleado(EmpleadoDTO.obtenerValorDefecto());
 		setCliente(ClienteDTO.obtenerValorDefecto());
@@ -30,7 +29,7 @@ public class FacturaDTO {
 		setPedido(PedidoDTO.obtenerValorDefecto());
 	}
 	
-	public FacturaDTO(final UUID id, final String codigo, final String fechaGeneracion, final float costoTotal, final EmpresaDTO empresa, final EmpleadoDTO empleado, final ClienteDTO cliente, final CostoAdicionalDTO costoAdicional, final PedidoDTO pedido) {
+	public FacturaDTO(final UUID id, final String codigo, final String fechaGeneracion, final Float costoTotal, final EmpresaDTO empresa, final EmpleadoDTO empleado, final ClienteDTO cliente, final CostoAdicionalDTO costoAdicional, final PedidoDTO pedido) {
 		setId(id);
 		setCodigo(codigo);
 		setFechaGeneracion(fechaGeneracion);
@@ -69,11 +68,11 @@ public class FacturaDTO {
 		return this;
 	}
 
-	public float getCostoTotal() {
+	public Float getCostoTotal() {
 		return costoTotal;
 	}
 
-	public FacturaDTO setCostoTotal(float costoTotal) {
+	public FacturaDTO setCostoTotal(Float costoTotal) {
 		this.costoTotal = UtilFloat.obtenerValorDefecto(costoTotal);
 		return this;
 	}

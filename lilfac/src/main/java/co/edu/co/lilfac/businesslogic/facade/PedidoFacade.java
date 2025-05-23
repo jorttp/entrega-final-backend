@@ -11,7 +11,7 @@ public interface PedidoFacade {
 	void registrarNuevoPedido(PedidoDTO pedido)throws LilfacException;
 	void modificarPedidoExistente(UUID id, PedidoDTO pedido)throws LilfacException;
 	void darBajaDefinitivamentePedidoExistente(UUID id)throws LilfacException;
-	PedidoDTO consultarPedidoPorId(UUID id);
+	PedidoDTO consultarPedidoPorId(UUID id)throws LilfacException;
 	List<PedidoDTO> consultarPedidos(PedidoDTO filtro)throws LilfacException;
 
 }

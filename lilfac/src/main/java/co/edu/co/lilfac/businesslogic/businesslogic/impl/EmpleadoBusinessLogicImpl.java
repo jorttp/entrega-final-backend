@@ -18,27 +18,30 @@ public class EmpleadoBusinessLogicImpl implements EmpleadoBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevoEmpleado(EmpleadoDomain empleado) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoEmpleado(EmpleadoDomain empleado) throws LilfacException {
+		EmpleadoEntity empleadoEntity = null;
+		factory.getEmpleadoDAO().create(empleadoEntity);
 	}
 
 	@Override
-	public void modificarEmpleadoExistente(UUID id, EmpleadoDomain empleado) {
-		// TODO Auto-generated method stub
-		
+	public void modificarEmpleadoExistente(UUID id, EmpleadoDomain empleado) throws LilfacException {
+		EmpleadoEntity empleadoEntity = null;
+		factory.getEmpleadoDAO().update(id, empleadoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteEmpleadoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteEmpleadoExistente(UUID id) throws LilfacException {
+		EmpleadoEntity empleadoEntity = null;
+		factory.getEmpleadoDAO().delete(id);
 	}
 
 	@Override
-	public EmpleadoDomain consultarEmpleadoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public EmpleadoDomain consultarEmpleadoPorId(UUID id) throws LilfacException {
+		EmpleadoEntity EmpleadoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		EmpleadoEntity EmpleadoEntity = factory.getEmpleadoDAO().listById(id);
+		
+		EmpleadoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

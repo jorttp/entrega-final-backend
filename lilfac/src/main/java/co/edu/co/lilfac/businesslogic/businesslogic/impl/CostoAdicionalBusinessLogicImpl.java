@@ -18,27 +18,30 @@ public class CostoAdicionalBusinessLogicImpl implements CostoAdicionalBusinessLo
 	}
 	
 	@Override
-	public void registrarNuevoCostoAdicional(CostoAdicionalDomain costoAdicional) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoCostoAdicional(CostoAdicionalDomain costoAdicional) throws LilfacException {
+		CostoAdicionalEntity costoAdicionalEntity = null;
+		factory.getCostoAdicionalDAO().create(costoAdicionalEntity);
 	}
 
 	@Override
-	public void modificarCostoAdicionalExistente(UUID id, CostoAdicionalDomain costoAdicional) {
-		// TODO Auto-generated method stub
-		
+	public void modificarCostoAdicionalExistente(UUID id, CostoAdicionalDomain costoAdicional) throws LilfacException {
+		CostoAdicionalEntity costoAdicionalEntity = null;
+		factory.getCostoAdicionalDAO().update(id, costoAdicionalEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteCostoAdicionalExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteCostoAdicionalExistente(UUID id) throws LilfacException {
+		CostoAdicionalEntity costoAdicionalEntity = null;
+		factory.getCostoAdicionalDAO().delete(id);
 	}
 
 	@Override
-	public CostoAdicionalDomain consultarCostoAdicionalPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CostoAdicionalDomain consultarCostoAdicionalPorId(UUID id) throws LilfacException {
+		CostoAdicionalEntity CostoAdicionalFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		CostoAdicionalEntity CostoAdicionalEntity = factory.getCostoAdicionalDAO().listById(id);
+		
+		CostoAdicionalDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

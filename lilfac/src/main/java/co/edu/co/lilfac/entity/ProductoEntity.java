@@ -13,6 +13,7 @@ public final class ProductoEntity {
 	private Integer codigo;
 	private String caracteristicas;
 	private String estado;
+	private boolean objetoVacio;
 	
 	public ProductoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -77,6 +78,8 @@ public final class ProductoEntity {
 	public void setEstado(String estado) {
 		this.estado = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(estado);
 	}
-	
+	public boolean isObjetoVacio() {
+		return objetoVacio;
+	}
 	
 }

@@ -19,27 +19,30 @@ public class HistorialCostoBusinessLogicImpl implements HistorialCostoBusinessLo
 	
 
 	@Override
-	public void registrarNuevoHistorialCosto(HistorialCostoDomain historialCosto) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoHistorialCosto(HistorialCostoDomain historialCosto) throws LilfacException {
+		HistorialCostoEntity historialCostoEntity = null;
+		factory.getHistorialCostoDAO().create(historialCostoEntity);
 	}
 
 	@Override
-	public void modificarHistorialCostoExistente(UUID id, HistorialCostoDomain historialCosto) {
-		// TODO Auto-generated method stub
-		
+	public void modificarHistorialCostoExistente(UUID id, HistorialCostoDomain historialCosto) throws LilfacException {
+		HistorialCostoEntity historialCostoEntity = null;
+		factory.getHistorialCostoDAO().update(id, historialCostoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteHistorialCostoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteHistorialCostoExistente(UUID id) throws LilfacException {
+		HistorialCostoEntity historialCostoEntity = null;
+		factory.getHistorialCostoDAO().delete(id);
 	}
 
 	@Override
-	public HistorialCostoDomain consultarHistorialCostoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public HistorialCostoDomain consultarHistorialCostoPorId(UUID id) throws LilfacException {
+		HistorialCostoEntity HistorialCostoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		HistorialCostoEntity HistorialCostoEntity = factory.getHistorialCostoDAO().listById(id);
+		
+		HistorialCostoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

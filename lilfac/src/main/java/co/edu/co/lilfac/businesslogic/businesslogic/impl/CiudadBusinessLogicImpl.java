@@ -18,27 +18,30 @@ public class CiudadBusinessLogicImpl implements CiudadBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevaCiudad(CiudadDomain ciudad) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaCiudad(CiudadDomain ciudad) throws LilfacException {
+		CiudadEntity ciudadEntity = null;
+		factory.getCiudadDAO().create(ciudadEntity);
 	}
 
 	@Override
-	public void modificarCiudadExistente(UUID id, CiudadDomain ciudad) {
-		// TODO Auto-generated method stub
-		
+	public void modificarCiudadExistente(UUID id, CiudadDomain ciudad) throws LilfacException {
+		CiudadEntity ciudadEntity = null;
+		factory.getCiudadDAO().update(id, ciudadEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteCiudadExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteCiudadExistente(UUID id) throws LilfacException {
+		CiudadEntity ciudadEntity = null;
+		factory.getCiudadDAO().delete(id);
 	}
 
 	@Override
-	public CiudadDomain consultarCiudadPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CiudadDomain consultarCiudadPorId(UUID id) throws LilfacException {
+		CiudadEntity CiudadFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		CiudadEntity CiudadEntity = factory.getCiudadDAO().listById(id);
+		
+		CiudadDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

@@ -18,27 +18,30 @@ public class PaisBusinessLogicImpl implements PaisBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevoPais(PaisDomain pais) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoPais(PaisDomain pais) throws LilfacException {
+		PaisEntity paisEntity = null; //convertir de domain a entity
+		factory.getPaisDAO().create(paisEntity);
 	}
 
 	@Override
-	public void modificarPaisExistente(UUID id, PaisDomain pais) {
-		// TODO Auto-generated method stub
-		
+	public void modificarPaisExistente(UUID id, PaisDomain pais) throws LilfacException {
+		PaisEntity paisEntity = null; //convertir de domain a entity
+		factory.getPaisDAO().update(id, paisEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamentePaisExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamentePaisExistente(UUID id) throws LilfacException {
+		PaisEntity paisEntity = null; //convertir de domain a entity
+		factory.getPaisDAO().delete(id);
 	}
 
 	@Override
-	public PaisDomain consultarPaisPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public PaisDomain consultarPaisPorId(UUID id) throws LilfacException {
+		PaisEntity paisFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		PaisEntity paisEntity = factory.getPaisDAO().listById(id);
+		
+		PaisDomain datosARetornar = null; // MAGIA DE TRADUCIR DE entity-›domain
+		return datosARetornar;
 	}
 
 	@Override

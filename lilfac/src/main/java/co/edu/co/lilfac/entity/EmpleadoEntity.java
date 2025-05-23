@@ -14,6 +14,7 @@ public class EmpleadoEntity {
 	private Integer cedula;
 	private Integer telefono;
 	private String correo;
+	private boolean objetoVacio;
 	
 	public EmpleadoEntity () {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -88,6 +89,9 @@ public class EmpleadoEntity {
 
 	public void setCorreo(final String correo) {
 		this.correo = correo;
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

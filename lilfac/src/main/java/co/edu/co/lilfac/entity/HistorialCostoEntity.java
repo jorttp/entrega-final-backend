@@ -17,6 +17,7 @@ public class HistorialCostoEntity {
 	private Boolean estado;
 	private Float costo;
 	private ProductoEntity producto;
+	private boolean objetoVacio;
 	
 	public HistorialCostoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -100,6 +101,9 @@ public class HistorialCostoEntity {
 
 	public void setProducto(ProductoEntity producto) {
 		this.producto = ProductoEntity.obtenerValorDefecto(producto);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }

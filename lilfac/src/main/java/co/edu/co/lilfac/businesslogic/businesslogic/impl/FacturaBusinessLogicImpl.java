@@ -18,27 +18,30 @@ public class FacturaBusinessLogicImpl implements FacturaBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevaFactura(FacturaDomain factura) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevaFactura(FacturaDomain factura) throws LilfacException {
+		FacturaEntity facturaEntity = null;
+		factory.getFacturaDAO().create(facturaEntity);
 	}
 
 	@Override
-	public void modificarFacturaExistente(UUID id, FacturaDomain factura) {
-		// TODO Auto-generated method stub
-		
+	public void modificarFacturaExistente(UUID id, FacturaDomain factura) throws LilfacException {
+		FacturaEntity facturaEntity = null;
+		factory.getFacturaDAO().update(id, facturaEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteFacturaExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteFacturaExistente(UUID id) throws LilfacException {
+		FacturaEntity facturaEntity = null;
+		factory.getFacturaDAO().delete(id);
 	}
 
 	@Override
-	public FacturaDomain consultarFacturaPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public FacturaDomain consultarFacturaPorId(UUID id) throws LilfacException {
+		FacturaEntity FacturaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		FacturaEntity FacturaEntity = factory.getFacturaDAO().listById(id);
+		
+		FacturaDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

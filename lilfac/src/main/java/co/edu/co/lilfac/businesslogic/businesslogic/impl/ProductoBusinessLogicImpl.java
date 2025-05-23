@@ -18,27 +18,30 @@ public class ProductoBusinessLogicImpl implements ProductoBusinessLogic {
 	}
 	
 	@Override
-	public void registrarNuevoProducto(ProductoDomain producto) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoProducto(ProductoDomain producto) throws LilfacException {
+		ProductoEntity productoEntity = null;
+		factory.getProductoDAO().create(productoEntity);
 	}
 
 	@Override
-	public void modificarProductoExistente(UUID id, ProductoDomain producto) {
-		// TODO Auto-generated method stub
-		
+	public void modificarProductoExistente(UUID id, ProductoDomain producto) throws LilfacException {
+		ProductoEntity productoEntity = null;
+		factory.getProductoDAO().update(id, productoEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteProductoExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteProductoExistente(UUID id) throws LilfacException {
+		ProductoEntity productoEntity = null;
+		factory.getProductoDAO().delete(id);
 	}
 
 	@Override
-	public ProductoDomain consultarProductoPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductoDomain consultarProductoPorId(UUID id) throws LilfacException {
+		ProductoEntity ProductoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		ProductoEntity ProductoEntity = factory.getProductoDAO().listById(id);
+		
+		ProductoDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

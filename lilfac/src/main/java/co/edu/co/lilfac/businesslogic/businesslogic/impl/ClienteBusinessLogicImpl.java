@@ -18,27 +18,30 @@ private DAOFactory factory;
 	}
 	
 	@Override
-	public void registrarNuevoCliente(ClienteDomain cliente) {
-		// TODO Auto-generated method stub
-		
+	public void registrarNuevoCliente(ClienteDomain cliente) throws LilfacException {
+		ClienteEntity clienteEntity = null;
+		factory.getClienteDAO().create(clienteEntity);
 	}
 
 	@Override
-	public void modificarClienteExistente(UUID id, ClienteDomain cliente) {
-		// TODO Auto-generated method stub
-		
+	public void modificarClienteExistente(UUID id, ClienteDomain cliente) throws LilfacException {
+		ClienteEntity clienteEntity = null;
+		factory.getClienteDAO().update(id, clienteEntity);
 	}
 
 	@Override
-	public void darBajaDefinitivamenteClienteExistente(UUID id) {
-		// TODO Auto-generated method stub
-		
+	public void darBajaDefinitivamenteClienteExistente(UUID id) throws LilfacException {
+		ClienteEntity clienteEntity = null;
+		factory.getClienteDAO().delete(id);
 	}
 
 	@Override
-	public ClienteDomain consultarClientePorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ClienteDomain consultarClientePorId(UUID id) throws LilfacException {
+		ClienteEntity ClienteFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		ClienteEntity ClienteEntity = factory.getClienteDAO().listById(id);
+		
+		ClienteDomain datosARetornar = null;
+		return datosARetornar;
 	}
 
 	@Override

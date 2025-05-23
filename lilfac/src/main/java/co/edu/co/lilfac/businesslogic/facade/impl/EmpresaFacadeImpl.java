@@ -3,8 +3,10 @@ package co.edu.co.lilfac.businesslogic.facade.impl;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpresaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpresaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EmpresaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EmpresaFacade;
+import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.data.dao.factory.Factory;
@@ -17,27 +19,68 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 	
 	public EmpresaFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
-		empresaBusinessLogic = new EmpresaBusinessLogicImpl();
+		empresaBusinessLogic = new EmpresaBusinessLogicImpl(daoFactory);
 		
 		//REVISAR EL ARGUMENTO DE new InventarioBusinessLogicImpl()
 	} 
 	
 	@Override
-	public void registrarInformacionEmpresa(EmpresaDTO empresa) {
-		// TODO Auto-generated method stub
-		
+	public void registrarInformacionEmpresa(EmpresaDTO empresa) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			EmpresaDomain empresaDomain = null; //pasar de dto a domain
+			empresaBusinessLogic.registrarInformacionEmpresa(empresaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de registrar la información de una nueva empresa";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de registrar la información de una nueva empresa";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public void modificarEmpresaExistente(UUID id, EmpresaDTO empresa) {
-		// TODO Auto-generated method stub
-		
+	public void modificarEmpresaExistente(UUID id, EmpresaDTO empresa) throws LilfacException {
+		try {
+			daoFactory.iniciarTransaccion();
+			EmpresaDomain empresaDomain = null; //pasar de dto a domain
+			empresaBusinessLogic.modificarEmpresaExistente(id, empresaDomain);
+			daoFactory.confirmarTransaccion();
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de modificar la información de la empresa con el identificador ingresado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de modificar la información de la empresa con el identificador ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
 	}
 
 	@Override
-	public EmpresaDTO consultarEmpresaPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	public EmpresaDTO consultarEmpresaPorId(UUID id) throws LilfacException {
+		try {
+			var empresaDomainResultado = empresaBusinessLogic.consultarEmpresaPorId(id);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de una empresa con el id deseado";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de una empresa con el id ingresado";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
+		}
+		
+		return null;//convertir de domain a dto
 	}
 
 	@Override

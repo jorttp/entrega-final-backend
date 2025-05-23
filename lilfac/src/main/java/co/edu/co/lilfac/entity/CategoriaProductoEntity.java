@@ -11,6 +11,7 @@ public class CategoriaProductoEntity {
 	private UUID id;
 	private ProductoEntity producto;
 	private CategoriaEntity categoria;
+	private boolean objetoVacio;
 	
 	public CategoriaProductoEntity() {
 		setId(UtilUUID.obtenerValorDefecto());
@@ -60,6 +61,9 @@ public class CategoriaProductoEntity {
 
 	public void setCategoria (CategoriaEntity categoria) {
 		this.categoria = CategoriaEntity.obtenerValorDefecto(categoria);
+	}
+	public boolean isObjetoVacio() {
+		return objetoVacio;
 	}
 
 }
