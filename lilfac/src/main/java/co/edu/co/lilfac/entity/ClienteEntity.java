@@ -29,7 +29,7 @@ public class ClienteEntity {
 		setCiudad(CiudadEntity.obtenerValorDefecto());
 	}
 	
-	public ClienteEntity (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo) {
+	public ClienteEntity (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo, final String direccionResidencia, final CiudadEntity ciudad) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);

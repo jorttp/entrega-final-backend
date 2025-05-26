@@ -1,21 +1,24 @@
 package co.edu.co.lilfac.businesslogic.businesslogic.domain;
 
+import java.util.UUID;
+
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class ClienteDomain {
-	private int id;
+	private UUID id;
 	private String nombre;
 	private String apellido;
-	private int cedula;
-	private int telefono;
+	private Integer cedula;
+	private Integer telefono;
 	private String correo;
 	private String direccionResidencia;
 	private CiudadDomain ciudad;
 	
 	ClienteDomain () {
-		setId(UtilNumerico.getInstance().obtenerValorDefecto());
+		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
 		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
@@ -25,7 +28,7 @@ public class ClienteDomain {
 		setCiudad(CiudadDomain.obtenerValorDefecto());
 	}
 	
-	public ClienteDomain (final int id, final String nombre, final String apellido, final int cedula, final int telefono, final String correo) {
+	public ClienteDomain (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo, final String direccionResidencia, final CiudadDomain ciudad) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -44,12 +47,12 @@ public class ClienteDomain {
 		return UtilObjeto.getInstance().obtenerValorDefecto(cliente, obtenerValorDefecto());
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	private void setId(final int id) {
-		this.id = UtilNumerico.obtenerValorDefecto(id);
+	private void setId(final UUID id) {
+		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
 	public String getNombre() {
@@ -68,19 +71,19 @@ public class ClienteDomain {
 		this.apellido = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(apellido);
 	}
 
-	public int getCedula() {
+	public Integer getCedula() {
 		return cedula;
 	}
 
-	private void setCedula(final int cedula) {
+	private void setCedula(final Integer cedula) {
 		this.cedula = UtilNumerico.obtenerValorDefecto(cedula);
 	}
 
-	public int getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	private void setTelefono(final int telefono) {
+	private void setTelefono(final Integer telefono) {
 		this.telefono = UtilNumerico.obtenerValorDefecto(telefono);
 	}
 

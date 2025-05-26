@@ -82,7 +82,7 @@ public class HistorialCostoDTO {
 		return this;
 	}
 
-	public Boolean getEstado() {
+	public Boolean isEstado() {
 		return estado;
 	}
 

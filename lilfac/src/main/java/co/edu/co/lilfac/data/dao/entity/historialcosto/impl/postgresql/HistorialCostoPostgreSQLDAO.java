@@ -33,7 +33,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 			sentenciaPreparada.setInt(2, entity.getCodigo());
 			sentenciaPreparada.setString(3, entity.getFechaInicio());
 			sentenciaPreparada.setString(4, entity.getFechaFin());
-			sentenciaPreparada.setBoolean(5, entity.getEstado());
+			sentenciaPreparada.setBoolean(5, entity.isEstado());
 			sentenciaPreparada.setFloat(6, entity.getCosto());
 			sentenciaPreparada.setObject(7, entity.getProducto().getId());
 			
@@ -72,7 +72,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 			if (filter.getFechaFin() != null && !filter.getFechaFin().isBlank()) {
 				sentenciaSQL.append(" AND fechaFin LIKE ?");
 			}
-			if (filter.getEstado() != null) {
+			if (filter.isEstado() != null) {
 				sentenciaSQL.append(" AND estado = ?");
 			}
 			if (filter.getCosto() != null) {
@@ -100,8 +100,8 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 				if (filter.getFechaFin() != null && !filter.getFechaFin().isBlank()) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getFechaFin() + "%");
 				}
-				if (filter.getEstado() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEstado());
+				if (filter.isEstado() != null) {
+					sentenciaPreparada.setObject(indiceParametro++, filter.isEstado());
 				}
 				if (filter.getCosto() != null) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getCosto());
@@ -238,7 +238,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 			sentenciaPreparada.setInt(1,  entity.getCodigo());
 			sentenciaPreparada.setString(2, entity.getFechaInicio());
 			sentenciaPreparada.setString(3, entity.getFechaFin());
-			sentenciaPreparada.setBoolean(4, entity.getEstado());
+			sentenciaPreparada.setBoolean(4, entity.isEstado());
 			sentenciaPreparada.setFloat(5,  entity.getCosto());
 			sentenciaPreparada.setObject(6,  entity.getProducto().getId());
 			sentenciaPreparada.setObject(7,  id);

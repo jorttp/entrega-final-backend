@@ -8,10 +8,10 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class InventarioDomain {
 	private UUID id;
-	private int totalUnidades;
-	private int unidadesAlquiladas;
-	private int unidadesAfectadas;
-	private int unidadesDisponibles;
+	private Integer totalUnidades;
+	private Integer unidadesAlquiladas;
+	private Integer unidadesAfectadas;
+	private Integer unidadesDisponibles;
 	private EmpresaDomain empresa;
 	private ProductoDomain producto;
 	private HistorialCostoDomain historialCosto;
@@ -27,7 +27,7 @@ public class InventarioDomain {
 		setHistorialCosto(HistorialCostoDomain.obtenerValorDefecto());
 	}
 	
-	public InventarioDomain(final UUID id, final int totalUnidades, final int unidadesAlquiladas, final int unidadesAfectadas, final int unidadesDisponibles, final EmpresaDomain empresa, final ProductoDomain producto, final HistorialCostoDomain historialCosto) {
+	public InventarioDomain(final UUID id, final Integer totalUnidades, final Integer unidadesAlquiladas, final Integer unidadesAfectadas, final Integer unidadesDisponibles, final EmpresaDomain empresa, final ProductoDomain producto, final HistorialCostoDomain historialCosto) {
 		setId(id);
 		setTotalUnidades(totalUnidades);
 		setUnidadesAlquiladas(unidadesAlquiladas);
@@ -54,35 +54,35 @@ public class InventarioDomain {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
-	public int getTotalUnidades() {
+	public Integer getTotalUnidades() {
 		return totalUnidades;
 	}
 
-	private void setTotalUnidades(int totalUnidades) {
+	private void setTotalUnidades(Integer totalUnidades) {
 		this.totalUnidades = UtilNumerico.obtenerValorDefecto(totalUnidades);
 	}
 
-	public int getUnidadesAlquiladas() {
+	public Integer getUnidadesAlquiladas() {
 		return unidadesAlquiladas;
 	}
 
-	private void setUnidadesAlquiladas(int unidadesAlquiladas) {
+	private void setUnidadesAlquiladas(Integer unidadesAlquiladas) {
 		this.unidadesAlquiladas = UtilNumerico.obtenerValorDefecto(unidadesAlquiladas);
 	}
 
-	public int getUnidadesAfectadas() {
+	public Integer getUnidadesAfectadas() {
 		return unidadesAfectadas;
 	}
 
-	private void setUnidadesAfectadas(int unidadesAfectadas) {
+	private void setUnidadesAfectadas(Integer unidadesAfectadas) {
 		this.unidadesAfectadas = UtilNumerico.obtenerValorDefecto(unidadesAfectadas);
 	}
 
-	public int getUnidadesDisponibles() {
+	public Integer getUnidadesDisponibles() {
 		return unidadesDisponibles;
 	}
 
-	private void setUnidadesDisponibles(int unidadesDisponibles) {
+	private void setUnidadesDisponibles(Integer unidadesDisponibles) {
 		this.unidadesDisponibles = UtilNumerico.obtenerValorDefecto(unidadesDisponibles);
 	}
 
