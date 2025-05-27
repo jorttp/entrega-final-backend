@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.ClienteBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.cliente.entity.ClienteEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ClienteDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ private DAOFactory factory;
 	
 	@Override
 	public void registrarNuevoCliente(ClienteDomain cliente) throws LilfacException {
-		ClienteEntity clienteEntity = null;
+		var clienteEntity = ClienteEntityAssembler.getInstance().toEntity(cliente);
 		factory.getClienteDAO().create(clienteEntity);
 	}
 
 	@Override
 	public void modificarClienteExistente(UUID id, ClienteDomain cliente) throws LilfacException {
-		ClienteEntity clienteEntity = null;
+		var clienteEntity = ClienteEntityAssembler.getInstance().toEntity(cliente);
 		factory.getClienteDAO().update(id, clienteEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteClienteExistente(UUID id) throws LilfacException {
-		ClienteEntity clienteEntity = null;
 		factory.getClienteDAO().delete(id);
 	}
 
 	@Override
 	public ClienteDomain consultarClientePorId(UUID id) throws LilfacException {
-		ClienteEntity ClienteFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		ClienteEntity ClienteEntity = factory.getClienteDAO().listById(id);
-		
-		ClienteDomain datosARetornar = null;
-		return datosARetornar;
+		var clienteEntity = factory.getClienteDAO().listById(id);
+		return ClienteEntityAssembler.getInstance().toDomain(clienteEntity);
 	}
 
 	@Override
 	public List<ClienteDomain> consultarClientes(ClienteDomain filtro) throws LilfacException {
 		
-		ClienteEntity ClienteFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<ClienteEntity> ClienteEntities = factory.getClienteDAO().listByFIlter(ClienteFilter);
-		
-		List<ClienteDomain> datosARetornar = null;
-		return datosARetornar;
+		var clienteFilter = ClienteEntityAssembler.getInstance().toEntity(filtro);
+		List<ClienteEntity> clienteEntities = factory.getClienteDAO().listByFIlter(clienteFilter);
+		return ClienteEntityAssembler.getInstance().toDomain(clienteEntities);
 	}
 
 	@Override

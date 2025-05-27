@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.DepartamentoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.departamento.entity.DepartamentoEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.DepartamentoDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class DepartamentoBusinessLogicImpl implements DepartamentoBusinessLogic 
 	
 	@Override
 	public void registrarNuevoDepartamento(DepartamentoDomain departamento) throws LilfacException {
-		DepartamentoEntity departamentoEntity = null;
+		var departamentoEntity = DepartamentoEntityAssembler.getInstance().toEntity(departamento);
 		factory.getDepartamentoDAO().create(departamentoEntity);
 	}
 
 	@Override
 	public void modificarDepartamentoExistente(UUID id, DepartamentoDomain departamento) throws LilfacException {
-		DepartamentoEntity departamentoEntity = null;
+		var departamentoEntity = DepartamentoEntityAssembler.getInstance().toEntity(departamento);
 		factory.getDepartamentoDAO().update(id, departamentoEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteDepartamentoExistente(UUID id) throws LilfacException {
-		DepartamentoEntity departamentoEntity = null;
 		factory.getDepartamentoDAO().delete(id);
 	}
 
 	@Override
 	public DepartamentoDomain consultarDepartamentoPorId(UUID id) throws LilfacException {
-		DepartamentoEntity DepartamentoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		DepartamentoEntity Departamentontities = factory.getDepartamentoDAO().listById(id);
-		
-		DepartamentoDomain datosARetornar = null;
-		return datosARetornar;
+		var departamEntotity = factory.getDepartamentoDAO().listById(id);
+		return DepartamentoEntityAssembler.getInstance().toDomain(departamEntotity);
 	}
 
 	@Override
 	public List<DepartamentoDomain> consultarDepartamentos(DepartamentoDomain filtro) throws LilfacException {
 		
-		DepartamentoEntity DepartamentoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<DepartamentoEntity> Departamentontities = factory.getDepartamentoDAO().listByFIlter(DepartamentoFilter);
-		
-		List<DepartamentoDomain> datosARetornar = null;
-		return datosARetornar;
+		var departamentoFilter = DepartamentoEntityAssembler.getInstance().toEntity(filtro); 
+		List<DepartamentoEntity> departamentoEntities = factory.getDepartamentoDAO().listByFIlter(departamentoFilter);
+		return DepartamentoEntityAssembler.getInstance().toDomain(departamentoEntities);
 		
 	}
 

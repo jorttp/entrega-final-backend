@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CategoriaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.categoria.dto.CategoriaDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CategoriaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CategoriaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CategoriaFacade;
@@ -27,7 +28,7 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	public void registrarNuevaCategoria(CategoriaDTO categoria) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
+			CategoriaDomain categoriaDomain = CategoriaDTOAssembler.getInstance().toDomain(categoria);
 			categoriaBusinessLogic.registrarNuevaCategoria(categoriaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -47,7 +48,7 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	public void modificarCategoriaExistente(UUID id, CategoriaDTO categoria) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
+			CategoriaDomain categoriaDomain = CategoriaDTOAssembler.getInstance().toDomain(categoria);
 			categoriaBusinessLogic.modificarCategoriaExistente(id, categoriaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +68,6 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	public void darBajaDefinitivamenteCategoriaExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CategoriaDomain categoriaDomain = null; //pasar de dto a domain
 			categoriaBusinessLogic.darBajaDefinitivamenteCategoriaExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -87,6 +87,7 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	public CategoriaDTO consultarCategoriaPorId(UUID id) throws LilfacException {
 		try {
 			var categoriaDomainResultado = categoriaBusinessLogic.consultarCategoriaPorId(id);
+			return CategoriaDTOAssembler.getInstance().toDto(categoriaDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -99,7 +100,6 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 			daoFactory.cerrarConexion();
 		}
 		
-		return null;//convertir de domain a dto
 	}
 
 	@Override

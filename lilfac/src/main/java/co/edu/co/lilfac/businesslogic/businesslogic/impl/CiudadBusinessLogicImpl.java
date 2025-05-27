@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CiudadBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.ciudad.entity.CiudadEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CiudadDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class CiudadBusinessLogicImpl implements CiudadBusinessLogic {
 	
 	@Override
 	public void registrarNuevaCiudad(CiudadDomain ciudad) throws LilfacException {
-		CiudadEntity ciudadEntity = null;
+		var ciudadEntity = CiudadEntityAssembler.getInstance().toEntity(ciudad);
 		factory.getCiudadDAO().create(ciudadEntity);
 	}
 
 	@Override
 	public void modificarCiudadExistente(UUID id, CiudadDomain ciudad) throws LilfacException {
-		CiudadEntity ciudadEntity = null;
+		var ciudadEntity = CiudadEntityAssembler.getInstance().toEntity(ciudad);
 		factory.getCiudadDAO().update(id, ciudadEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteCiudadExistente(UUID id) throws LilfacException {
-		CiudadEntity ciudadEntity = null;
 		factory.getCiudadDAO().delete(id);
 	}
 
 	@Override
 	public CiudadDomain consultarCiudadPorId(UUID id) throws LilfacException {
-		CiudadEntity CiudadFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		CiudadEntity CiudadEntity = factory.getCiudadDAO().listById(id);
-		
-		CiudadDomain datosARetornar = null;
-		return datosARetornar;
+		var ciudadEntity = factory.getCiudadDAO().listById(id);
+		return CiudadEntityAssembler.getInstance().toDomain(ciudadEntity);
 	}
 
 	@Override
 	public List<CiudadDomain> consultarCiudades(CiudadDomain filtro) throws LilfacException {
 		
-		CiudadEntity CiudadFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<CiudadEntity> CiudadEntities = factory.getCiudadDAO().listByFIlter(CiudadFilter);
-		
-		List<CiudadDomain> datosARetornar = null;
-		return datosARetornar;
+		var ciudadFilter = CiudadEntityAssembler.getInstance().toEntity(filtro);
+		List<CiudadEntity> ciudadEntities = factory.getCiudadDAO().listByFIlter(ciudadFilter);
+		return CiudadEntityAssembler.getInstance().toDomain(ciudadEntities);
 	}
 
 }

@@ -12,9 +12,9 @@ public class PedidoDomain {
 	private String fechaReserva;
 	private String fechaVencimiento;
 	private String direccionEntrega;
-	private float costo;
-	private float abono;
-	private float restante;
+	private Float costo;
+	private Float abono;
+	private Float restante;
 	private CiudadDomain ciudad;
 	private ClienteDomain cliente;
 	private EmpleadoDomain empleado;
@@ -32,7 +32,7 @@ public class PedidoDomain {
 		setEmpleado(EmpleadoDomain.obtenerValorDefecto());
 	}
 	
-	public PedidoDomain(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final float costo, final float abono, final float restante, final CiudadDomain ciudad, final ClienteDomain cliente, final EmpleadoDomain empleado) {
+	public PedidoDomain(final UUID id, final String fechaReserva, final String fechaVencimiento, final String direccionEntrega, final Float costo, final Float abono, final Float restante, final CiudadDomain ciudad, final ClienteDomain cliente, final EmpleadoDomain empleado) {
 		setId(id);
 		setFechaReserva(fechaReserva);
 		setFechaVencimiento(fechaVencimiento);
@@ -85,27 +85,27 @@ public class PedidoDomain {
 		this.direccionEntrega = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionEntrega);
 	}
 
-	public float getCosto() {
+	public Float getCosto() {
 		return costo;
 	}
 
-	private void setCosto(float costo) {
+	private void setCosto(Float costo) {
 		this.costo = UtilFloat.obtenerValorDefecto(costo);
 	}
 
-	public float getAbono() {
+	public Float getAbono() {
 		return abono;
 	}
 
-	private void setAbono(float abono) {
+	private void setAbono(Float abono) {
 		this.abono = UtilFloat.obtenerValorDefecto(abono);
 	}
 
-	public float getRestante() {
+	public Float getRestante() {
 		return restante;
 	}
 
-	private void setRestante(float restante) {
+	private void setRestante(Float restante) {
 		this.restante = UtilFloat.obtenerValorDefecto(restante);
 	}
 

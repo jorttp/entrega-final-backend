@@ -10,7 +10,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 public class ProductoPedidoDomain {
 	
 	private UUID id;
-	private int cantidad; 
+	private Integer cantidad; 
 	private ProductoDomain producto;
 	private PedidoDomain pedido;
 	
@@ -28,7 +28,7 @@ public class ProductoPedidoDomain {
 		setPedido(PedidoDomain.obtenerValorDefecto());
 	}
 	
-	public ProductoPedidoDomain(final UUID id, final int cantidad, final ProductoDomain producto, final PedidoDomain pedido) {
+	public ProductoPedidoDomain(final UUID id, final Integer cantidad, final ProductoDomain producto, final PedidoDomain pedido) {
 		setId(id);
 		setCantidad(cantidad);
 		setProducto(producto);
@@ -52,11 +52,11 @@ public class ProductoPedidoDomain {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
-	public int getCantidad() {
+	public Integer getCantidad() {
 		return cantidad;
 	}
 	
-	private void setCantidad(int cantidad) {
+	private void setCantidad(Integer cantidad) {
 		this.cantidad = UtilNumerico.obtenerValorDefecto(cantidad);
 	}
 	

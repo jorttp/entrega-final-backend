@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.FacturaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.factura.entity.FacturaEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.FacturaDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class FacturaBusinessLogicImpl implements FacturaBusinessLogic {
 	
 	@Override
 	public void registrarNuevaFactura(FacturaDomain factura) throws LilfacException {
-		FacturaEntity facturaEntity = null;
+		var facturaEntity = FacturaEntityAssembler.getInstance().toEntity(factura);
 		factory.getFacturaDAO().create(facturaEntity);
 	}
 
 	@Override
 	public void modificarFacturaExistente(UUID id, FacturaDomain factura) throws LilfacException {
-		FacturaEntity facturaEntity = null;
+		var facturaEntity = FacturaEntityAssembler.getInstance().toEntity(factura);
 		factory.getFacturaDAO().update(id, facturaEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteFacturaExistente(UUID id) throws LilfacException {
-		FacturaEntity facturaEntity = null;
 		factory.getFacturaDAO().delete(id);
 	}
 
 	@Override
 	public FacturaDomain consultarFacturaPorId(UUID id) throws LilfacException {
-		FacturaEntity FacturaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		FacturaEntity FacturaEntity = factory.getFacturaDAO().listById(id);
-		
-		FacturaDomain datosARetornar = null;
-		return datosARetornar;
+		var facturaEntity = factory.getFacturaDAO().listById(id);
+		return FacturaEntityAssembler.getInstance().toDomain(facturaEntity);
 	}
 
 	@Override
 	public List<FacturaDomain> consultarFacturas(FacturaDomain filtro) throws LilfacException {
 		
-		FacturaEntity FacturaFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<FacturaEntity> FacturaEntities = factory.getFacturaDAO().listByFIlter(FacturaFilter);
-		
-		List<FacturaDomain> datosARetornar = null;
-		return datosARetornar;
+		var facturaFilter = FacturaEntityAssembler.getInstance().toEntity(filtro);
+		List<FacturaEntity> facturaEntities = factory.getFacturaDAO().listByFIlter(facturaFilter);
+		return FacturaEntityAssembler.getInstance().toDomain(facturaEntities);
 	}
 
 }

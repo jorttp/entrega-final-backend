@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CostoAdicionalBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.costoadicional.entity.CostoAdicionalEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CostoAdicionalDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class CostoAdicionalBusinessLogicImpl implements CostoAdicionalBusinessLo
 	
 	@Override
 	public void registrarNuevoCostoAdicional(CostoAdicionalDomain costoAdicional) throws LilfacException {
-		CostoAdicionalEntity costoAdicionalEntity = null;
+		var costoAdicionalEntity = CostoAdicionalEntityAssembler.getInstance().toEntity(costoAdicional);
 		factory.getCostoAdicionalDAO().create(costoAdicionalEntity);
 	}
 
 	@Override
 	public void modificarCostoAdicionalExistente(UUID id, CostoAdicionalDomain costoAdicional) throws LilfacException {
-		CostoAdicionalEntity costoAdicionalEntity = null;
+		var costoAdicionalEntity = CostoAdicionalEntityAssembler.getInstance().toEntity(costoAdicional);
 		factory.getCostoAdicionalDAO().update(id, costoAdicionalEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteCostoAdicionalExistente(UUID id) throws LilfacException {
-		CostoAdicionalEntity costoAdicionalEntity = null;
 		factory.getCostoAdicionalDAO().delete(id);
 	}
 
 	@Override
 	public CostoAdicionalDomain consultarCostoAdicionalPorId(UUID id) throws LilfacException {
-		CostoAdicionalEntity CostoAdicionalFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		CostoAdicionalEntity CostoAdicionalEntity = factory.getCostoAdicionalDAO().listById(id);
-		
-		CostoAdicionalDomain datosARetornar = null;
-		return datosARetornar;
+		var costoAdicionalEntity = factory.getCostoAdicionalDAO().listById(id);
+		return CostoAdicionalEntityAssembler.getInstance().toDomain(costoAdicionalEntity);
 	}
 
 	@Override
 	public List<CostoAdicionalDomain> consultarCostosAdicionales(CostoAdicionalDomain filtro) throws LilfacException {
 		
-		CostoAdicionalEntity CostoAdicionalFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<CostoAdicionalEntity> CostoAdicionalEntities = factory.getCostoAdicionalDAO().listByFIlter(CostoAdicionalFilter);
-		
-		List<CostoAdicionalDomain> datosARetornar = null;
-		return datosARetornar;
+		var costoAdicionalFilter = CostoAdicionalEntityAssembler.getInstance().toEntity(filtro);
+		List<CostoAdicionalEntity> costoAdicionalEntities = factory.getCostoAdicionalDAO().listByFIlter(costoAdicionalFilter);
+		return CostoAdicionalEntityAssembler.getInstance().toDomain(costoAdicionalEntities);
 	}
 
 }

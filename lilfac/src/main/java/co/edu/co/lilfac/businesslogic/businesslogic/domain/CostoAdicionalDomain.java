@@ -9,7 +9,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 
 public class CostoAdicionalDomain {
 	private UUID id;
-	private float valor;
+	private Float valor;
 	private String descripcion;
 	private RecepcionDomain recepcion;
 	
@@ -28,7 +28,7 @@ public class CostoAdicionalDomain {
 		
 	}
 	
-	public CostoAdicionalDomain(final UUID id, final float valor, final String descripcion, final RecepcionDomain recepcion) {
+	public CostoAdicionalDomain(final UUID id, final Float valor, final String descripcion, final RecepcionDomain recepcion) {
 		setId(id);
 		setValor(valor);
 		setDescripcion(descripcion);
@@ -51,11 +51,11 @@ public class CostoAdicionalDomain {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 	
-	public float getValor() {
+	public Float getValor() {
 		return valor;
 	}
 
-	private void setValor(float valor) {
+	private void setValor(Float valor) {
 		this.valor = UtilFloat.obtenerValorDefecto(valor);
 	}
 	

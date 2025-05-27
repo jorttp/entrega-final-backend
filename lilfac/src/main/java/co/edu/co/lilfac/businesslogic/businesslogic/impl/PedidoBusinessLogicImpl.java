@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.PedidoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.pedido.entity.PedidoEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.PedidoDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class PedidoBusinessLogicImpl implements PedidoBusinessLogic {
 	
 	@Override
 	public void registrarNuevoPedido(PedidoDomain pedido) throws LilfacException {
-		PedidoEntity pedidoEntity = null;
+		var pedidoEntity = PedidoEntityAssembler.getInstance().toEntity(pedido);
 		factory.getPedidoDAO().create(pedidoEntity);
 	}
 
 	@Override
 	public void modificarPedidoExistente(UUID id, PedidoDomain pedido) throws LilfacException {
-		PedidoEntity pedidoEntity = null;
+		var pedidoEntity = PedidoEntityAssembler.getInstance().toEntity(pedido);
 		factory.getPedidoDAO().update(id, pedidoEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamentePedidoExistente(UUID id) throws LilfacException {
-		PedidoEntity pedidoEntity = null;
 		factory.getPedidoDAO().delete(id);
 	}
 
 	@Override
 	public PedidoDomain consultarPedidoPorId(UUID id) throws LilfacException {
-		PedidoEntity PedidoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		PedidoEntity PedidoEntity = factory.getPedidoDAO().listById(id);
-		
-		PedidoDomain datosARetornar = null;
-		return datosARetornar;
+		var pedidoEntity = factory.getPedidoDAO().listById(id);
+		return PedidoEntityAssembler.getInstance().toDomain(pedidoEntity);
 	}
 
 	@Override
 	public List<PedidoDomain> consultarPedidos(PedidoDomain filtro) throws LilfacException {
 		
-		PedidoEntity PedidoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		List<PedidoEntity> PedidoEntities = factory.getPedidoDAO().listByFIlter(PedidoFilter);
-		
-		List<PedidoDomain> datosARetornar = null;
-		return datosARetornar;
+		var pedidoFilter = PedidoEntityAssembler.getInstance().toEntity(filtro);
+		List<PedidoEntity> pedidoEntities = factory.getPedidoDAO().listByFIlter(pedidoFilter);
+		return PedidoEntityAssembler.getInstance().toDomain(pedidoEntities);
 		
 	}
 

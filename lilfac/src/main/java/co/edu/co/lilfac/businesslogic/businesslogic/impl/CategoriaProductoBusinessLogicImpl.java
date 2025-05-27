@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CategoriaProductoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.categoriaproducto.entity.CategoriaProductoEntityAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CategoriaProductoDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -19,39 +20,33 @@ public class CategoriaProductoBusinessLogicImpl implements CategoriaProductoBusi
 	
 	@Override
 	public void registrarNuevaCategoriaProducto(CategoriaProductoDomain categoriaProducto) throws LilfacException {
-		CategoriaProductoEntity categoriaProdcutoEntity = null;
+		var categoriaProdcutoEntity = CategoriaProductoEntityAssembler.getInstance().toEntity(categoriaProducto);
 		factory.getCategoriaProductoDAO().create(categoriaProdcutoEntity);
 	}
 
 	@Override
 	public void modificarCategoriaProductoExistente(UUID id, CategoriaProductoDomain categoriaProducto) throws LilfacException {
-		CategoriaProductoEntity categoriaProdcutoEntity = null;
+		var categoriaProdcutoEntity = CategoriaProductoEntityAssembler.getInstance().toEntity(categoriaProducto);
 		factory.getCategoriaProductoDAO().update(id, categoriaProdcutoEntity);
 	}
 
 	@Override
 	public void darBajaDefinitivamenteCategoriaProductoExistente(UUID id) throws LilfacException {
-		CategoriaProductoEntity categoriaProdcutoEntity = null;
 		factory.getCategoriaProductoDAO().delete(id);
 	}
 
 	@Override
 	public CategoriaProductoDomain consultarCategoriaProductoPorId(UUID id) throws LilfacException {
-		CategoriaProductoEntity categoriaProductoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
-		CategoriaProductoEntity categoriaProductoEntity = factory.getCategoriaProductoDAO().listById(id);
-		
-		CategoriaProductoDomain datosARetornar = null;
-		return datosARetornar;
+		var categoriaProductoEntity = factory.getCategoriaProductoDAO().listById(id);
+		return CategoriaProductoEntityAssembler.getInstance().toDomain(categoriaProductoEntity);
 	}
 
 	@Override
 	public List<CategoriaProductoDomain> consultarCategoriasProducto(CategoriaProductoDomain filtro) throws LilfacException {
 		
-		CategoriaProductoEntity categoriaProductoFilter = null; // MAGIA DE TRADUCIR DE domain-›entity 
+		var categoriaProductoFilter = CategoriaProductoEntityAssembler.getInstance().toEntity(filtro);
 		List<CategoriaProductoEntity> categoriaProductoEntities = factory.getCategoriaProductoDAO().listByFIlter(categoriaProductoFilter);
-		
-		List<CategoriaProductoDomain> datosARetornar = null;
-		return datosARetornar;
+		return CategoriaProductoEntityAssembler.getInstance().toDomain(categoriaProductoEntities);
 	}
 
 }

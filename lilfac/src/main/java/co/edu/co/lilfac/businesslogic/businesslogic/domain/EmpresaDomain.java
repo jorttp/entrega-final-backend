@@ -10,8 +10,8 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 public final class EmpresaDomain {
 	private UUID id;
 	private String nombre;
-	private int nit;
-	private int telefono;
+	private Integer nit;
+	private Integer telefono;
 	private String correo;
 	private String direccion;
 	private CiudadDomain ciudad;
@@ -25,7 +25,7 @@ public final class EmpresaDomain {
 		setCiudad(CiudadDomain.obtenerValorDefecto());
 	}
 	
-	public EmpresaDomain (final UUID id, final String nombre, final int nit, final int telefono, final String correo, final String direccion, final CiudadDomain ciudad) {
+	public EmpresaDomain (final UUID id, final String nombre, final Integer nit, final Integer telefono, final String correo, final String direccion, final CiudadDomain ciudad) {
 		setId(id);
 		setNombre(nombre);
 		setNit(nit);		
@@ -59,19 +59,19 @@ public final class EmpresaDomain {
 		this.nombre = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombre);
 	}
 
-	public int getNit() {
+	public Integer getNit() {
 		return nit;
 	}
 
-	private void setNit(final int nit) {
+	private void setNit(final Integer nit) {
 		this.nit = UtilNumerico.obtenerValorDefecto(nit);
 	}
 
-	public int getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	private void setTelefono(final int telefono) {
+	private void setTelefono(final Integer telefono) {
 		this.telefono =UtilNumerico.obtenerValorDefecto(telefono);
 	}
 

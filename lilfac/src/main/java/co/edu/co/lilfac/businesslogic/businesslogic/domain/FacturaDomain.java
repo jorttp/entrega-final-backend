@@ -1,9 +1,8 @@
-package co.edu.co.lilfac.businesslogic.businesslogic.domain;
+	package co.edu.co.lilfac.businesslogic.businesslogic.domain;
 
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
@@ -12,7 +11,7 @@ public class FacturaDomain {
 	private UUID id;
 	private String codigo;
 	private String fechaGeneracion;
-	private float costoTotal;
+	private Float costoTotal;
 	private EmpresaDomain empresa;
 	private EmpleadoDomain empleado;
 	private ClienteDomain cliente;
@@ -23,7 +22,7 @@ public class FacturaDomain {
 		setId(UtilUUID.obtenerValorDefecto());
 		setCodigo(UtilTexto.getInstance().obtenerValorDefecto());
 		setFechaGeneracion(UtilTexto.getInstance().obtenerValorDefecto());
-		setCostoTotal(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCostoTotal(UtilFloat.getInstance().obtenerValorDefecto());
 		setEmpresa(EmpresaDomain.obtenerValorDefecto());
 		setEmpleado(EmpleadoDomain.obtenerValorDefecto());
 		setCliente(ClienteDomain.obtenerValorDefecto());
@@ -31,7 +30,7 @@ public class FacturaDomain {
 		setPedido(PedidoDomain.obtenerValorDefecto());
 	}
 	
-	public FacturaDomain(final UUID id, final String codigo, final String fechaGeneracion, final float costoTotal, final EmpresaDomain empresa, final EmpleadoDomain empleado, final ClienteDomain cliente, final CostoAdicionalDomain costoAdicional, final PedidoDomain pedido) {
+	public FacturaDomain(final UUID id, final String codigo, final String fechaGeneracion, final Float costoTotal, final EmpresaDomain empresa, final EmpleadoDomain empleado, final ClienteDomain cliente, final CostoAdicionalDomain costoAdicional, final PedidoDomain pedido) {
 		setId(id);
 		setCodigo(codigo);
 		setFechaGeneracion(fechaGeneracion);
@@ -75,11 +74,11 @@ public class FacturaDomain {
 		this.fechaGeneracion = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(fechaGeneracion);
 	}
 
-	public float getCostoTotal() {
+	public Float getCostoTotal() {
 		return costoTotal;
 	}
 
-	private void setCostoTotal(float costoTotal) {
+	private void setCostoTotal(Float costoTotal) {
 		this.costoTotal = UtilFloat.obtenerValorDefecto(costoTotal);
 	}
 

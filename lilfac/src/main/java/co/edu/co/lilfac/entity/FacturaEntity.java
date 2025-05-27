@@ -1,9 +1,9 @@
 package co.edu.co.lilfac.entity;
 
-import java.text.ParseException;
 import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
@@ -31,7 +31,7 @@ public class FacturaEntity {
 		setPedido(PedidoEntity.obtenerValorDefecto());
 	}
 	
-	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final Float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) throws ParseException {
+	public FacturaEntity(final UUID id, final String codigo, final String fechaGeneracion, final Float costoTotal, final EmpresaEntity empresa, final EmpleadoEntity empleado, final ClienteEntity cliente, final CostoAdicionalEntity costoAdicional, final PedidoEntity pedido) {
 		setId(id);
 		setCodigo(codigo);
 		setFechaGeneracion(fechaGeneracion);
@@ -41,6 +41,14 @@ public class FacturaEntity {
 		setCliente(cliente);
 		setCostoAdicional(costoAdicional);
 		setPedido(pedido);
+	}
+	
+	public static FacturaEntity obtenerValorDefecto() {
+		return new FacturaEntity();
+	}
+	
+	public static FacturaEntity obtenerValorDefecto(final FacturaEntity factura ) {
+		return UtilObjeto.getInstance().obtenerValorDefecto(factura, obtenerValorDefecto());
 	}
 
 	public UUID getId() {
