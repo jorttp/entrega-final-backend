@@ -38,6 +38,15 @@ public class PaisDTOAssembler implements DTOAssembler<PaisDTO, PaisDomain>{
 		return listaResultado;
 	}
 
+	@Override
+	public List<PaisDTO> toDto(List<PaisDomain> domainList) {
+		var listaResultados = new ArrayList<PaisDTO>();
+		for (PaisDomain paisDomain : domainList) {
+			listaResultados.add(toDto(paisDomain));
+		}
+		return null;
+	}
+
 
 
 }

@@ -3,9 +3,13 @@ package co.edu.co.lilfac.crosscutting.utilitarios;
 public final class UtilNumerico {
 		
 	private static UtilNumerico instancia = new UtilNumerico();
-	public static final int VACIO=0;
+	public static final Integer VACIO=0;
 	private UtilNumerico() {
 			
+	}
+	
+	public boolean estaVacia(final Integer valor) {
+		return VACIO.equals(valor);
 	}
 	
 	public static UtilNumerico getInstance() {

@@ -41,6 +41,16 @@ public class RecepcionDTOAssembler implements DTOAssembler<RecepcionDTO, Recepci
 		return listaResultado;
 	}
 
+	@Override
+	public List<RecepcionDTO> toDto(List<RecepcionDomain> domainList) {
+		var listaResultado = new ArrayList<RecepcionDTO>();
+		
+		for (RecepcionDomain recepcionDomain : domainList) {
+			listaResultado.add(toDto(recepcionDomain));
+		}
+		return null;
+	}
+
 
 
 }

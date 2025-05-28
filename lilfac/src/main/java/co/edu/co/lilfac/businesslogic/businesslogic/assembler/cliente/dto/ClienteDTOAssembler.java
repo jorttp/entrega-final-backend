@@ -39,6 +39,16 @@ public class ClienteDTOAssembler implements DTOAssembler<ClienteDTO, ClienteDoma
 		return listaResultado;
 	}
 
+	@Override
+	public List<ClienteDTO> toDto(List<ClienteDomain> domainList) {
+		var listaResultado = new ArrayList<ClienteDTO>();
+		
+		for (ClienteDomain clienteDomain : domainList) {
+			listaResultado.add(toDto(clienteDomain));
+		}
+		return listaResultado;
+	}
+
 
 
 }

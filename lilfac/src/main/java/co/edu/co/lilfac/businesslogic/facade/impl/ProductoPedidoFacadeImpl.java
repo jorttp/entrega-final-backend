@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.ProductoPedidoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.productopedido.dto.ProductoPedidoDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ProductoPedidoDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.ProductoPedidoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.ProductoPedidoFacade;
@@ -27,7 +28,7 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 	public void registrarNuevoProductoPedido(ProductoPedidoDTO productoPedido) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ProductoPedidoDomain productoPedidoDomain = null; //pasar de dto a domain
+			ProductoPedidoDomain productoPedidoDomain = ProductoPedidoDTOAssembler.getInstance().toDomain(productoPedido);
 			productoPedidoBusinessLogic.registrarNuevoProductoPedido(productoPedidoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -47,7 +48,7 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 	public void modificarProductoPedidoExistente(UUID id, ProductoPedidoDTO productoPedido) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ProductoPedidoDomain productoPedidoDomain = null; //pasar de dto a domain
+			ProductoPedidoDomain productoPedidoDomain = ProductoPedidoDTOAssembler.getInstance().toDomain(productoPedido);
 			productoPedidoBusinessLogic.modificarProductoPedidoExistente(id, productoPedidoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +68,6 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 	public void darBajaDefinitivamenteProductoPedidoExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ProductoPedidoDomain productoPedidoDomain = null; //pasar de dto a domain
 			productoPedidoBusinessLogic.darBajaDefinitivamenteProductoPedidoExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -86,7 +86,8 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 	@Override
 	public ProductoPedidoDTO consultarProductoPedidoPorId(UUID id) throws LilfacException {
 		try {
-			var productoPedidoDomainResultado = productoPedidoBusinessLogic.consultarProductoPedidoPorId(id);
+			var productoPedidoDomainResultado = productoPedidoBusinessLogic.consultarProductoPedidoPorId(id);		
+			return ProductoPedidoDTOAssembler.getInstance().toDto(productoPedidoDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -98,14 +99,24 @@ public class ProductoPedidoFacadeImpl implements ProductoPedidoFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<ProductoPedidoDTO> consultarProductosPedidos(ProductoPedidoDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductoPedidoDTO> consultarProductosPedidos(ProductoPedidoDTO filtro) throws LilfacException {
+		try {
+			var productoPedidoFilter = ProductoPedidoDTOAssembler.getInstance().toDomain(filtro);
+			List<ProductoPedidoDomain> productosPedidosDomain = productoPedidoBusinessLogic.consultarProductosPedidos(productoPedidoFilter);
+			return ProductoPedidoDTOAssembler.getInstance().toDto(productosPedidosDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los productos pedidos";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los productos pedidos";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

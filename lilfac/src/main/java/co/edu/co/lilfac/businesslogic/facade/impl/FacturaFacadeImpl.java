@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.FacturaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.factura.dto.FacturaDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.FacturaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.FacturaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.FacturaFacade;
@@ -29,7 +30,7 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	public void registrarNuevaFactura(FacturaDTO factura) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			FacturaDomain facturaDomain = null; //pasar de dto a domain
+			FacturaDomain facturaDomain = FacturaDTOAssembler.getInstance().toDomain(factura);
 			facturaBusinessLogic.registrarNuevaFactura(facturaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -49,7 +50,7 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	public void modificarFacturaExistente(UUID id, FacturaDTO factura) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			FacturaDomain facturaDomain = null; //pasar de dto a domain
+			FacturaDomain facturaDomain = FacturaDTOAssembler.getInstance().toDomain(factura);
 			facturaBusinessLogic.modificarFacturaExistente(id, facturaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -69,7 +70,6 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	public void darBajaDefinitivamenteFacturaExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			FacturaDomain facturaDomain = null; //pasar de dto a domain
 			facturaBusinessLogic.darBajaDefinitivamenteFacturaExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -88,7 +88,8 @@ public class FacturaFacadeImpl implements FacturaFacade{
 	@Override
 	public FacturaDTO consultarFacturaPorId(UUID id) throws LilfacException {
 		try {
-			var facturaDomainResultado = facturaBusinessLogic.consultarFacturaPorId(id);
+			var facturaDomainResultado = facturaBusinessLogic.consultarFacturaPorId(id);		
+			return FacturaDTOAssembler.getInstance().toDto(facturaDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -100,14 +101,24 @@ public class FacturaFacadeImpl implements FacturaFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<FacturaDTO> consultarFacturas(FacturaDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FacturaDTO> consultarFacturas(FacturaDTO filtro) throws LilfacException {
+		try {
+			var facturaFilter = FacturaDTOAssembler.getInstance().toDomain(filtro);
+			List<FacturaDomain> facturasDomain = facturaBusinessLogic.consultarFacturas(facturaFilter);
+			return FacturaDTOAssembler.getInstance().toDto(facturasDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de las facturas";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de las facturas";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

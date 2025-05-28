@@ -39,6 +39,15 @@ public class EmpresaDTOAssembler implements DTOAssembler<EmpresaDTO, EmpresaDoma
 		return listaResultado;
 	}
 
+	@Override
+	public List<EmpresaDTO> toDto(List<EmpresaDomain> domainList) {
+		var listaResultado = new ArrayList<EmpresaDTO>();
+		for (EmpresaDomain empresaDomain : domainList) {
+			listaResultado.add(toDto(empresaDomain));
+		}
+		return null;
+	}
+
 
 
 }

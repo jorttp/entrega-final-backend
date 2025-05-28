@@ -48,16 +48,4 @@ public class EmpleadoBusinessLogicImpl implements EmpleadoBusinessLogic {
 		return EmpleadoEntityAssembler.getInstance().toDomain(empleadoEntities);
 	}
 
-	@Override
-	public void confirmarTelefonoEmpleado(Integer telefonoEmpleado) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void confirmarCorreoEmpleado(String correoEmpleado) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

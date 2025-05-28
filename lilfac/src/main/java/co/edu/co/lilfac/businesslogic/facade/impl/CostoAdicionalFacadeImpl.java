@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CostoAdicionalBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.costoadicional.dto.CostoAdicionalDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CostoAdicionalDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CostoAdicionalBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CostoAdicionalFacade;
@@ -29,7 +30,7 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 	public void registrarNuevoCostoAdicional(CostoAdicionalDTO costoAdicional) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CostoAdicionalDomain costoAdicionalDomain = null; //pasar de dto a domain
+			CostoAdicionalDomain costoAdicionalDomain = CostoAdicionalDTOAssembler.getInstance().toDomain(costoAdicional);
 			costoAdicionalBusinessLogic.registrarNuevoCostoAdicional(costoAdicionalDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -49,7 +50,7 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 	public void modificarCostoAdicionalExistente(UUID id, CostoAdicionalDTO costoAdicional) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CostoAdicionalDomain costoAdicionalDomain = null; //pasar de dto a domain
+			CostoAdicionalDomain costoAdicionalDomain = CostoAdicionalDTOAssembler.getInstance().toDomain(costoAdicional);
 			costoAdicionalBusinessLogic.modificarCostoAdicionalExistente(id, costoAdicionalDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -69,7 +70,6 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 	public void darBajaDefinitivamenteCostoAdicionalExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CostoAdicionalDomain costoAdicionalDomain = null; //pasar de dto a domain
 			costoAdicionalBusinessLogic.darBajaDefinitivamenteCostoAdicionalExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -89,6 +89,7 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 	public CostoAdicionalDTO consultarCostoAdicionalPorId(UUID id) throws LilfacException {
 		try {
 			var costoAdicionalDomainResultado = costoAdicionalBusinessLogic.consultarCostoAdicionalPorId(id);
+			return CostoAdicionalDTOAssembler.getInstance().toDto(costoAdicionalDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -101,13 +102,24 @@ public class CostoAdicionalFacadeImpl implements CostoAdicionalFacade{
 			daoFactory.cerrarConexion();
 		}
 		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<CostoAdicionalDTO> consultarCostosAdicionales(CostoAdicionalDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CostoAdicionalDTO> consultarCostosAdicionales(CostoAdicionalDTO filtro) throws LilfacException {
+		try {
+			var costoAdicionalFilter = CostoAdicionalDTOAssembler.getInstance().toDomain(filtro);
+			List<CostoAdicionalDomain> costosAdicionalesDomain = costoAdicionalBusinessLogic.consultarCostosAdicionales(costoAdicionalFilter);
+			return CostoAdicionalDTOAssembler.getInstance().toDto(costosAdicionalesDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los costos adicionales";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los costos adicionales";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

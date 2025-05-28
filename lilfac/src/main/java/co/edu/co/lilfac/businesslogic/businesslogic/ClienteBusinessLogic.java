@@ -13,7 +13,4 @@ public interface ClienteBusinessLogic {
 	void darBajaDefinitivamenteClienteExistente(UUID id)throws LilfacException;
 	ClienteDomain consultarClientePorId(UUID id)throws LilfacException;
 	List<ClienteDomain> consultarClientes(ClienteDomain filtro)throws LilfacException;
-	void confirmarTelefonoCliente(Integer telefonoCliente)throws LilfacException;
-	void confirmarCorreoCliente(String correoCliente)throws LilfacException;
-
 }

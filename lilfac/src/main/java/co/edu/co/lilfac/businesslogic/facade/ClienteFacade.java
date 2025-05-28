@@ -13,7 +13,5 @@ public interface ClienteFacade {
 	void darBajaDefinitivamenteClienteExistente(UUID id)throws LilfacException;
 	ClienteDTO consultarClientePorId(UUID id)throws LilfacException;
 	List<ClienteDTO> consultarClientes(ClienteDTO filtro)throws LilfacException;
-	void confirmarTelefonoCliente(UUID id, Integer telefonoCliente)throws LilfacException;
-	void confirmarCorreoCliente(UUID id, String correoCliente)throws LilfacException;
 
 }

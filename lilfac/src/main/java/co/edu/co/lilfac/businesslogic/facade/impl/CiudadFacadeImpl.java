@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.CiudadBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.ciudad.dto.CiudadDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.CiudadDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.CiudadBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.CiudadFacade;
@@ -28,7 +29,7 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	public void registrarNuevaCiudad(CiudadDTO ciudad) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CiudadDomain ciudadDomain = null; //pasar de dto a domain
+			CiudadDomain ciudadDomain = CiudadDTOAssembler.getInstance().toDomain(ciudad);
 			ciudadBusinessLogic.registrarNuevaCiudad(ciudadDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -48,7 +49,7 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	public void modificarCiudadExistente(UUID id, CiudadDTO ciudad) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CiudadDomain ciudadDomain = null; //pasar de dto a domain
+			CiudadDomain ciudadDomain = CiudadDTOAssembler.getInstance().toDomain(ciudad);
 			ciudadBusinessLogic.modificarCiudadExistente(id, ciudadDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -68,7 +69,6 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	public void darBajaDefinitivamenteCiudadExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			CiudadDomain ciudadDomain = null; //pasar de dto a domain
 			ciudadBusinessLogic.darBajaDefinitivamenteCiudadExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -88,6 +88,7 @@ public class CiudadFacadeImpl implements CiudadFacade {
 	public CiudadDTO consultarCiudadPorId(UUID id) throws LilfacException {
 		try {
 			var ciudadDomainResultado = ciudadBusinessLogic.consultarCiudadPorId(id);
+			return CiudadDTOAssembler.getInstance().toDto(ciudadDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -100,13 +101,23 @@ public class CiudadFacadeImpl implements CiudadFacade {
 			daoFactory.cerrarConexion();
 		}
 		
-		return null;//convertir de domain a dto
 	}
 
 	@Override
-	public List<CiudadDTO> consultarCiudades(CiudadDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CiudadDTO> consultarCiudades(CiudadDTO filtro) throws LilfacException {
+		try {
+			var ciudadFilter = CiudadDTOAssembler.getInstance().toDomain(filtro);
+			List<CiudadDomain> ciudadesDomain = ciudadBusinessLogic.consultarCiudades(ciudadFilter);
+			return CiudadDTOAssembler.getInstance().toDto(ciudadesDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de las ciudades";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de las ciudades";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

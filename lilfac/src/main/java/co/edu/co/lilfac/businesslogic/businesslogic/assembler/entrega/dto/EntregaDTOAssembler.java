@@ -41,6 +41,15 @@ public class EntregaDTOAssembler implements DTOAssembler<EntregaDTO, EntregaDoma
 		return listaResultado;
 	}
 
+	@Override
+	public List<EntregaDTO> toDto(List<EntregaDomain> domainList) {
+		var listaResultado = new ArrayList<EntregaDTO>();
+		for (EntregaDomain entregaDomain : domainList) {
+			listaResultado.add(toDto(entregaDomain));
+		}
+		return null;
+	}
+
 
 
 }

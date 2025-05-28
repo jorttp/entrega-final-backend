@@ -10,7 +10,4 @@ public interface EmpresaBusinessLogic {
 	void registrarInformacionEmpresa(EmpresaDomain empresa)throws LilfacException;
 	void modificarEmpresaExistente(UUID id, EmpresaDomain empresa)throws LilfacException;
 	EmpresaDomain consultarEmpresaPorId(UUID id)throws LilfacException;
-	void confirmarTelefonoEmpresa(Integer telefonoEmpresa)throws LilfacException;
-	void confirmarCorreoEmpresa(String correoEmpresa)throws LilfacException;
-
 }

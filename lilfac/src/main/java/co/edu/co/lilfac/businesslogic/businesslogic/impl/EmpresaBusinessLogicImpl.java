@@ -34,16 +34,5 @@ public class EmpresaBusinessLogicImpl implements EmpresaBusinessLogic {
 		return EmpresaEntityAssembler.getInstance().toDomain(empresaEntity);
 	}
 
-	@Override
-	public void confirmarTelefonoEmpresa(Integer telefonoEmpresa) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void confirmarCorreoEmpresa(String correoEmpresa) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

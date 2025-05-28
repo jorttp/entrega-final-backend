@@ -41,6 +41,16 @@ public class InventarioDTOAssembler implements DTOAssembler<InventarioDTO, Inven
 		return listaResultado;
 	}
 
+	@Override
+	public List<InventarioDTO> toDto(List<InventarioDomain> domainList) {
+		var listaResultados = new ArrayList<InventarioDTO>();
+		
+		for (InventarioDomain inventarioDomain : domainList) {
+			listaResultados.add(toDto(inventarioDomain));
+		}
+		return null;
+	}
+
 
 
 }

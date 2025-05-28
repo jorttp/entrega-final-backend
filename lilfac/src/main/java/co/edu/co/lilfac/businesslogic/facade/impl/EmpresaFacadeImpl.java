@@ -3,6 +3,7 @@ package co.edu.co.lilfac.businesslogic.facade.impl;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpresaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.empresa.dto.EmpresaDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpresaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EmpresaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EmpresaFacade;
@@ -20,15 +21,14 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 	public EmpresaFacadeImpl() throws LilfacException {
 		daoFactory = DAOFactory.getFactory(Factory.POSTGRE_SQL);
 		empresaBusinessLogic = new EmpresaBusinessLogicImpl(daoFactory);
-		
-		//REVISAR EL ARGUMENTO DE new InventarioBusinessLogicImpl()
+
 	} 
 	
 	@Override
 	public void registrarInformacionEmpresa(EmpresaDTO empresa) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EmpresaDomain empresaDomain = null; //pasar de dto a domain
+			EmpresaDomain empresaDomain = EmpresaDTOAssembler.getInstance().toDomain(empresa);
 			empresaBusinessLogic.registrarInformacionEmpresa(empresaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -48,7 +48,7 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 	public void modificarEmpresaExistente(UUID id, EmpresaDTO empresa) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EmpresaDomain empresaDomain = null; //pasar de dto a domain
+			EmpresaDomain empresaDomain = EmpresaDTOAssembler.getInstance().toDomain(empresa);
 			empresaBusinessLogic.modificarEmpresaExistente(id, empresaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +67,8 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 	@Override
 	public EmpresaDTO consultarEmpresaPorId(UUID id) throws LilfacException {
 		try {
-			var empresaDomainResultado = empresaBusinessLogic.consultarEmpresaPorId(id);
+			var empresaDomainResultado = empresaBusinessLogic.consultarEmpresaPorId(id);		
+			return EmpresaDTOAssembler.getInstance().toDto(empresaDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -79,20 +80,6 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
-	}
 
-	@Override
-	public void confirmarTelefonoEmpresa(UUID id, Integer telefonoEmpresa) {
-		// TODO Auto-generated method stub
-		
 	}
-
-	@Override
-	public void confirmarCorreoEmpresa(UUID id, String correoEmpresa) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.ClienteBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.cliente.dto.ClienteDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ClienteDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.ClienteBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.ClienteFacade;
@@ -27,7 +28,7 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	public void registrarNuevoCliente(ClienteDTO cliente) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ClienteDomain clienteDomain = null; //pasar de dto a domain
+			ClienteDomain clienteDomain = ClienteDTOAssembler.getInstance().toDomain(cliente);
 			clienteBusinessLogic.registrarNuevoCliente(clienteDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -47,7 +48,7 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	public void modificarClienteExistente(UUID id, ClienteDTO cliente) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ClienteDomain clienteDomain = null; //pasar de dto a domain
+			ClienteDomain clienteDomain = ClienteDTOAssembler.getInstance().toDomain(cliente);
 			clienteBusinessLogic.modificarClienteExistente(id, clienteDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +68,6 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	public void darBajaDefinitivamenteClienteExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			ClienteDomain clienteDomain = null; //pasar de dto a domain
 			clienteBusinessLogic.darBajaDefinitivamenteClienteExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -87,6 +87,7 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	public ClienteDTO consultarClientePorId(UUID id) throws LilfacException {
 		try {
 			var clienteDomainResultado = clienteBusinessLogic.consultarClientePorId(id);
+			return ClienteDTOAssembler.getInstance().toDto(clienteDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -99,24 +100,23 @@ public class ClienteFacadeImpl implements ClienteFacade{
 			daoFactory.cerrarConexion();
 		}
 		
-		return null;//convertir de domain a dto
 	}
 
 	@Override
-	public List<ClienteDTO> consultarClientes(ClienteDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void confirmarTelefonoCliente(UUID id, Integer telefonoCliente) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void confirmarCorreoCliente(UUID id, String correoCliente) {
-		// TODO Auto-generated method stub
+	public List<ClienteDTO> consultarClientes(ClienteDTO filtro) throws LilfacException {
+		try {
+			var clienteFilter = ClienteDTOAssembler.getInstance().toDomain(filtro);
+			List<ClienteDomain> clientesDomain = clienteBusinessLogic.consultarClientes(clienteFilter);
+			return ClienteDTOAssembler.getInstance().toDto(clientesDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los clientes";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los clientes";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 		
 	}
 

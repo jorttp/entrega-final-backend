@@ -39,6 +39,16 @@ public class DepartamentoDTOAssembler implements DTOAssembler<DepartamentoDTO, D
 		return listaResultado;
 	}
 
+	@Override
+	public List<DepartamentoDTO> toDto(List<DepartamentoDomain> domainList) {
+		var listaResultado = new ArrayList<DepartamentoDTO>();
+		
+		for (DepartamentoDomain departamentoDomain : domainList) {
+			listaResultado.add(toDto(departamentoDomain));
+		}
+		return null;
+	}
+
 
 
 }

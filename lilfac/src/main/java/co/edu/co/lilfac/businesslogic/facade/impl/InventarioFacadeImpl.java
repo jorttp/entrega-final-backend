@@ -3,6 +3,7 @@ package co.edu.co.lilfac.businesslogic.facade.impl;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.InventarioBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.inventario.dto.InventarioDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.InventarioDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.InventarioBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.InventarioFacade;
@@ -27,7 +28,7 @@ public class InventarioFacadeImpl implements InventarioFacade{
 	public void registrarNuevoProductoInventario(InventarioDTO inventario) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			InventarioDomain inventarioDomain = null; //pasar de dto a domain
+			InventarioDomain inventarioDomain = InventarioDTOAssembler.getInstance().toDomain(inventario);
 			inventarioBusinessLogic.registrarNuevoProductoInventario(inventarioDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -47,7 +48,7 @@ public class InventarioFacadeImpl implements InventarioFacade{
 	public void modificarInventarioExistente(UUID id, InventarioDTO inventario) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			InventarioDomain inventarioDomain = null; //pasar de dto a domain
+			InventarioDomain inventarioDomain = InventarioDTOAssembler.getInstance().toDomain(inventario);
 			inventarioBusinessLogic.modificarInventarioExistente(id, inventarioDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +68,6 @@ public class InventarioFacadeImpl implements InventarioFacade{
 	public void darBajaDefinitivamenteInventarioExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			InventarioDomain inventarioDomain = null; //pasar de dto a domain
 			inventarioBusinessLogic.darBajaDefinitivamenteInventarioExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -86,7 +86,8 @@ public class InventarioFacadeImpl implements InventarioFacade{
 	@Override
 	public InventarioDTO consultarInventarioPorId(UUID id) throws LilfacException {
 		try {
-			var inventarioDomainResultado = inventarioBusinessLogic.consultarInventarioPorId(id);
+			var inventarioDomainResultado = inventarioBusinessLogic.consultarInventarioPorId(id);		
+			return InventarioDTOAssembler.getInstance().toDto(inventarioDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -98,8 +99,7 @@ public class InventarioFacadeImpl implements InventarioFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 }

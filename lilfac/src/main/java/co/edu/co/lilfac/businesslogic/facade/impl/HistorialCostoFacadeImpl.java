@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.HistorialCostoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.historialcosto.dto.HistorialCostoDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.HistorialCostoDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.HistorialCostoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.HistorialCostoFacade;
@@ -29,7 +30,7 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 	public void registrarNuevoHistorialCosto(HistorialCostoDTO historialCosto) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			HistorialCostoDomain historialCostoDomain = null; //pasar de dto a domain
+			HistorialCostoDomain historialCostoDomain = HistorialCostoDTOAssembler.getInstance().toDomain(historialCosto);
 			historialCostoBusinessLogic.registrarNuevoHistorialCosto(historialCostoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -49,7 +50,7 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 	public void modificarHistorialCostoExistente(UUID id, HistorialCostoDTO historialCosto) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			HistorialCostoDomain historialCostoDomain = null; //pasar de dto a domain
+			HistorialCostoDomain historialCostoDomain = HistorialCostoDTOAssembler.getInstance().toDomain(historialCosto);
 			historialCostoBusinessLogic.modificarHistorialCostoExistente(id, historialCostoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -69,7 +70,6 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 	public void darBajaDefinitivamenteHistorialCostoExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			HistorialCostoDomain historialCostoDomain = null; //pasar de dto a domain
 			historialCostoBusinessLogic.darBajaDefinitivamenteHistorialCostoExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -88,7 +88,8 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 	@Override
 	public HistorialCostoDTO consultarHistorialCostoPorId(UUID id) throws LilfacException {
 		try {
-			var historialCostoDomainResultado = historialCostoBusinessLogic.consultarHistorialCostoPorId(id);
+			var historialCostoDomainResultado = historialCostoBusinessLogic.consultarHistorialCostoPorId(id);		
+			return HistorialCostoDTOAssembler.getInstance().toDto(historialCostoDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -100,14 +101,24 @@ public class HistorialCostoFacadeImpl implements HistorialCostoFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<HistorialCostoDTO> consultarHistorialesCosto(HistorialCostoDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<HistorialCostoDTO> consultarHistorialesCosto(HistorialCostoDTO filtro) throws LilfacException {
+		try {
+			var historialCostoFilter = HistorialCostoDTOAssembler.getInstance().toDomain(filtro);
+			List<HistorialCostoDomain> historialesCostosDomain = historialCostoBusinessLogic.consultarHistorialesCosto(historialCostoFilter);
+			return HistorialCostoDTOAssembler.getInstance().toDto(historialesCostosDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los historiales de costos";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los historiales de costos";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 	

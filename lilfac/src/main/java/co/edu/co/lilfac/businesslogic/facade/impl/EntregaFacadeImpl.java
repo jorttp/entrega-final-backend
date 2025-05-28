@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EntregaBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.entrega.dto.EntregaDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EntregaDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EntregaBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EntregaFacade;
@@ -28,7 +29,7 @@ public class EntregaFacadeImpl implements EntregaFacade{
 	public void registrarNuevaEntrega(EntregaDTO entrega) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EntregaDomain entregaDomain = null; //pasar de dto a domain
+			EntregaDomain entregaDomain = EntregaDTOAssembler.getInstance().toDomain(entrega);
 			entregaBusinessLogic.registrarNuevaEntrega(entregaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -48,7 +49,7 @@ public class EntregaFacadeImpl implements EntregaFacade{
 	public void modificarEntregaExistente(UUID id, EntregaDTO entrega) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EntregaDomain entregaDomain = null; //pasar de dto a domain
+			EntregaDomain entregaDomain = EntregaDTOAssembler.getInstance().toDomain(entrega);
 			entregaBusinessLogic.modificarEntregaExistente(id, entregaDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -68,7 +69,6 @@ public class EntregaFacadeImpl implements EntregaFacade{
 	public void darBajaDefinitivamenteEntregaExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EntregaDomain entregaDomain = null; //pasar de dto a domain
 			entregaBusinessLogic.darBajaDefinitivamenteEntregaExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -87,7 +87,8 @@ public class EntregaFacadeImpl implements EntregaFacade{
 	@Override
 	public EntregaDTO consultarEntregaPorId(UUID id) throws LilfacException {
 		try {
-			var entregaDomainResultado = entregaBusinessLogic.consultarEntregaPorId(id);
+			var entregaDomainResultado = entregaBusinessLogic.consultarEntregaPorId(id);		
+			return EntregaDTOAssembler.getInstance().toDto(entregaDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -99,14 +100,24 @@ public class EntregaFacadeImpl implements EntregaFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<EntregaDTO> consultarEntregas(EntregaDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EntregaDTO> consultarEntregas(EntregaDTO filtro) throws LilfacException {
+		try {
+			var entregaFilter = EntregaDTOAssembler.getInstance().toDomain(filtro);
+			List<EntregaDomain> entregasDomain = entregaBusinessLogic.consultarEntregas(entregaFilter);
+			return EntregaDTOAssembler.getInstance().toDto(entregasDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de las entregas";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de las entregas";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

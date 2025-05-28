@@ -43,6 +43,16 @@ public class FacturaDTOAssembler implements DTOAssembler<FacturaDTO, FacturaDoma
 		return listaResultado;
 	}
 
+	@Override
+	public List<FacturaDTO> toDto(List<FacturaDomain> domainList) {
+		var listaResultados = new ArrayList<FacturaDTO>();
+		
+		for (FacturaDomain facturaDomain : domainList) {
+			listaResultados.add(toDto(facturaDomain));
+		}
+		return listaResultados;
+	}
+
 
 
 }

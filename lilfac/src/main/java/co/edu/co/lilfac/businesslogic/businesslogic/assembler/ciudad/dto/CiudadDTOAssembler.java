@@ -39,6 +39,16 @@ public class CiudadDTOAssembler implements DTOAssembler<CiudadDTO, CiudadDomain>
 		return listaResultado;
 	}
 
+	@Override
+	public List<CiudadDTO> toDto(List<CiudadDomain> domainList) {
+		var listaResultado = new ArrayList<CiudadDTO>();
+		
+		for (CiudadDomain ciudadDomain : domainList) {
+			listaResultado.add(toDto(ciudadDomain));
+		}
+		return null;
+	}
+
 
 
 }

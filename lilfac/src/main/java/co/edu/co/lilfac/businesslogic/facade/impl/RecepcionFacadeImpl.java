@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.RecepcionBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.recepcion.dto.RecepcionDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.RecepcionDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.RecepcionBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.RecepcionFacade;
@@ -29,7 +30,7 @@ public class RecepcionFacadeImpl implements RecepcionFacade{
 	public void registrarNuevaRecepcion(RecepcionDTO recepcion) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			RecepcionDomain recepcionDomain = null; //pasar de dto a domain
+			RecepcionDomain recepcionDomain = RecepcionDTOAssembler.getInstance().toDomain(recepcion);
 			recepcionBusinessLogic.registrarNuevaRecepcion(recepcionDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -49,7 +50,7 @@ public class RecepcionFacadeImpl implements RecepcionFacade{
 	public void modificarRecepcionExistente(UUID id, RecepcionDTO recepcion) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			RecepcionDomain recepcionDomain = null; //pasar de dto a domain
+			RecepcionDomain recepcionDomain = RecepcionDTOAssembler.getInstance().toDomain(recepcion);
 			recepcionBusinessLogic.modificarRecepcionExistente(id, recepcionDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -69,7 +70,6 @@ public class RecepcionFacadeImpl implements RecepcionFacade{
 	public void darBajaDefinitivamenteRecepcionExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			RecepcionDomain recepcionDomain = null; //pasar de dto a domain
 			recepcionBusinessLogic.darBajaDefinitivamenteRecepcionExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -88,7 +88,8 @@ public class RecepcionFacadeImpl implements RecepcionFacade{
 	@Override
 	public RecepcionDTO consultarRecepcionPorId(UUID id) throws LilfacException {
 		try {
-			var recepcionDomainResultado = recepcionBusinessLogic.consultarRecepcionPorId(id);
+			var recepcionDomainResultado = recepcionBusinessLogic.consultarRecepcionPorId(id);		
+			return RecepcionDTOAssembler.getInstance().toDto(recepcionDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -100,14 +101,24 @@ public class RecepcionFacadeImpl implements RecepcionFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<RecepcionDTO> consultarRecepciones(RecepcionDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RecepcionDTO> consultarRecepciones(RecepcionDTO filtro) throws LilfacException {
+		try {
+			var recepcionFilter = RecepcionDTOAssembler.getInstance().toDomain(filtro);
+			List<RecepcionDomain> recepcionesDomain = recepcionBusinessLogic.consultarRecepciones(recepcionFilter);
+			return RecepcionDTOAssembler.getInstance().toDto(recepcionesDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de las recepciones";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de las recepciones";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

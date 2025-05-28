@@ -38,6 +38,16 @@ public class ProductoDTOAssembler implements DTOAssembler<ProductoDTO, ProductoD
 		return listaResultado;
 	}
 
+	@Override
+	public List<ProductoDTO> toDto(List<ProductoDomain> domainList) {
+		var listaResultados = new ArrayList<ProductoDTO>();
+		
+		for (ProductoDomain productoDomain : domainList) {
+			listaResultados.add(toDto(productoDomain));
+		}
+		return null;
+	}
+
 
 
 }

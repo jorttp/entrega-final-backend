@@ -13,7 +13,5 @@ public interface EmpleadoFacade {
 	void darBajaDefinitivamenteEmpleadoExistente(UUID id)throws LilfacException;
 	EmpleadoDTO consultarEmpleadoPorId(UUID id)throws LilfacException;
 	List<EmpleadoDTO> consultarEmpleados(EmpleadoDTO filtro)throws LilfacException;
-	void confirmarTelefonoEmpleado(UUID id, Integer telefonoEmpleado)throws LilfacException;
-	void confirmarCorreoEmpleado(UUID id, String correoEmpleado)throws LilfacException;
-
+	
 }

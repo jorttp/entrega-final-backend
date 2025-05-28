@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.DepartamentoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.departamento.dto.DepartamentoDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.DepartamentoDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.DepartamentoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.DepartamentoFacade;
@@ -28,7 +29,7 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 	public void registrarNuevoDepartamento(DepartamentoDTO departamento) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			DepartamentoDomain departamentoDomain = null; //pasar de dto a domain
+			DepartamentoDomain departamentoDomain = DepartamentoDTOAssembler.getInstance().toDomain(departamento);
 			departamentoBusinessLogic.registrarNuevoDepartamento(departamentoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -48,7 +49,7 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 	public void modificarDepartamentoExistente(UUID id, DepartamentoDTO departamento) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			DepartamentoDomain departamentoDomain = null; //pasar de dto a domain
+			DepartamentoDomain departamentoDomain = DepartamentoDTOAssembler.getInstance().toDomain(departamento);
 			departamentoBusinessLogic.modificarDepartamentoExistente(id, departamentoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -68,7 +69,6 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 	public void darBajaDefinitivamenteDepartamentoExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			DepartamentoDomain departamentoDomain = null; //pasar de dto a domain
 			departamentoBusinessLogic.darBajaDefinitivamenteDepartamentoExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -88,6 +88,7 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 	public DepartamentoDTO consultarDepartamentoPorId(UUID id) throws LilfacException {
 		try {
 			var departamentoDomainResultado = departamentoBusinessLogic.consultarDepartamentoPorId(id);
+			return DepartamentoDTOAssembler.getInstance().toDto(departamentoDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -99,14 +100,23 @@ public class DepartamentoFacadeImpl implements DepartamentoFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
 	}
 
 	@Override
-	public List<DepartamentoDTO> consultarDepartamentos(DepartamentoDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DepartamentoDTO> consultarDepartamentos(DepartamentoDTO filtro) throws LilfacException {
+		try {
+			var departamentoFilter = DepartamentoDTOAssembler.getInstance().toDomain(filtro);
+			List<DepartamentoDomain> departamentosDomain = departamentoBusinessLogic.consultarDepartamentos(departamentoFilter);
+			return DepartamentoDTOAssembler.getInstance().toDto(departamentosDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los departamentos";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los departamentos";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

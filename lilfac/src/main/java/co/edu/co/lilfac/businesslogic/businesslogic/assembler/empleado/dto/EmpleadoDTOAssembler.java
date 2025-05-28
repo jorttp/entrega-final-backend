@@ -38,6 +38,16 @@ public class EmpleadoDTOAssembler implements DTOAssembler<EmpleadoDTO, EmpleadoD
 		return listaResultado;
 	}
 
+	@Override
+	public List<EmpleadoDTO> toDto(List<EmpleadoDomain> domainList) {
+		var listaResultado = new ArrayList<EmpleadoDTO>();
+		
+		for (EmpleadoDomain empleadoDomain : domainList) {
+			listaResultado.add(toDto(empleadoDomain));
+		}
+		return null;
+	}
+
 
 
 }

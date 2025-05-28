@@ -103,10 +103,20 @@ public class CategoriaFacadeImpl implements CategoriaFacade{
 	}
 
 	@Override
-	public List<CategoriaDTO> consultarCategorias(CategoriaDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CategoriaDTO> consultarCategorias(CategoriaDTO filtro) throws LilfacException {
+		try {
+			var categoriaFilter = CategoriaDTOAssembler.getInstance().toDomain(filtro);
+			List<CategoriaDomain> categoriasDomain = categoriaBusinessLogic.consultarCategorias(categoriaFilter);
+			return CategoriaDTOAssembler.getInstance().toDto(categoriasDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de las categorias";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de las categorias";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
-	
 
 }

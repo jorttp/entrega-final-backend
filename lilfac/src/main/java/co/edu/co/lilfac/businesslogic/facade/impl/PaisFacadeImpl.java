@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.PaisBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.pais.dto.PaisDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.PaisDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.PaisBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.PaisFacade;
@@ -28,7 +29,7 @@ public class PaisFacadeImpl implements PaisFacade{
 	public void registrarNuevoPais(PaisDTO pais) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			PaisDomain paisDomain = null; //pasar de dto a domain
+			PaisDomain paisDomain = PaisDTOAssembler.getInstance().toDomain(pais);
 			paisBusinessLogic.registrarNuevoPais(paisDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -48,7 +49,7 @@ public class PaisFacadeImpl implements PaisFacade{
 	public void modificarPaisExistente(UUID id, PaisDTO pais) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			PaisDomain paisDomain = null; //pasar de dto a domain
+			PaisDomain paisDomain = PaisDTOAssembler.getInstance().toDomain(pais);
 			paisBusinessLogic.modificarPaisExistente(id, paisDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -68,7 +69,6 @@ public class PaisFacadeImpl implements PaisFacade{
 	public void darBajaDefinitivamentePaisExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			PaisDomain paisDomain = null; //pasar de dto a domain
 			paisBusinessLogic.darBajaDefinitivamentePaisExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -87,7 +87,8 @@ public class PaisFacadeImpl implements PaisFacade{
 	@Override
 	public PaisDTO consultarPaisPorId(UUID id) throws LilfacException {
 		try {
-			var paisDomainResultado = paisBusinessLogic.consultarPaisPorId(id);
+			var paisDomainResultado = paisBusinessLogic.consultarPaisPorId(id);		
+			return PaisDTOAssembler.getInstance().toDto(paisDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -99,14 +100,24 @@ public class PaisFacadeImpl implements PaisFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
+
 	}
 
 	@Override
-	public List<PaisDTO> consultarPaises(PaisDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PaisDTO> consultarPaises(PaisDTO filtro) throws LilfacException {
+		try {
+			var paisFilter = PaisDTOAssembler.getInstance().toDomain(filtro);
+			List<PaisDomain> paisesDomain = paisBusinessLogic.consultarPaises(paisFilter);
+			return PaisDTOAssembler.getInstance().toDto(paisesDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los paises";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los paises";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
 
 }

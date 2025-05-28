@@ -41,6 +41,16 @@ public class PedidoDTOAssembler implements DTOAssembler<PedidoDTO, PedidoDomain>
 		return listaResultado;
 	}
 
+	@Override
+	public List<PedidoDTO> toDto(List<PedidoDomain> domainList) {
+		var listaResultados = new ArrayList<PedidoDTO>();
+		
+		for (PedidoDomain pedidoDomain : domainList) {
+			listaResultados.add(toDto(pedidoDomain));
+		}
+		return null;
+	}
+
 
 
 }

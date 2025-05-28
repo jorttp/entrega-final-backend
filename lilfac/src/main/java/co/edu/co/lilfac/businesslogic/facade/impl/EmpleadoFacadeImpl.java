@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpleadoBusinessLogic;
+import co.edu.co.lilfac.businesslogic.businesslogic.assembler.empleado.dto.EmpleadoDTOAssembler;
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.EmpleadoDomain;
 import co.edu.co.lilfac.businesslogic.businesslogic.impl.EmpleadoBusinessLogicImpl;
 import co.edu.co.lilfac.businesslogic.facade.EmpleadoFacade;
@@ -27,7 +28,7 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	public void registrarNuevoEmpleado(EmpleadoDTO empleado) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
+			EmpleadoDomain empleadoDomain = EmpleadoDTOAssembler.getInstance().toDomain(empleado);
 			empleadoBusinessLogic.registrarNuevoEmpleado(empleadoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -47,7 +48,7 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	public void modificarEmpleadoExistente(UUID id, EmpleadoDTO empleado) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
+			EmpleadoDomain empleadoDomain = EmpleadoDTOAssembler.getInstance().toDomain(empleado);
 			empleadoBusinessLogic.modificarEmpleadoExistente(id, empleadoDomain);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -67,7 +68,6 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	public void darBajaDefinitivamenteEmpleadoExistente(UUID id) throws LilfacException {
 		try {
 			daoFactory.iniciarTransaccion();
-			EmpleadoDomain empleadoDomain = null; //pasar de dto a domain
 			empleadoBusinessLogic.darBajaDefinitivamenteEmpleadoExistente(id);
 			daoFactory.confirmarTransaccion();
 		} catch (LilfacException exception) {
@@ -87,6 +87,7 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 	public EmpleadoDTO consultarEmpleadoPorId(UUID id) throws LilfacException {
 		try {
 			var empleadoDomainResultado = empleadoBusinessLogic.consultarEmpleadoPorId(id);
+			return EmpleadoDTOAssembler.getInstance().toDto(empleadoDomainResultado);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
 			throw exception;
@@ -98,26 +99,22 @@ public class EmpleadoFacadeImpl implements EmpleadoFacade{
 		}finally {
 			daoFactory.cerrarConexion();
 		}
-		
-		return null;//convertir de domain a dto
 	}
 
 	@Override
-	public List<EmpleadoDTO> consultarEmpleados(EmpleadoDTO filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmpleadoDTO> consultarEmpleados(EmpleadoDTO filtro) throws LilfacException {
+		try {
+			var empleadoFilter = EmpleadoDTOAssembler.getInstance().toDomain(filtro);
+			List<EmpleadoDomain> empleadosDomain = empleadoBusinessLogic.consultarEmpleados(empleadoFilter);
+			return EmpleadoDTOAssembler.getInstance().toDto(empleadosDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		} catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los empleados";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los empleados";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
 	}
-
-	@Override
-	public void confirmarTelefonoEmpleado(UUID id, Integer telefonoEmpleado) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void confirmarCorreoEmpleado(UUID id, String correoEmpleado) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

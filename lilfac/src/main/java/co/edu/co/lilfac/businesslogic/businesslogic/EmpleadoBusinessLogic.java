@@ -13,7 +13,4 @@ public interface EmpleadoBusinessLogic {
 	void darBajaDefinitivamenteEmpleadoExistente(UUID id)throws LilfacException;
 	EmpleadoDomain consultarEmpleadoPorId(UUID id)throws LilfacException;
 	List<EmpleadoDomain> consultarEmpleados(EmpleadoDomain filtro)throws LilfacException;
-	void confirmarTelefonoEmpleado(Integer telefonoEmpleado)throws LilfacException;
-	void confirmarCorreoEmpleado(String correoEmpleado)throws LilfacException;
-
 }

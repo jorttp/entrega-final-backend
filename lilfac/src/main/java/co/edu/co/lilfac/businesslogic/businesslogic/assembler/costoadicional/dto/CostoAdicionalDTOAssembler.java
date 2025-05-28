@@ -39,6 +39,16 @@ public class CostoAdicionalDTOAssembler implements DTOAssembler<CostoAdicionalDT
 		return listaResultado;
 	}
 
+	@Override
+	public List<CostoAdicionalDTO> toDto(List<CostoAdicionalDomain> domainList) {
+		var listaResultado = new ArrayList<CostoAdicionalDTO>();
+		
+		for (CostoAdicionalDomain costoAdicionalDomain : domainList) {
+			listaResultado.add(toDto(costoAdicionalDomain));
+		}
+		return null;
+	}
+
 
 
 }

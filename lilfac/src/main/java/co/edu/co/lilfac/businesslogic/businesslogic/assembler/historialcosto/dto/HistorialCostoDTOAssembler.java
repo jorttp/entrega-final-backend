@@ -39,6 +39,16 @@ public class HistorialCostoDTOAssembler implements DTOAssembler<HistorialCostoDT
 		return listaResultado;
 	}
 
+	@Override
+	public List<HistorialCostoDTO> toDto(List<HistorialCostoDomain> domainList) {
+		var listaResultados = new ArrayList<HistorialCostoDTO>();
+		
+		for (HistorialCostoDomain historialCostoDomain : domainList) {
+			listaResultados.add(toDto(historialCostoDomain));
+		}
+		return null;
+	}
+
 
 
 }
