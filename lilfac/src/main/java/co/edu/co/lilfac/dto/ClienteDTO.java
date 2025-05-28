@@ -28,6 +28,17 @@ public class ClienteDTO {
 		setCiudad(CiudadDTO.obtenerValorDefecto());
 	}
 	
+	public ClienteDTO(final UUID id) {
+		setId(id);
+		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
+		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
+		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
+		setTelefono(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCorreo(UtilTexto.getInstance().obtenerValorDefecto());
+		setDireccionResidencia(UtilTexto.getInstance().obtenerValorDefecto());
+		setCiudad(CiudadDTO.obtenerValorDefecto());
+	}
+	
 	public ClienteDTO (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo, final String direccionResidencia, final CiudadDTO ciudad) {
 		setId(id);
 		setNombre(nombre);
