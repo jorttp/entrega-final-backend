@@ -25,7 +25,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	public void create(DepartamentoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Departamento (id, nombre, pais) VALUES (?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO departamento (id, nombre, pais) VALUES (?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -52,17 +52,17 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	public List<DepartamentoEntity> listByFIlter(DepartamentoEntity filter) throws LilfacException {
 		var listaDepartamentos = new java.util.ArrayList<DepartamentoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM Departamento D JOIN Pais P ON D.pais = P.id WHERE 1=1");
+		sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM departamento D JOIN pais P ON D.pais = P.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND D.id = ?");
 			}
 			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
-				sentenciaSQL.append(" AND nombre LIKE ?");
+				sentenciaSQL.append(" AND D.nombre LIKE ?");
 			}
 			if (filter.getPais() != null) {
-				sentenciaSQL.append(" AND pais = ?");
+				sentenciaSQL.append(" AND P.nombre = ?");
 			}
 		}
 		
@@ -78,7 +78,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
 				}
 				if (filter.getPais() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getPais().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getPais().getNombre());
 				}
 			}
 			
@@ -118,7 +118,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	    List<DepartamentoEntity> listaDepartamentos = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM Departamento D JOIN Pais P ON D.pais = P.id");
+	    sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM departamento D JOIN pais P ON D.pais = P.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -153,7 +153,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 		var departamentoEntityRetorno=new DepartamentoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM Departamento D JOIN Pais P ON D.pais = P.id WHERE D.id = ?");
+		sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM departamento D JOIN pais P ON D.pais = P.id WHERE D.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -190,7 +190,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	public void update(UUID id, DepartamentoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Departamento SET nombre = ?, SET pais = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE departamento SET nombre = ?, SET pais = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -217,7 +217,7 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Departamento WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM departamento WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

@@ -24,7 +24,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	public void create(EmpleadoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Empleado (id, nombre, apellido, cedula, telefono, correo) VALUES (?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO empleado (id, nombre, apellido, cedula, telefono, correo) VALUES (?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -54,7 +54,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	public List<EmpleadoEntity> listByFIlter(EmpleadoEntity filter) throws LilfacException {
 		var listaEmpleados = new java.util.ArrayList<EmpleadoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo WHERE 1=1");
+		sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo FROM empleado WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
@@ -138,7 +138,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	    List<EmpleadoEntity> listaEmpleados = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo");
+	    sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo FROM empleado");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -173,7 +173,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 		var empleadoEntityRetorno=new EmpleadoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo WHERE id = ?");
+		sentenciaSQL.append("SELECT id, nombre, apellido, cedula, telefono, correo FROM empleado WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -211,7 +211,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	public void update(UUID id, EmpleadoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Empleado SET nombre = ?, apellido = ?, cedula = ?, telefono = ?, correo = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE empleado SET nombre = ?, apellido = ?, cedula = ?, telefono = ?, correo = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -241,7 +241,7 @@ public class EmpleadoPostgreSQLDAO implements EmpleadoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Empleado WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM empleado WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

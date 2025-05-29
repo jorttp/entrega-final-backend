@@ -25,7 +25,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	public void create(ProductoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Producto (id, nombre, codigo, caracteristicas, estado) VALUES (?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO producto (id, nombre, codigo, caracteristicas, estado) VALUES (?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -54,7 +54,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	public List<ProductoEntity> listByFIlter(ProductoEntity filter) throws LilfacException {
 		var listaProductos = new java.util.ArrayList<ProductoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado WHERE 1=1");
+		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
@@ -131,7 +131,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	    List<ProductoEntity> listaProductos = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado");
+	    sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -165,7 +165,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		var productoEntityRetorno=new ProductoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado WHERE id = ?");
+		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -202,7 +202,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	public void update(UUID id, ProductoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Producto SET nombre = ?, codigo = ?, caracteristicas = ?, estado = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE producto SET nombre = ?, codigo = ?, caracteristicas = ?, estado = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -230,7 +230,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Producto WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM producto WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

@@ -27,6 +27,7 @@ public class ClienteFacadeImpl implements ClienteFacade{
 	@Override
 	public void registrarNuevoCliente(ClienteDTO cliente) throws LilfacException {
 		try {
+			daoFactory.abrirConexion();
 			daoFactory.iniciarTransaccion();
 			ClienteDomain clienteDomain = ClienteDTOAssembler.getInstance().toDomain(cliente);
 			clienteBusinessLogic.registrarNuevoCliente(clienteDomain);

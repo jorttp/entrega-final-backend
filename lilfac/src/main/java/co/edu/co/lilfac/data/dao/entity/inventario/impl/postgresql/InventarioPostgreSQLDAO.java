@@ -28,7 +28,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	public void create(InventarioEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Inventario (id, totalUnidades, unidadesAlquiladas, unidadesAfectadas, UnidadesDisponibles, empresa, producto, histotialCosto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO inventario (id, totalUnidades, unidadesAlquiladas, unidadesAfectadas, UnidadesDisponibles, empresa, producto, histotialCosto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -59,32 +59,32 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	public List<InventarioEntity> listByFIlter(InventarioEntity filter) throws LilfacException {
 		var listaInventario = new java.util.ArrayList<InventarioEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM Inventario I JOIN Empresa E ON I.empresa = E.id JOIN Producto P ON I.producto = P.id JOIN HistorialCosto H ON I.historialCosto = H.id WHERE 1=1");
+		sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM inventario I JOIN empresa E ON I.empresa = E.id JOIN producto P ON I.producto = P.id JOIN historialCosto H ON I.historialCosto = H.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND I.id = ?");
 			}
 			if (filter.getTotalUnidades() != null) {
-				sentenciaSQL.append(" AND totalUnidades = ?");
+				sentenciaSQL.append(" AND I.totalUnidades = ?");
 			}
 			if (filter.getUnidadesAlquiladas() != null) {
-				sentenciaSQL.append(" AND unidadesAlquiladas = ?");
+				sentenciaSQL.append(" AND I.unidadesAlquiladas = ?");
 			}
 			if (filter.getUnidadesAfectadas() != null) {
-				sentenciaSQL.append(" AND unidadesAfectadas = ?");
+				sentenciaSQL.append(" AND I.unidadesAfectadas = ?");
 			}
 			if (filter.getUnidadesDisponibles() != null) {
-				sentenciaSQL.append(" AND UnidadesDisponibles = ?");
+				sentenciaSQL.append(" AND I.unidadesDisponibles = ?");
 			}
 			if (filter.getEmpresa() != null) {
-				sentenciaSQL.append(" AND empresa = ?");
+				sentenciaSQL.append(" AND E.nombre = ?");
 			}
 			if (filter.getProducto() != null) {
-				sentenciaSQL.append(" AND producto = ?");
+				sentenciaSQL.append(" AND P.nombre = ?");
 			}
 			if (filter.getHistorialCosto() != null) {
-				sentenciaSQL.append(" AND historialCosto = ?");
+				sentenciaSQL.append(" AND H.costo = ?");
 			}
 		}
 		
@@ -109,13 +109,13 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 					sentenciaPreparada.setObject(indiceParametro++, filter.getUnidadesDisponibles());
 				}
 				if (filter.getEmpresa() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getNombre());
 				}
 				if (filter.getProducto() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getNombre());
 				}
 				if (filter.getHistorialCosto() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getHistorialCosto().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getHistorialCosto().getCosto());
 				}
 			}
 			
@@ -166,7 +166,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	    List<InventarioEntity> listaInventario = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM Inventario I JOIN Empresa E ON I.empresa = E.id JOIN Producto P ON I.producto = P.id JOIN HistorialCosto H ON I.historialCosto = H.id");
+	    sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM inventario I JOIN empresa E ON I.empresa = E.id JOIN producto P ON I.producto = P.id JOIN historialCosto H ON I.historialCosto = H.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -212,7 +212,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 		var inventarioEntityRetorno=new InventarioEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM Inventario I JOIN Empresa E ON I.empresa = E.id JOIN Producto P ON I.producto = P.id JOIN HistorialCosto H ON I.historialCosto = H.id WHERE I.id = ?");
+		sentenciaSQL.append("SELECT I.id, I.totalUnidades, I.unidadesAlquiladas, I.unidadesAfectadas, I.UnidadesDisponibles, E.nombre AS nombre_empresa, P.nombre AS nombre_producto, H.costo AS costo FROM inventario I JOIN empresa E ON I.empresa = E.id JOIN producto P ON I.producto = P.id JOIN historialCosto H ON I.historialCosto = H.id WHERE I.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -261,7 +261,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	public void update(UUID id, InventarioEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Invetario SET totalUnidades = ?, unidadesAlquiladas = ?, unidadesAfectadas = ?, UnidadesDisponibles = ?, empresa = ?, producto = ?, histotialCosto = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE invetario SET totalUnidades = ?, unidadesAlquiladas = ?, unidadesAfectadas = ?, UnidadesDisponibles = ?, empresa = ?, producto = ?, histotialCosto = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -292,7 +292,7 @@ public class InventarioPostgreSQLDAO implements InventarioDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Inventario WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM inventario WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

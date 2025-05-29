@@ -26,7 +26,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	public void create(ProductoPedidoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO ProductoPedido (id, cantidad, producto, pedido) VALUES (?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO productoPedido (id, cantidad, producto, pedido) VALUES (?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -53,20 +53,20 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	public List<ProductoPedidoEntity> listByFIlter(ProductoPedidoEntity filter) throws LilfacException {
 		var listaProductosPedidos = new java.util.ArrayList<ProductoPedidoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM ProductoPedido PP JOIN Producto PR ON PP.producto = PR.id JOIN Pedido PE ON PP.pedido = PE.id WHERE 1=1");
+		sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM productoPedido PP JOIN producto PR ON PP.producto = PR.id JOIN pedido PE ON PP.pedido = PE.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND PP.id = ?");
 			}
 			if (filter.getCantidad() != null) {
-				sentenciaSQL.append(" AND cantidad = ?");
+				sentenciaSQL.append(" AND PP.cantidad = ?");
 			}		
 			if (filter.getProducto() != null) {
-				sentenciaSQL.append(" AND producto = ?");
+				sentenciaSQL.append(" AND PR.nombre = ?");
 			}
 			if (filter.getPedido() != null) {
-				sentenciaSQL.append(" AND pedido = ?");
+				sentenciaSQL.append(" AND PE.id = ?");
 			}
 		}
 		
@@ -82,7 +82,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 					sentenciaPreparada.setInt(indiceParametro++, filter.getCantidad());
 				}		
 				if (filter.getProducto() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getNombre());
 				}
 				if (filter.getPedido() != null) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
@@ -129,7 +129,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	    List<ProductoPedidoEntity> listaProductosPedidos = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM ProductoPedido PP JOIN Producto PR ON PP.producto = PR.id JOIN Pedido PE ON PP.pedido = PE.id");
+	    sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM productoPedido PP JOIN producto PR ON PP.producto = PR.id JOIN pedido PE ON PP.pedido = PE.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -168,7 +168,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 		var productoPedidoEntityRetorno=new ProductoPedidoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM ProductoPedido PP JOIN Producto PR ON PP.producto = PR.id JOIN Pedido PE ON PP.pedido = PE.id WHERE PP.id = ?");
+		sentenciaSQL.append("SELECT PP.id, PP.cantidad, PR.nombre AS nombre_producto, PE.id AS pedido FROM productoPedido PP JOIN producto PR ON PP.producto = PR.id JOIN pedido PE ON PP.pedido = PE.id WHERE PP.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -211,7 +211,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	public void update(UUID id, ProductoPedidoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE ProductoPedido SET cantidad = ?, producto = ?, pedido = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE productoPedido SET cantidad = ?, producto = ?, pedido = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -238,7 +238,7 @@ public class ProductoPedidoPostgreSQLDAO implements ProductoPedidoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM ProductoPedido WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM productoPedido WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

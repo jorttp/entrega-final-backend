@@ -27,7 +27,7 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	public void create(RecepcionEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Recepcion (id, entrega, fecha, estado, direccion, ciudad, empleado) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO recepcion (id, entrega, fecha, estado, direccion, ciudad, empleado) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -58,29 +58,29 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	public List<RecepcionEntity> listByFIlter(RecepcionEntity filter) throws LilfacException {
 		var listaRecepciones = new java.util.ArrayList<RecepcionEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM Recepcion R JOIN Entrega E ON R.entrega = E.id JOIN Ciudad C ON R.ciudad = C.id JOIN Empleado EM ON R.empleado = EM.id WHERE 1=1");
+		sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM recepcion R JOIN entrega E ON R.entrega = E.id JOIN ciudad C ON R.ciudad = C.id JOIN empleado EM ON R.empleado = EM.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND R.id = ?");
 			}
 			if (filter.getEntrega() != null) {
-				sentenciaSQL.append(" AND entrega = ?");
+				sentenciaSQL.append(" AND R.entrega = ?");
 			}
 			if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
-				sentenciaSQL.append(" AND fecha LIKE ?");
+				sentenciaSQL.append(" AND R.fecha LIKE ?");
 			}
 			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
-				sentenciaSQL.append(" AND estado LIKE ?");
+				sentenciaSQL.append(" AND R.estado LIKE ?");
 			}
 			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
-				sentenciaSQL.append(" AND direccion LIKE ?");
+				sentenciaSQL.append(" AND R.direccion LIKE ?");
 			}
 			if (filter.getCiudad() != null) {
-				sentenciaSQL.append(" AND ciudad = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 			if (filter.getEmpleado() != null) {
-				sentenciaSQL.append(" AND empleado = ?");
+				sentenciaSQL.append(" AND EM.nombre = ?");
 			}
 			
 		}
@@ -106,10 +106,10 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccion() + "%");
 				}
 				if (filter.getCiudad() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getNombre());
 				}
 				if (filter.getEmpleado() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getNombre());
 				}
 				
 			}
@@ -160,7 +160,7 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	    List<RecepcionEntity> listaRecepciones = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM Recepcion R JOIN Entrega E ON R.entrega = E.id JOIN Ciudad C ON R.ciudad = C.id JOIN Empleado EM ON R.empleado = EM.id");
+	    sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM recepcion R JOIN entrega E ON R.entrega = E.id JOIN ciudad C ON R.ciudad = C.id JOIN empleado EM ON R.empleado = EM.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -205,7 +205,7 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 		var recepcionEntityRetorno=new RecepcionEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM Recepcion R JOIN Entrega E ON R.entrega = E.id JOIN Ciudad C ON R.ciudad = C.id JOIN Empleado EM ON R.empleado = EM.id WHERE R.id = ?");
+		sentenciaSQL.append("SELECT R.id, E.id AS entrega, R.fecha, R.estado, R.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado FROM recepcion R JOIN entrega E ON R.entrega = E.id JOIN ciudad C ON R.ciudad = C.id JOIN empleado EM ON R.empleado = EM.id WHERE R.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -254,7 +254,7 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	public void update(UUID id, RecepcionEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Recepcion SET  entrega = ?, fecha = ?, estado = ?, direccion = ?, ciudad = ?, empleado = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE recepcion SET  entrega = ?, fecha = ?, estado = ?, direccion = ?, ciudad = ?, empleado = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -284,7 +284,7 @@ public class RecepcionPostgreSQLDAO implements RecepcionDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Recepcion WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM recepcion WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

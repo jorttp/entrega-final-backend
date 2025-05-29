@@ -17,6 +17,12 @@ public final class CiudadDTO {
 		setDepartamento(DepartamentoDTO.obtenerValorDefecto());
 	}
 	
+	public CiudadDTO(final String nombre) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setNombre(nombre);
+		setDepartamento(DepartamentoDTO.obtenerValorDefecto());
+	}
+	
 	public CiudadDTO(final UUID id) {
 		setId(id);
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());	
@@ -63,9 +69,5 @@ public final class CiudadDTO {
 		this.departamento = DepartamentoDTO.obtenerValorDefecto(departamento);
 		return this;
 	}
-
 	
-
-	
-
 }

@@ -25,7 +25,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public void create(ClienteEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Cliente (id, nombre, apellido, cedula, telefono, correo, direccionResidencia, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO cliente (id, nombre, apellido, cedula, telefono, correo, direccionResidencia, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -36,7 +36,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 			sentenciaPreparada.setInt(5,  entity.getTelefono());
 			sentenciaPreparada.setString(6,  entity.getCorreo());
 			sentenciaPreparada.setString(7,  entity.getDireccionResidencia());
-			sentenciaPreparada.setObject(8,  entity.getCiudad().getId());
+			sentenciaPreparada.setObject(8,  entity.getCiudad().getNombre());
 			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
@@ -57,32 +57,32 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public List<ClienteEntity> listByFIlter(ClienteEntity filter) throws LilfacException {
 		var listaClientes = new java.util.ArrayList<ClienteEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM Cliente CL JOIN Ciudad C ON CL.ciudad = C.id WHERE 1=1");
+		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM cliente CL JOIN ciudad C ON CL.ciudad = C.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND CL.id = ?");
 			}
 			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
-				sentenciaSQL.append(" AND nombre LIKE ?");
+				sentenciaSQL.append(" AND CL.nombre LIKE ?");
 			}
 			if (filter.getApellido() != null && !filter.getApellido().isBlank()) {
-				sentenciaSQL.append(" AND apellido LIKE ?");
+				sentenciaSQL.append(" AND CL.apellido LIKE ?");
 			}
 			if (filter.getCedula() != null) {
-				sentenciaSQL.append(" AND cedula = ?");
+				sentenciaSQL.append(" AND CL.cedula = ?");
 			}
 			if (filter.getTelefono() != null) {
-				sentenciaSQL.append(" AND telefono = ?");
+				sentenciaSQL.append(" AND CL.telefono = ?");
 			}
 			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
-				sentenciaSQL.append(" AND correo LIKE ?");
+				sentenciaSQL.append(" AND CL.correo LIKE ?");
 			}
 			if (filter.getDireccionResidencia() != null && !filter.getDireccionResidencia().isBlank()) {
-				sentenciaSQL.append(" AND direccionResidencia LIKE ?");
+				sentenciaSQL.append(" AND CL.direccionResidencia LIKE ?");
 			}
 			if (filter.getCiudad() != null) {
-				sentenciaSQL.append(" AND ciudad = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 		}
 		
@@ -113,7 +113,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccionResidencia() + "%");
 				}
 				if (filter.getCiudad() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getNombre());
 				}
 			}
 			
@@ -158,7 +158,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	    List<ClienteEntity> listaClientes = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM Cliente CL JOIN Ciudad C ON CL.ciudad = C.id");
+	    sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM cliente CL JOIN ciudad C ON CL.ciudad = C.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -198,7 +198,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 		var clienteEntityRetorno=new ClienteEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM Cliente CL JOIN Ciudad C ON CL.ciudad = C.id WHERE CL.id = ?");
+		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM cliente CL JOIN ciudad C ON CL.ciudad = C.id WHERE CL.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -240,7 +240,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public void update(UUID id, ClienteEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Cliente SET nombre = ?, apellido = ?, cedula = ?, telefono = ?, correo = ?, direccionResidencia = ?, ciudad = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE cliente SET nombre = ?, apellido = ?, cedula = ?, telefono = ?, correo = ?, direccionResidencia = ?, ciudad = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -272,7 +272,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Cliente WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM cliente WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

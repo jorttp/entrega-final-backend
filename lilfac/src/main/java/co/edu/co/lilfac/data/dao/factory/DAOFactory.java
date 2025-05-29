@@ -37,7 +37,7 @@ public abstract class DAOFactory {
 		
 	}
 			
-	protected abstract void abrirConexion()throws LilfacException;
+	public abstract void abrirConexion()throws LilfacException;
 	public abstract void iniciarTransaccion()throws LilfacException;
 	public abstract void confirmarTransaccion()throws LilfacException;
 	public abstract void cancelarTransaccion()throws LilfacException;

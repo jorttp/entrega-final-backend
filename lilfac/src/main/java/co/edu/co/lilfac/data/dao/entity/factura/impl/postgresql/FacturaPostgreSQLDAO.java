@@ -29,7 +29,7 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	public void create(FacturaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Factura (id, codigo, fechaGeneracion, costoTotal, empresa, empleado, cliente, costoAdicional, pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO factura (id, codigo, fechaGeneracion, costoTotal, empresa, empleado, cliente, costoAdicional, pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -62,35 +62,35 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	public List<FacturaEntity> listByFIlter(FacturaEntity filter) throws LilfacException {
 		var listaFacturas = new java.util.ArrayList<FacturaEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id WHERE 1=1");
+		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM factura F JOIN empresa E ON F.empresa = E.id JOIN empleado EM ON F.empleado = EM.id JOIN cliente CL ON F.cliente = CL.id JOIN costoAdicional CA ON F.costoAdicional = CA.id JOIN pedido PE ON F.pedido = PE.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND F.id = ?");
 			}
 			if (filter.getCodigo() != null) {
-				sentenciaSQL.append(" AND codigo = ?");
+				sentenciaSQL.append(" AND F.codigo = ?");
 			}
 			if (filter.getFechaGeneracion() != null && !filter.getFechaGeneracion().isBlank()) {
-				sentenciaSQL.append(" AND fechaGeneracion LIKE ?");
+				sentenciaSQL.append(" AND F.fechaGeneracion LIKE ?");
 			}
 			if (filter.getCostoTotal() != null) {
-				sentenciaSQL.append(" AND costoTotal = ?");
+				sentenciaSQL.append(" AND F.costoTotal = ?");
 			}
 			if (filter.getEmpresa() != null) {
-				sentenciaSQL.append(" AND empresa = ?");
+				sentenciaSQL.append(" AND E.nombre = ?");
 			}
 			if (filter.getEmpleado() != null) {
-				sentenciaSQL.append(" AND empleado = ?");
+				sentenciaSQL.append(" AND EM.nombre = ?");
 			}
 			if (filter.getCliente() != null) {
-				sentenciaSQL.append(" AND cliente = ?");
+				sentenciaSQL.append(" AND CL.nombre = ?");
 			}
 			if (filter.getCostoAdicional() != null) {
-				sentenciaSQL.append(" AND costoAdicional = ?");
+				sentenciaSQL.append(" AND CA.valor = ?");
 			}
 			if (filter.getPedido() != null) {
-				sentenciaSQL.append(" AND pedido = ?");
+				sentenciaSQL.append(" AND PE.id = ?");
 			}
 
 		}
@@ -113,16 +113,16 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 					sentenciaPreparada.setFloat(indiceParametro++, filter.getCostoTotal());
 				}
 				if (filter.getEmpresa() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpresa().getNombre());
 				}
 				if (filter.getEmpleado() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getNombre());
 				}
 				if (filter.getCliente() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getNombre());
 				}
 				if (filter.getCostoAdicional() != null){
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCostoAdicional().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCostoAdicional().getValor());
 				}
 				if (filter.getPedido() != null) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
@@ -184,7 +184,7 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	    List<FacturaEntity> listaFacturas = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id");
+	    sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM factura F JOIN empresa E ON F.empresa = E.id JOIN empleado EM ON F.empleado = EM.id JOIN cliente CL ON F.cliente = CL.id JOIN costoAdicional CA ON F.costoAdicional = CA.id JOIN pedido PE ON F.pedido = PE.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -238,7 +238,7 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 		var facturaEntityRetorno=new FacturaEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM Factura F JOIN Empresa E ON F.empresa = E.id JOIN Empleado EM ON F.empleado = EM.id JOIN Cliente CL ON F.cliente = CL.id JOIN CostoAdicional CA ON F.costoAdicional = CA.id JOIN Pedido PE ON F.pedido = PE.id WHERE F.id = ?");
+		sentenciaSQL.append("SELECT F.id, F.codigo, F.fechaGeneracion, F.costoTotal, E.nombre AS nombre_empresa, EM.nombre AS nombre_empleado, CL.nombre AS nombre_cliente, CA.valor AS costo_adicional, PE.id AS pedido FROM factura F JOIN empresa E ON F.empresa = E.id JOIN empleado EM ON F.empleado = EM.id JOIN cliente CL ON F.cliente = CL.id JOIN costoAdicional CA ON F.costoAdicional = CA.id JOIN pedido PE ON F.pedido = PE.id WHERE F.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -295,7 +295,7 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	public void update(UUID id, FacturaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Factura SET  codigo = ?, fechaGeneracion = ?, costoTotal = ?, empresa = ?, empleado = ?, cliente = ?, costoAdicional = ?, pedido = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE factura SET  codigo = ?, fechaGeneracion = ?, costoTotal = ?, empresa = ?, empleado = ?, cliente = ?, costoAdicional = ?, pedido = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -327,7 +327,7 @@ public class FacturaPostgreSQLDAO implements FacturaDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Factura WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM factura WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

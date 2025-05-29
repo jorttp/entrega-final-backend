@@ -25,7 +25,7 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	public void create(CostoAdicionalEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO CostoAdicional (id, valor, descripcion, recepcion) VALUES (?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO costoAdicional (id, valor, descripcion, recepcion) VALUES (?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -52,20 +52,20 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	public List<CostoAdicionalEntity> listByFIlter(CostoAdicionalEntity filter) throws LilfacException {
 		var listaCostosAdicionales = new java.util.ArrayList<CostoAdicionalEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM CostoAdicional CA JOIN Recepcion R ON CA.recepcion = R.id WHERE 1=1");
+		sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM costoAdicional CA JOIN recepcion R ON CA.recepcion = R.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND CA.id = ?");
 			}
 			if (filter.getValor() != null) {
-				sentenciaSQL.append(" AND valor = ?");
+				sentenciaSQL.append(" AND CA.valor = ?");
 			}
 			if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
-				sentenciaSQL.append(" AND descripcion LIKE ?");
+				sentenciaSQL.append(" AND CA.descripcion LIKE ?");
 			}
 			if (filter.getRecepcion() != null) {
-				sentenciaSQL.append(" AND recepcion = ?");
+				sentenciaSQL.append(" AND R.id = ?");
 			}
 		}
 		
@@ -125,7 +125,7 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	    List<CostoAdicionalEntity> listaCostosAdicionales = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM CostoAdicional CA JOIN Recepcion R ON CA.recepcion = R.id");
+	    sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM costoAdicional CA JOIN recepcion R ON CA.recepcion = R.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -162,7 +162,7 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 		var costoAdicionalEntityRetorno=new CostoAdicionalEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM CostoAdicional CA JOIN Recepcion R ON CA.recepcion = R.id WHERE CA.id = ?");
+		sentenciaSQL.append("SELECT CA.id, CA.valor, CA.descripcion, R.id AS recepcion FROM costoAdicional CA JOIN recepcion R ON CA.recepcion = R.id WHERE CA.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -201,7 +201,7 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	public void update(UUID id, CostoAdicionalEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE CostoAdicional SET valor = ?, descripcion = ?, recepcion = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE costoAdicional SET valor = ?, descripcion = ?, recepcion = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -228,7 +228,7 @@ public class CostoAdicionalPostgreSQLDAO implements CostoAdicionalDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM CostoAdicional WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM costoAdicional WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

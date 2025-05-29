@@ -27,7 +27,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	public void create(EntregaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Entrega (id, fecha, estado, direccion, ciudad, empleado, pedido) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO entrega (id, fecha, estado, direccion, ciudad, empleado, pedido) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -58,29 +58,29 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	public List<EntregaEntity> listByFIlter(EntregaEntity filter) throws LilfacException {
 		var listaEntregas = new java.util.ArrayList<EntregaEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM Entrega E JOIN Ciudad C ON E.ciudad = C.id JOIN Empleado EM ON E.empleado = EM.id JOIN Pedido P ON E.pedido = P.id WHERE 1=1");
+		sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM entrega E JOIN ciudad C ON E.ciudad = C.id JOIN empleado EM ON E.empleado = EM.id JOIN pedido P ON E.pedido = P.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND E.id = ?");
 			}
 			if (filter.getFecha() != null && !filter.getFecha().isBlank()) {
-				sentenciaSQL.append(" AND fecha LIKE ?");
+				sentenciaSQL.append(" AND E.fecha LIKE ?");
 			}
 			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
-				sentenciaSQL.append(" AND estado LIKE ?");
+				sentenciaSQL.append(" AND E.estado LIKE ?");
 			}
 			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
-				sentenciaSQL.append(" AND direccion LIKE ?");
+				sentenciaSQL.append(" AND E.direccion LIKE ?");
 			}
 			if (filter.getCiudad() != null) {
-				sentenciaSQL.append(" AND ciudad = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 			if (filter.getEmpleado() != null) {
-				sentenciaSQL.append(" AND empleado = ?");
+				sentenciaSQL.append(" AND EM.nombre = ?");
 			}
 			if (filter.getPedido() != null) {
-				sentenciaSQL.append(" AND pedido = ?");
+				sentenciaSQL.append(" AND P.id = ?");
 			}
 			
 		}
@@ -103,10 +103,10 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDireccion() + "%");
 				}
 				if (filter.getCiudad() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getNombre());
 				}
 				if (filter.getEmpleado() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getNombre());
 				}
 				if (filter.getPedido() != null) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getPedido().getId());
@@ -159,7 +159,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	    List<EntregaEntity> listaEntregas = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM Entrega E JOIN Ciudad C ON E.ciudad = C.id JOIN Empleado EM ON E.empleado = EM.id JOIN Pedido P ON E.pedido = P.id");
+	    sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM entrega E JOIN ciudad C ON E.ciudad = C.id JOIN empleado EM ON E.empleado = EM.id JOIN pedido P ON E.pedido = P.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -204,7 +204,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 		var entregaEntityRetorno=new EntregaEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM Entrega E JOIN Ciudad C ON E.ciudad = C.id JOIN Empleado EM ON E.empleado = EM.id JOIN Pedido P ON E.pedido = P.id WHERE E.id = ?");
+		sentenciaSQL.append("SELECT E.id, E.fecha, E.estado, E.direccion, C.nombre AS nombre_ciudad, EM.nombre AS nombre_empleado, P.id AS pedido FROM entrega E JOIN ciudad C ON E.ciudad = C.id JOIN empleado EM ON E.empleado = EM.id JOIN pedido P ON E.pedido = P.id WHERE E.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -253,7 +253,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	public void update(UUID id, EntregaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Entrega SET  fecha = ?, estado = ?, direccion = ?, ciudad = ?, empleado = ?, pedido = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE entrega SET  fecha = ?, estado = ?, direccion = ?, ciudad = ?, empleado = ?, pedido = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -283,7 +283,7 @@ public class EntregaPostgreSQLDAO implements EntregaDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Entrega WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM entrega WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

@@ -26,7 +26,7 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	public void create(CategoriaProductoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO CategoriaProducto (id, producto, categoria) VALUES (?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO categoriaProducto (id, producto, categoria) VALUES (?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -52,17 +52,17 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	public List<CategoriaProductoEntity> listByFIlter(CategoriaProductoEntity filter) throws LilfacException {
 		var listaCategoriaProducto = new java.util.ArrayList<CategoriaProductoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM CategoriaProducto CP JOIN Producto P ON CP.producto = P.id JOIN Categoria C ON CP.categoria = C.id WHERE 1=1");
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND CP.id = ?");
 			}
 			if (filter.getProducto() != null) {
-				sentenciaSQL.append(" AND producto = ?");
+				sentenciaSQL.append(" AND P.nombre = ?");
 			}
 			if (filter.getCategoria() != null) {
-				sentenciaSQL.append(" AND categoria = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 		}
 		
@@ -75,10 +75,10 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
 				if (filter.getProducto() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getNombre());
 				}
 				if (filter.getCategoria() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCategoria().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCategoria().getNombre());
 				}
 			}
 			
@@ -121,7 +121,7 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	    List<CategoriaProductoEntity> listaCategoriaProducto = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM CategoriaProducto CP JOIN Producto P ON CP.producto = P.id JOIN Categoria C ON CP.categoria = C.id");
+	    sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -159,7 +159,7 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 		var categoriaProductoEntityRetorno=new CategoriaProductoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM CategoriaProducto CP JOIN Producto P ON CP.producto = P.id JOIN Categoria C ON CP.categoria = C.id WHERE id = ?");
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

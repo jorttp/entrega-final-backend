@@ -26,7 +26,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	public void create(EmpresaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Empresa (id, nombre, nit, telefono, correo, direccion, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO empresa (id, nombre, nit, telefono, correo, direccion, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -57,29 +57,29 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	public List<EmpresaEntity> listByFIlter(EmpresaEntity filter) throws LilfacException {
 		var listaEmpresas = new java.util.ArrayList<EmpresaEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM Empresa E JOIN Ciudad C ON E.ciudad = C.id WHERE 1=1");
+		sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM empresa E JOIN ciudad C ON E.ciudad = C.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND E.id = ?");
 			}
 			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
-				sentenciaSQL.append(" AND nombre LIKE ?");
+				sentenciaSQL.append(" AND E.nombre LIKE ?");
 			}
 			if (filter.getNit() != null) {
-				sentenciaSQL.append(" AND nit = ?");
+				sentenciaSQL.append(" AND E.nit = ?");
 			}
 			if (filter.getTelefono() != null) {
-				sentenciaSQL.append(" AND telefono = ?");
+				sentenciaSQL.append(" AND E.telefono = ?");
 			}
 			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
-				sentenciaSQL.append(" AND correo LIKE ?");
+				sentenciaSQL.append(" AND E.correo LIKE ?");
 			}
 			if (filter.getDireccion() != null && !filter.getDireccion().isBlank()) {
-				sentenciaSQL.append(" AND direccion LIKE ?");
+				sentenciaSQL.append(" AND E.direccion LIKE ?");
 			}
 			if (filter.getCiudad() != null) {
-				sentenciaSQL.append(" AND ciudad = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 		}
 		
@@ -107,7 +107,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 					sentenciaPreparada.setString(indiceParametro++, filter.getDireccion());
 				}
 				if (filter.getCiudad() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getNombre());
 				}
 			}
 			
@@ -150,7 +150,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	    List<EmpresaEntity> listaEmpresas = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM Empresa E JOIN Ciudad C ON E.ciudad = C.id");
+	    sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM empresa E JOIN ciudad C ON E.ciudad = C.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -188,7 +188,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 		var empresaEntityRetorno=new EmpresaEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM Empresa E JOIN Ciudad C ON E.ciudad = C.id WHERE E.id = ?");
+		sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM empresa E JOIN ciudad C ON E.ciudad = C.id WHERE E.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -229,7 +229,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	public void update(UUID id, EmpresaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Empresa SET nombre = ?, nit = ?, telefono = ?, correo = ?, direccion = ?, ciudad = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE empresa SET nombre = ?, nit = ?, telefono = ?, correo = ?, direccion = ?, ciudad = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -260,7 +260,7 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Empresa WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM empresa WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

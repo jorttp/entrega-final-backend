@@ -27,7 +27,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	public void create(PedidoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Pedido (id, fechaReserva, fechaVencimiento, direccionEntrega, costo, abono, restante, ciudad, cliente, empleado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO pedido (id, fechaReserva, fechaVencimiento, direccionEntrega, costo, abono, restante, ciudad, cliente, empleado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -60,38 +60,38 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	public List<PedidoEntity> listByFIlter(PedidoEntity filter) throws LilfacException {
 		var listaPedidos = new java.util.ArrayList<PedidoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM Pedido P JOIN Ciudad C ON P.ciudad = C.id JOIN Cliente CL ON P.cliente = CL.id JOIN Empleado E ON P.empleado = E.id WHERE 1=1");
+		sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM pedido P JOIN ciudad C ON P.ciudad = C.id JOIN cliente CL ON P.cliente = CL.id JOIN empleado E ON P.empleado = E.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND P.id = ?");
 			}
 			if (filter.getFechaReserva() != null && !filter.getFechaReserva().isBlank()) {
-				sentenciaSQL.append(" AND fechaReserva LIKE ?");
+				sentenciaSQL.append(" AND P.fechaReserva LIKE ?");
 			}
 			if (filter.getFechaVencimiento() != null && !filter.getFechaVencimiento().isBlank()) {
-				sentenciaSQL.append(" AND fechaVencimiento LIKE ?");
+				sentenciaSQL.append(" AND P.fechaVencimiento LIKE ?");
 			}
 			if (filter.getDireccionEntrega() != null && !filter.getDireccionEntrega().isBlank()) {
-				sentenciaSQL.append(" AND direccionEntrega LIKE ?");
+				sentenciaSQL.append(" AND P.direccionEntrega LIKE ?");
 			}
 			if (filter.getCosto() != null) {
-				sentenciaSQL.append(" AND costo = ?");
+				sentenciaSQL.append(" AND P.costo = ?");
 			}
 			if (filter.getAbono() != null) {
-				sentenciaSQL.append(" AND abono = ?");
+				sentenciaSQL.append(" AND P.abono = ?");
 			}
 			if (filter.getRestante() != null) {
-				sentenciaSQL.append(" AND restante = ?");
+				sentenciaSQL.append(" AND P.restante = ?");
 			}
 			if (filter.getCiudad() != null) {
-				sentenciaSQL.append(" AND ciudad = ?");
+				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 			if (filter.getCliente() != null) {
-				sentenciaSQL.append(" AND cliente = ?");
+				sentenciaSQL.append(" AND CL.nombre = ?");
 			}
 			if (filter.getEmpleado() != null) {
-				sentenciaSQL.append(" AND empleado = ?");
+				sentenciaSQL.append(" AND E.nombre = ?");
 			}
 		}
 		
@@ -122,13 +122,13 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 					sentenciaPreparada.setObject(indiceParametro++, filter.getRestante());
 				}
 				if (filter.getCiudad() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCiudad().getNombre());
 				}
 				if (filter.getCliente() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getCliente().getNombre());
 				}
 				if (filter.getEmpleado() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getEmpleado().getNombre());
 				}
 			}
 			
@@ -181,7 +181,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	    List<PedidoEntity> listaPedidos = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM Pedido P JOIN Ciudad C ON P.ciudad = C.id JOIN Cliente CL ON P.cliente = CL.id JOIN Empleado E ON P.empleado = E.id");
+	    sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM pedido P JOIN ciudad C ON P.ciudad = C.id JOIN cliente CL ON P.cliente = CL.id JOIN empleado E ON P.empleado = E.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -229,7 +229,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 		var pedidoEntityRetorno=new PedidoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM Pedido P JOIN Ciudad C ON P.ciudad = C.id JOIN Cliente CL ON P.cliente = CL.id JOIN Empleado E ON P.empleado = E.id WHERE P.id = ? ");
+		sentenciaSQL.append("SELECT P.id, P.fechaReserva, P.fechaVencimiento, P.direccionEntrega, P.costo, P.abono, P.restante, C.nombre AS nombre_ciudad, CL.nombre AS nombre_cliente, E.nombre AS nombre_empleado FROM pedido P JOIN ciudad C ON P.ciudad = C.id JOIN cliente CL ON P.cliente = CL.id JOIN empleado E ON P.empleado = E.id WHERE P.id = ? ");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -280,7 +280,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	public void update(UUID id, PedidoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Pedido SET fechaReserva = ?, fechaVencimiento = ?, direccionEntrega = ?, costo = ?, abono = ?, restante = ?, ciudad = ?, cliente = ?, empleado = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE pedido SET fechaReserva = ?, fechaVencimiento = ?, direccionEntrega = ?, costo = ?, abono = ?, restante = ?, ciudad = ?, cliente = ?, empleado = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -314,7 +314,7 @@ public class PedidoPostgreSQLDAO implements PedidoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Pedido WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM pedido WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

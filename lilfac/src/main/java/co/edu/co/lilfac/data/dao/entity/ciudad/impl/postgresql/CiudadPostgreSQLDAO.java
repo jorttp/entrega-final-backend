@@ -25,7 +25,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	public void create(CiudadEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Ciudad (id, nombre, departamento) VALUES (?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO ciudad (id, nombre, departamento) VALUES (?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -52,17 +52,17 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	public List<CiudadEntity> listByFIlter(CiudadEntity filter) throws LilfacException {
 		var listaCiudades = new java.util.ArrayList<CiudadEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM Ciudad C JOIN Departamento D ON C.departamento = D.id WHERE 1=1");
+		sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM ciudad C JOIN departamento D ON C.departamento = D.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND C.id = ?");
 			}
 			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
-				sentenciaSQL.append(" AND nombre LIKE ?");
+				sentenciaSQL.append(" AND C.nombre LIKE ?");
 			}
 			if (filter.getDepartamento() != null) {
-				sentenciaSQL.append(" AND departamento = ?");
+				sentenciaSQL.append(" AND D.nombre = ?");
 			}
 		}
 		
@@ -78,7 +78,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
 				}
 				if (filter.getDepartamento() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getDepartamento().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getDepartamento().getNombre());
 				}
 			}
 			
@@ -118,7 +118,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	    List<CiudadEntity> listaCiudades = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM Ciudad C JOIN Departamento D ON C.departamento = D.id");
+	    sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM ciudad C JOIN departamento D ON C.departamento = D.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -153,7 +153,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 		var ciudadEntityRetorno=new CiudadEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM Ciudad C JOIN Departamento D ON C.departamento = D.id WHERE C.id = ?");
+		sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM ciudad C JOIN departamento D ON C.departamento = D.id WHERE C.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -190,7 +190,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	public void update(UUID id, CiudadEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Ciudad SET nombre = ?,  departamento = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE ciudad SET nombre = ?,  departamento = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -217,7 +217,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Ciudad WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM ciudad WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

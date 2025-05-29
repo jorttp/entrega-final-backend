@@ -25,7 +25,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	public void create(HistorialCostoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO HistorialCosto (id, codigo, fechaInicio, fechaFin, estado, costo, producto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO historialCosto (id, codigo, fechaInicio, fechaFin, estado, costo, producto) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -57,29 +57,29 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	public List<HistorialCostoEntity> listByFIlter(HistorialCostoEntity filter) throws LilfacException {
 		var listaHistorialesCosto = new java.util.ArrayList<HistorialCostoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE 1=1");
+		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM historialCosto H JOIN producto P ON H.producto = P.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
-				sentenciaSQL.append(" AND id = ?");
+				sentenciaSQL.append(" AND H.id = ?");
 			}
 			if (filter.getCodigo() != null) {
-				sentenciaSQL.append(" AND codigo = ?");
+				sentenciaSQL.append(" AND H.codigo = ?");
 			}
 			if (filter.getFechaInicio() != null && !filter.getFechaInicio().isBlank()) {
-				sentenciaSQL.append(" AND fechaInicio LIKE ?");
+				sentenciaSQL.append(" AND H.fechaInicio LIKE ?");
 			}
 			if (filter.getFechaFin() != null && !filter.getFechaFin().isBlank()) {
-				sentenciaSQL.append(" AND fechaFin LIKE ?");
+				sentenciaSQL.append(" AND H.fechaFin LIKE ?");
 			}
 			if (filter.isEstado() != null) {
-				sentenciaSQL.append(" AND estado = ?");
+				sentenciaSQL.append(" AND H.estado = ?");
 			}
 			if (filter.getCosto() != null) {
-				sentenciaSQL.append(" AND costo = ?");
+				sentenciaSQL.append(" AND H.costo = ?");
 			}
 			if (filter.getProducto() != null) {
-				sentenciaSQL.append(" AND producto = ?");
+				sentenciaSQL.append(" AND P.nombre = ?");
 			}
 		}
 		
@@ -107,7 +107,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 					sentenciaPreparada.setObject(indiceParametro++, filter.getCosto());
 				}
 				if (filter.getProducto() != null) {
-					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getId());
+					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getNombre());
 				}
 			}
 			
@@ -151,7 +151,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	    List<HistorialCostoEntity> listaHistorialesCosto = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id");
+	    sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM historialCosto H JOIN producto P ON H.producto = P.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -190,7 +190,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 		var historialCostoEntityRetorno=new HistorialCostoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM HistorialCosto H JOIN Producto P ON H.producto = P.id WHERE H.id = ?");
+		sentenciaSQL.append("SELECT H.id, H.codigo, H.fechaInicio, H.fechaFin, H.estado, H.costo, P.nombre AS nombre_producto FROM historialCosto H JOIN producto P ON H.producto = P.id WHERE H.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -231,7 +231,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	public void update(UUID id, HistorialCostoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE HistorialCosto SET codigo = ?, fechaInicio = ?, fechaFin = ?, estado = ?, costo = ?, producto = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE historialCosto SET codigo = ?, fechaInicio = ?, fechaFin = ?, estado = ?, costo = ?, producto = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -263,7 +263,7 @@ public class HistorialCostoPostgreSQLDAO implements HistorialCostoDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM HistorialCosto WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM historialCosto WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

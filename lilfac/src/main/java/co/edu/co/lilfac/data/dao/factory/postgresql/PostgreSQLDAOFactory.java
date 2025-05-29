@@ -55,7 +55,7 @@ public class PostgreSQLDAOFactory extends DAOFactory{
 	}
 
 	@Override
-	protected void abrirConexion() throws LilfacException {
+	public void abrirConexion() throws LilfacException {
         String url = "jdbc:postgresql://localhost:5432/postgresdoo";
         String usuario = "postgres";
         String contrasena = "jose2003112";

@@ -24,7 +24,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 	public void create(CategoriaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Categoria (id, nombre, descripcion) VALUES (?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO categoria (id, nombre, descripcion) VALUES (?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -52,7 +52,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 	public List<CategoriaEntity> listByFIlter(CategoriaEntity filter) throws LilfacException {
 		var listaCategorias = new java.util.ArrayList<CategoriaEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT id, nombre, descripcion FROM Categoria WHERE 1=1");
+		sentenciaSQL.append("SELECT id, nombre, descripcion FROM categoria WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
@@ -115,7 +115,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 	    List<CategoriaEntity> listaCategorias = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT id, nombre, descripcion FROM Categoria");
+	    sentenciaSQL.append("SELECT id, nombre, descripcion FROM categoria");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -148,7 +148,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 		var categoriaEntityRetorno=new CategoriaEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT id, nombre, descripcion FROM Categoria WHERE id = ?");
+		sentenciaSQL.append("SELECT id, nombre, descripcion FROM categoria WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -183,7 +183,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 	public void update(UUID id, CategoriaEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Categoria SET nombre = ?,  descripcion = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE categoria SET nombre = ?,  descripcion = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -210,7 +210,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Categoria WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM categoria WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

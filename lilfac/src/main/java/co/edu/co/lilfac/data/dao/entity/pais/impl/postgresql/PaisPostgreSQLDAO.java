@@ -24,7 +24,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	public void create(PaisEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO Pais (id, nombre) VALUES (?, ?)");
+		sentenciaSQL.append("INSERT INTO pais (id, nombre) VALUES (?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -51,7 +51,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 		
 		var listaPaises = new java.util.ArrayList<PaisEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT id, nombre FROM Pais WHERE 1=1");
+		sentenciaSQL.append("SELECT id, nombre FROM pais WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {
@@ -107,7 +107,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	    List<PaisEntity> listaPaises = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT id, nombre FROM Pais");
+	    sentenciaSQL.append("SELECT id, nombre FROM pais");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {
@@ -139,7 +139,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 		var paisEntityRetorno=new PaisEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT id, nombre FROM Pais WHERE id = ?");
+		sentenciaSQL.append("SELECT id, nombre FROM pais WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -173,7 +173,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	public void update(UUID id, PaisEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("UPDATE Pais SET nombre = ? WHERE id = ?");
+		sentenciaSQL.append("UPDATE pais SET nombre = ? WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
@@ -199,7 +199,7 @@ public class PaisPostgreSQLDAO implements PaisDAO{
 	public void delete(UUID id) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("DELETE FROM Pais WHERE id = ?");
+		sentenciaSQL.append("DELETE FROM pais WHERE id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
