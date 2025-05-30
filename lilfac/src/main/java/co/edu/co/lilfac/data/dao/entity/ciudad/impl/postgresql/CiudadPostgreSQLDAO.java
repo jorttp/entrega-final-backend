@@ -76,6 +76,7 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 				}
 				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
+
 				}
 				if (filter.getDepartamento() != null) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getDepartamento().getNombre());

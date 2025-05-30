@@ -14,6 +14,7 @@ import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
 import co.edu.co.lilfac.entity.CiudadEntity;
 import co.edu.co.lilfac.entity.ClienteEntity;
+import co.edu.co.lilfac.entity.DepartamentoEntity;
 
 public class ClienteBusinessLogicImpl implements ClienteBusinessLogic {
 
@@ -30,6 +31,7 @@ private DAOFactory factory;
 		validarIntegridadTelefonoCliente(cliente.getTelefono());
 		validarIntegridadCorreoCliente(cliente.getCorreo());
 		validarIntegridadDireccionResidenciaCliente(cliente.getDireccionResidencia());
+		validarDepartamentoExistente(cliente.getCiudad().getDepartamento().getNombre());
 		validarCiudadExistente(cliente.getCiudad().getNombre());
 	}
 	
@@ -100,19 +102,30 @@ private DAOFactory factory;
 		if (UtilTexto.getInstance().esNula(direccionResidenciaCliente)) {
 			throw BusinessLogicLilfacException.reportar("la direccion del cliente no puede ser un valor nulo");
 		}
-		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionResidenciaCliente).length() > 25) {
-			throw BusinessLogicLilfacException.reportar("la direccion de el cliente supera los 25 caracteres");
+		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionResidenciaCliente).length() > 100) {
+			throw BusinessLogicLilfacException.reportar("la direccion de el cliente supera los 100 caracteres");
 		}
 	}
 	
 	private void validarCiudadExistente(String nombreCiudad) throws LilfacException {
 		var filtro = new CiudadEntity();
-		filtro.setNombre(nombreCiudad);
+		filtro.setNombre(UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombreCiudad));
 		
 		var listaResultados = factory.getCiudadDAO().listByFIlter(filtro);
 		
 		if (listaResultados.isEmpty()) {
-			throw BusinessLogicLilfacException.reportar("la ciudad no existe");
+		    throw BusinessLogicLilfacException.reportar("la ciudad no existe");
+		}
+	}
+	
+	private void validarDepartamentoExistente(String nombreDepartamento) throws LilfacException {
+		var filtro = new DepartamentoEntity();
+		filtro.setNombre(UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombreDepartamento));
+		
+		var listaResultados = factory.getDepartamentoDAO().listByFIlter(filtro);
+		
+		if (listaResultados.isEmpty()) {
+		    throw BusinessLogicLilfacException.reportar("la ciudad no existe");
 		}
 	}
 	

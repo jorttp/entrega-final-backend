@@ -20,14 +20,32 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public ClientePostgreSQLDAO(Connection conexion) {
 		this.conexion=conexion;
 	}
+	
+	private UUID obtenerIdCiudadPorNombre(String nombreCiudad) throws SQLException {
+	    var sql = "SELECT id FROM ciudad WHERE nombre = ?";
+	    
+	    try (var sentencia = conexion.prepareStatement(sql)) {
+	        sentencia.setString(1, nombreCiudad);
+
+	        try (var resultado = sentencia.executeQuery()) {
+	            if (resultado.next()) {
+	                return UUID.fromString(resultado.getString("id"));
+	            } else {
+	                throw new SQLException("No se encontró ninguna ciudad con nombre: " + nombreCiudad);
+	            }
+	        }
+	    }
+	}
 
 	@Override
 	public void create(ClienteEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO cliente (id, nombre, apellido, cedula, telefono, correo, direccionResidencia, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO cliente (id, nombre, apellido, cedula, telefono, correo, direccionresidencia, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
+			
+			UUID ciudad = obtenerIdCiudadPorNombre(entity.getCiudad().getNombre());
 			
 			sentenciaPreparada.setObject(1, entity.getId());
 			sentenciaPreparada.setString(2, entity.getNombre());
@@ -36,7 +54,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 			sentenciaPreparada.setString(5,  entity.getTelefono());
 			sentenciaPreparada.setString(6,  entity.getCorreo());
 			sentenciaPreparada.setString(7,  entity.getDireccionResidencia());
-			sentenciaPreparada.setObject(8,  entity.getCiudad().getNombre());
+			sentenciaPreparada.setObject(8,  ciudad);
 			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
@@ -57,7 +75,7 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	public List<ClienteEntity> listByFIlter(ClienteEntity filter) throws LilfacException {
 		var listaClientes = new java.util.ArrayList<ClienteEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionResidencia, C.nombre AS nombre_ciudad FROM cliente CL JOIN ciudad C ON CL.ciudad = C.id WHERE 1=1");
+		sentenciaSQL.append("SELECT CL.id, CL.nombre, CL.apellido, CL.cedula, CL.telefono, CL.correo, CL.direccionresidencia, C.nombre AS nombre_ciudad FROM cliente CL JOIN ciudad C ON CL.ciudad = C.id WHERE 1=1");
 		
 		if (filter != null) {
 			if (filter.getId() != null) {

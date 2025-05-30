@@ -3,7 +3,7 @@ package co.edu.co.lilfac.crosscutting.utilitarios;
 public class UtilCorreo {
 	
 	private static UtilCorreo instancia = new UtilCorreo();
-	private static String PATRON_CARACTERES_PERMITIDOS = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$";
+	private static String PATRON_CARACTERES_PERMITIDOS = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 	
 	public static UtilCorreo getInstance() {
 		return instancia;
