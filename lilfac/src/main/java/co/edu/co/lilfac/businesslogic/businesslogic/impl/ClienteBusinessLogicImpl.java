@@ -8,7 +8,7 @@ import co.edu.co.lilfac.businesslogic.businesslogic.assembler.cliente.entity.Cli
 import co.edu.co.lilfac.businesslogic.businesslogic.domain.ClienteDomain;
 import co.edu.co.lilfac.crosscutting.excepciones.BusinessLogicLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilCorreo;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.factory.DAOFactory;
@@ -34,6 +34,9 @@ private DAOFactory factory;
 	}
 	
 	private void validarIntegridadNombreCliente(String nombreCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(nombreCliente)) {
+			throw BusinessLogicLilfacException.reportar("El nombre del cliente no puede ser un valor nulo");
+		}
 		if (UtilTexto.getInstance().estaVacia(nombreCliente)) {
 			throw BusinessLogicLilfacException.reportar("el nombre de el cliente es un campo obligatorio");
 		}
@@ -46,6 +49,9 @@ private DAOFactory factory;
 	}
 	
 	private void validarIntegridadApellidoCliente(String apellidoCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(apellidoCliente)) {
+			throw BusinessLogicLilfacException.reportar("El apellido del cliente no puede ser un valor nulo");
+		}
 		if (UtilTexto.getInstance().estaVacia(apellidoCliente)) {
 			throw BusinessLogicLilfacException.reportar("el apellido de el cliente es un campo obligatorio");
 		}
@@ -57,28 +63,43 @@ private DAOFactory factory;
 		}
 	}
 	
-	private void validarIntegridadCedulaCliente(Integer cedulaCliente) throws LilfacException {
-		if (UtilNumerico.getInstance().estaVacia(cedulaCliente)) {
+	private void validarIntegridadCedulaCliente(String cedulaCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(cedulaCliente)) {
+			throw BusinessLogicLilfacException.reportar("la cedula del cliente no puede ser un valor nulo");
+		}
+		if (UtilTexto.getInstance().estaVacia(cedulaCliente)) {
 			throw BusinessLogicLilfacException.reportar("la cedula de el cliente es un campo obligatorio");
 		}
 	}
 	
-	private void validarIntegridadTelefonoCliente(Integer telefonoCliente) throws LilfacException {
-		if (UtilNumerico.getInstance().estaVacia(telefonoCliente)) {
+	private void validarIntegridadTelefonoCliente(String telefonoCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(telefonoCliente)) {
+			throw BusinessLogicLilfacException.reportar("El telefono del cliente no puede ser un valor nulo");
+		}
+		if (UtilTexto.getInstance().estaVacia(telefonoCliente)) {
 			throw BusinessLogicLilfacException.reportar("el telefono de el cliente es un campo obligatorio");
 		}
 	}
 	
 	private void validarIntegridadCorreoCliente(String correoCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(correoCliente)) {
+			throw BusinessLogicLilfacException.reportar("El correo del cliente no puede ser un valor nulo");
+		}
 		if (UtilTexto.getInstance().estaVacia(correoCliente)) {
 			throw BusinessLogicLilfacException.reportar("el correo de el cliente es un campo obligatorio");
 		}
 		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(correoCliente).length() > 320) {
 			throw BusinessLogicLilfacException.reportar("el correo de el cliente supera los 320 caracteres");
 		}
+		if (!UtilCorreo.getInstance().esCorreoValido(correoCliente)) {
+			throw BusinessLogicLilfacException.reportar("el correo ingresado no es de formato válido");
+		}
 	}
 	
 	private void validarIntegridadDireccionResidenciaCliente(String direccionResidenciaCliente) throws LilfacException {
+		if (UtilTexto.getInstance().esNula(direccionResidenciaCliente)) {
+			throw BusinessLogicLilfacException.reportar("la direccion del cliente no puede ser un valor nulo");
+		}
 		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(direccionResidenciaCliente).length() > 25) {
 			throw BusinessLogicLilfacException.reportar("la direccion de el cliente supera los 25 caracteres");
 		}
@@ -95,7 +116,7 @@ private DAOFactory factory;
 		}
 	}
 	
-	private void validarNoExisteClienteMismaCedula(Integer cedula) throws LilfacException {
+	private void validarNoExisteClienteMismaCedula(String cedula) throws LilfacException {
 		var filtro = new ClienteEntity();
 		filtro.setCedula(cedula);
 		var listaResultados = factory.getClienteDAO().listByFIlter(filtro);

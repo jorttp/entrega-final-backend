@@ -32,8 +32,8 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 			sentenciaPreparada.setObject(1, entity.getId());
 			sentenciaPreparada.setString(2, entity.getNombre());
 			sentenciaPreparada.setString(3, entity.getApellido());
-			sentenciaPreparada.setInt(4, entity.getCedula());
-			sentenciaPreparada.setInt(5,  entity.getTelefono());
+			sentenciaPreparada.setString(4, entity.getCedula());
+			sentenciaPreparada.setString(5,  entity.getTelefono());
 			sentenciaPreparada.setString(6,  entity.getCorreo());
 			sentenciaPreparada.setString(7,  entity.getDireccionResidencia());
 			sentenciaPreparada.setObject(8,  entity.getCiudad().getNombre());
@@ -70,10 +70,10 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 				sentenciaSQL.append(" AND CL.apellido LIKE ?");
 			}
 			if (filter.getCedula() != null) {
-				sentenciaSQL.append(" AND CL.cedula = ?");
+				sentenciaSQL.append(" AND CL.cedula LIKE ?");
 			}
 			if (filter.getTelefono() != null) {
-				sentenciaSQL.append(" AND CL.telefono = ?");
+				sentenciaSQL.append(" AND CL.telefono LIKE ?");
 			}
 			if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
 				sentenciaSQL.append(" AND CL.correo LIKE ?");
@@ -101,10 +101,10 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getApellido() + "%");
 				}
 				if (filter.getCedula() != null) {
-					sentenciaPreparada.setInt(indiceParametro++, filter.getCedula());
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCedula() + "%");
 				}
 				if (filter.getTelefono() != null) {
-					sentenciaPreparada.setInt(indiceParametro++, filter.getTelefono());
+					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getTelefono() + "%");
 				}
 				if (filter.getCorreo() != null && !filter.getCorreo().isBlank()) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCorreo() + "%");
@@ -124,8 +124,8 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 		            cliente.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
 		            cliente.setNombre(cursorResultados.getString("nombre"));
 		            cliente.setApellido(cursorResultados.getString("apellido"));
-		            cliente.setCedula(cursorResultados.getInt("cedula"));
-		            cliente.setTelefono(cursorResultados.getInt("telefono"));
+		            cliente.setCedula(cursorResultados.getString("cedula"));
+		            cliente.setTelefono(cursorResultados.getString("telefono"));
 		            cliente.setCorreo(cursorResultados.getString("correo"));
 		            cliente.setDireccionResidencia(cursorResultados.getString("direccionResidencia"));
 
@@ -168,8 +168,8 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 	            cliente.setId(UtilUUID.convertirAUUID(resultados.getString("id")));
 	            cliente.setNombre(resultados.getString("nombre"));
 	            cliente.setApellido(resultados.getString("apellido"));
-	            cliente.setCedula(resultados.getInt("cedula"));
-	            cliente.setTelefono(resultados.getInt("telefono"));
+	            cliente.setCedula(resultados.getString("cedula"));
+	            cliente.setTelefono(resultados.getString("telefono"));
 	            cliente.setCorreo(resultados.getString("correo"));
 	            cliente.setDireccionResidencia(resultados.getString("direccionResidencia"));
 
@@ -210,8 +210,8 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 					clienteEntityRetorno.setId(UtilUUID.convertirAUUID(cursorResultados.getString("id")));
 					clienteEntityRetorno.setNombre(cursorResultados.getString("nombre"));
 					clienteEntityRetorno.setApellido(cursorResultados.getString("apellido"));
-					clienteEntityRetorno.setCedula(cursorResultados.getInt("cedula"));
-					clienteEntityRetorno.setTelefono(cursorResultados.getInt("telefono"));
+					clienteEntityRetorno.setCedula(cursorResultados.getString("cedula"));
+					clienteEntityRetorno.setTelefono(cursorResultados.getString("telefono"));
 					clienteEntityRetorno.setCorreo(cursorResultados.getString("correo"));
 					clienteEntityRetorno.setDireccionResidencia(cursorResultados.getString("direccionResidencia"));
 					var ciudad = new CiudadEntity();
@@ -246,8 +246,8 @@ public class ClientePostgreSQLDAO implements ClienteDAO{
 			
 			sentenciaPreparada.setString(1, entity.getNombre());
 			sentenciaPreparada.setString(2, entity.getApellido());
-			sentenciaPreparada.setInt(3,  entity.getCedula());
-			sentenciaPreparada.setInt(4,  entity.getTelefono());
+			sentenciaPreparada.setString(3,  entity.getCedula());
+			sentenciaPreparada.setString(4,  entity.getTelefono());
 			sentenciaPreparada.setString(5,  entity.getCorreo());
 			sentenciaPreparada.setString(6,  entity.getDireccionResidencia());
 			sentenciaPreparada.setObject(7,  entity.getCiudad().getId());

@@ -2,7 +2,6 @@ package co.edu.co.lilfac.entity;
 
 import java.util.UUID;
 
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
@@ -11,8 +10,8 @@ public class ClienteEntity {
 	private UUID id;
 	private String nombre;
 	private String apellido;
-	private Integer cedula;
-	private Integer telefono;
+	private String cedula;
+	private String telefono;
 	private String correo;
 	private String direccionResidencia;
 	private CiudadEntity ciudad;
@@ -22,14 +21,14 @@ public class ClienteEntity {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setApellido(UtilTexto.getInstance().obtenerValorDefecto());
-		setCedula(UtilNumerico.getInstance().obtenerValorDefecto());
-		setTelefono(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCedula(UtilTexto.getInstance().obtenerValorDefecto());
+		setTelefono(UtilTexto.getInstance().obtenerValorDefecto());
 		setCorreo(UtilTexto.getInstance().obtenerValorDefecto());
 		setDireccionResidencia(UtilTexto.getInstance().obtenerValorDefecto());
 		setCiudad(CiudadEntity.obtenerValorDefecto());
 	}
 	
-	public ClienteEntity (final UUID id, final String nombre, final String apellido, final Integer cedula, final Integer telefono, final String correo, final String direccionResidencia, final CiudadEntity ciudad) {
+	public ClienteEntity (final UUID id, final String nombre, final String apellido, final String cedula, final String telefono, final String correo, final String direccionResidencia, final CiudadEntity ciudad) {
 		setId(id);
 		setNombre(nombre);
 		setApellido(apellido);
@@ -72,20 +71,20 @@ public class ClienteEntity {
 		this.apellido = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(apellido);
 	}
 
-	public Integer getCedula() {
+	public String getCedula() {
 		return cedula;
 	}
 
-	public void setCedula(final Integer cedula) {
-		this.cedula = UtilNumerico.obtenerValorDefecto(cedula);
+	public void setCedula(final String cedula) {
+		this.cedula = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(cedula);
 	}
 
-	public Integer getTelefono() {
+	public String getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(final Integer telefono) {
-		this.telefono = UtilNumerico.obtenerValorDefecto(telefono);
+	public void setTelefono(final String telefono) {
+		this.telefono = UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(telefono);
 	}
 
 	public String getCorreo() {
