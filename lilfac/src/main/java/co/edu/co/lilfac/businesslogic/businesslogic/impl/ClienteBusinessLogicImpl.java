@@ -125,7 +125,7 @@ private DAOFactory factory;
 		var listaResultados = factory.getDepartamentoDAO().listByFIlter(filtro);
 		
 		if (listaResultados.isEmpty()) {
-		    throw BusinessLogicLilfacException.reportar("la ciudad no existe");
+		    throw BusinessLogicLilfacException.reportar("el departamento no existe");
 		}
 	}
 	
