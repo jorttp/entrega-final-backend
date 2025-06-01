@@ -32,7 +32,7 @@ private DAOFactory factory;
 		validarIntegridadCorreoCliente(cliente.getCorreo());
 		validarIntegridadDireccionResidenciaCliente(cliente.getDireccionResidencia());
 		validarDepartamentoExistente(cliente.getCiudad().getDepartamento().getNombre());
-		//validarCiudadExistente(cliente.getCiudad().getNombre());
+		validarCiudadExistente(cliente.getCiudad().getNombre());
 	}
 	
 	private void validarIntegridadNombreCliente(String nombreCliente) throws LilfacException {
