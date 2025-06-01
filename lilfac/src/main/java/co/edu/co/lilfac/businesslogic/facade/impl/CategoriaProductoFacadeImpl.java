@@ -29,6 +29,7 @@ public class CategoriaProductoFacadeImpl implements CategoriaProductoFacade{
 	@Override
 	public void registrarNuevaCategoriaProducto(CategoriaProductoDTO categoriaProducto) throws LilfacException {
 		try {
+			daoFactory.abrirConexion();
 			daoFactory.iniciarTransaccion();
 			CategoriaProductoDomain categoriaProductoDomain = CategoriaProductoDTOAssembler.getInstance().toDomain(categoriaProducto);
 			categoriaProductoBusinessLogic.registrarNuevaCategoriaProducto(categoriaProductoDomain);
