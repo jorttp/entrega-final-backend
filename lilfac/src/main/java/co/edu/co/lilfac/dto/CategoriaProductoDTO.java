@@ -18,6 +18,12 @@ public class CategoriaProductoDTO {
 		setCategoria(CategoriaDTO.obtenerValorDefecto());
 	}
 	
+	public CategoriaProductoDTO(final ProductoDTO producto, final CategoriaDTO categoria) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setProducto(producto);
+		setCategoria(categoria);
+	}
+	
 	public CategoriaProductoDTO(final UUID id) {
 		setId(id);
 		setProducto(ProductoDTO.obtenerValorDefecto());

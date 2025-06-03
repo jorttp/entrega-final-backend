@@ -11,9 +11,15 @@ public final class CategoriaDomain {
 	private String nombre;
 	private String descripcion;
 	
-	CategoriaDomain() {
+	public CategoriaDomain() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
+	public CategoriaDomain(final String nombre) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setNombre(nombre);
 		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	

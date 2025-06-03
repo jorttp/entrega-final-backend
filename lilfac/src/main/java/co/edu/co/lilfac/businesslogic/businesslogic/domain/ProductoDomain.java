@@ -14,13 +14,22 @@ public final class ProductoDomain {
 	private String caracteristicas;
 	private String estado;
 	
-	ProductoDomain() {
+	public ProductoDomain(final String nombre) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setNombre(nombre);
+		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());	
+		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
+	public ProductoDomain() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
 		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
 		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());	
 		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
 	}
+	
 	
 	public ProductoDomain (final UUID id, final String nombre, final Integer codigo, final String caracteristicas, final String estado){
 		setId(id);

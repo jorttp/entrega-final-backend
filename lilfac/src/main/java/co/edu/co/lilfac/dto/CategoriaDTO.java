@@ -17,6 +17,12 @@ public final class CategoriaDTO {
 		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
+	public CategoriaDTO(final String nombre) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setNombre(nombre);
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
 	public CategoriaDTO(final UUID id, final String nombre, final String descripcion) {
 		setId(id);
 		setNombre(nombre);

@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilNumerico;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.producto.ProductoDAO;
 import co.edu.co.lilfac.entity.ProductoEntity;
@@ -56,20 +59,20 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		var sentenciaSQL = new StringBuilder();
 		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto WHERE 1=1");
 		
-		if (filter != null) {
-			if (filter.getId() != null) {
+		if (!UtilObjeto.getInstance().esNulo(filter)) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 				sentenciaSQL.append(" AND id = ?");
 			}
-			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+			if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
 				sentenciaSQL.append(" AND nombre LIKE ?");
 			}
-			if (filter.getCodigo() != null) {
+			if (!UtilNumerico.getInstance().esNula(filter.getCodigo()) && !UtilNumerico.getInstance().estaVacia(filter.getCodigo())) {
 				sentenciaSQL.append(" AND codigo = ?");
 			}
-			if (filter.getCaracteristicas() != null && !filter.getCaracteristicas().isBlank()) {
+			if (!UtilTexto.getInstance().esNula(filter.getCaracteristicas()) && !UtilTexto.getInstance().estaVacia(filter.getCaracteristicas())) {
 				sentenciaSQL.append(" AND caracteristicas LIKE ?");
 			}
-			if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+			if (!UtilTexto.getInstance().esNula(filter.getEstado()) && !UtilTexto.getInstance().estaVacia(filter.getEstado())) {
 				sentenciaSQL.append(" AND estado LIKE ?");
 			}
 		}
@@ -78,20 +81,20 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 			
 			var indiceParametro = 1;
 			
-			if (filter != null) {
-				if (filter.getId() != null) {
+			if (!UtilObjeto.getInstance().esNulo(filter)) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
-				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
 				}
-				if (filter.getCodigo() != null) {
+				if (!UtilNumerico.getInstance().esNula(filter.getCodigo()) && !UtilNumerico.getInstance().estaVacia(filter.getCodigo())) {
 					sentenciaPreparada.setInt(indiceParametro++, filter.getCodigo());
 				}
-				if (filter.getCaracteristicas() != null && !filter.getCaracteristicas().isBlank()) {
+				if (!UtilTexto.getInstance().esNula(filter.getCaracteristicas()) && !UtilTexto.getInstance().estaVacia(filter.getCaracteristicas())) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getCaracteristicas() + "%");
 				}
-				if (filter.getEstado() != null && !filter.getEstado().isBlank()) {
+				if (!UtilTexto.getInstance().esNula(filter.getEstado()) && !UtilTexto.getInstance().estaVacia(filter.getEstado())) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getEstado() + "%");
 				}
 			}

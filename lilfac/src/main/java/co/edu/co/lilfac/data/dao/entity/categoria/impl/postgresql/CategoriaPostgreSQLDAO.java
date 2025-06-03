@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.categoria.CategoriaDAO;
 import co.edu.co.lilfac.entity.CategoriaEntity;
@@ -54,14 +56,14 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 		var sentenciaSQL = new StringBuilder();
 		sentenciaSQL.append("SELECT id, nombre, descripcion FROM categoria WHERE 1=1");
 		
-		if (filter != null) {
-			if (filter.getId() != null) {
+		if (!UtilObjeto.getInstance().esNulo(filter)) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 				sentenciaSQL.append(" AND id = ?");
 			}
-			if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+			if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
 				sentenciaSQL.append(" AND nombre LIKE ?");
 			}
-			if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+			if (!UtilTexto.getInstance().esNula(filter.getDescripcion()) && !UtilTexto.getInstance().estaVacia(filter.getDescripcion())) {
 				sentenciaSQL.append(" AND descripcion LIKE ?");
 			}
 		}
@@ -70,14 +72,14 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 			
 			var indiceParametro = 1;
 			
-			if (filter != null) {
-				if (filter.getId() != null) {
+			if (!UtilObjeto.getInstance().esNulo(filter)) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
-				if (filter.getNombre() != null && !filter.getNombre().isBlank()) {
+				if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getNombre() + "%");
 				}
-				if (filter.getDescripcion() != null && !filter.getDescripcion().isBlank()) {
+				if (!UtilTexto.getInstance().esNula(filter.getDescripcion()) && !UtilTexto.getInstance().estaVacia(filter.getDescripcion())) {
 					sentenciaPreparada.setString(indiceParametro++, "%" + filter.getDescripcion() + "%");
 				}
 			}

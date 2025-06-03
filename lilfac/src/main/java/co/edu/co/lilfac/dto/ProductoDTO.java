@@ -22,6 +22,22 @@ public final class ProductoDTO {
 		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
+	public ProductoDTO(final UUID id) {
+		setId(id);
+		setNombre(UtilTexto.getInstance().obtenerValorDefecto());
+		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());
+		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
+	public ProductoDTO(final String nombre) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setNombre(nombre);
+		setCodigo(UtilNumerico.getInstance().obtenerValorDefecto());
+		setCaracteristicas(UtilTexto.getInstance().obtenerValorDefecto());
+		setEstado(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
 	public ProductoDTO (final UUID id, final String nombre, final Integer codigo, final String caracteristicas, final String estado){
 		setId(id);
 		setNombre(nombre);

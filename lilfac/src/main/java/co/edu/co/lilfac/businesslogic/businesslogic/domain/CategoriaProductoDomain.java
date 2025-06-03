@@ -12,10 +12,16 @@ public class CategoriaProductoDomain {
 	private ProductoDomain producto;
 	private CategoriaDomain categoria;
 	
-	CategoriaProductoDomain() {
+	public CategoriaProductoDomain() {
 		setId(UtilUUID.obtenerValorDefecto());
 		setProducto(ProductoDomain.obtenerValorDefecto());
 		setCategoria(CategoriaDomain.obtenerValorDefecto());
+	}
+	
+	public CategoriaProductoDomain(final ProductoDomain producto, final CategoriaDomain categoria) {
+		setId(UtilUUID.obtenerValorDefecto());
+		setProducto(producto);
+		setCategoria(categoria);
 	}
 	
 	public CategoriaProductoDomain(final UUID id) {

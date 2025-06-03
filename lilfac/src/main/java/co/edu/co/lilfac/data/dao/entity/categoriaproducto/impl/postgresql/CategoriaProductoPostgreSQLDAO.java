@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import co.edu.co.lilfac.crosscutting.excepciones.DataLilfacException;
 import co.edu.co.lilfac.crosscutting.excepciones.LilfacException;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.data.dao.entity.categoriaproducto.CategoriaProductoDAO;
 import co.edu.co.lilfac.entity.CategoriaEntity;
@@ -52,16 +53,18 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	public List<CategoriaProductoEntity> listByFIlter(CategoriaProductoEntity filter) throws LilfacException {
 		var listaCategoriaProducto = new java.util.ArrayList<CategoriaProductoEntity>();
 		var sentenciaSQL = new StringBuilder();
-		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id WHERE 1=1");
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria "
+				+ "FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id"
+				+ " WHERE 1=1");
 		
-		if (filter != null) {
-			if (filter.getId() != null) {
+		if (!UtilObjeto.getInstance().esNulo(filter)) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 				sentenciaSQL.append(" AND CP.id = ?");
 			}
-			if (filter.getProducto() != null) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getProducto())) {
 				sentenciaSQL.append(" AND P.nombre = ?");
 			}
-			if (filter.getCategoria() != null) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getCategoria())) {
 				sentenciaSQL.append(" AND C.nombre = ?");
 			}
 		}
@@ -70,14 +73,14 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 			
 			var indiceParametro = 1;
 			
-			if (filter != null) {
-				if (filter.getId() != null) {
+			if (!UtilObjeto.getInstance().esNulo(filter)) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
-				if (filter.getProducto() != null) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getProducto())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getProducto().getNombre());
 				}
-				if (filter.getCategoria() != null) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getCategoria())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getCategoria().getNombre());
 				}
 			}

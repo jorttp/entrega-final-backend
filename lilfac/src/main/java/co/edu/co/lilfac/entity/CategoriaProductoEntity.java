@@ -19,12 +19,6 @@ public class CategoriaProductoEntity {
 		setCategoria(CategoriaEntity.obtenerValorDefecto());
 	}
 	
-	public CategoriaProductoEntity(final UUID id) {
-		setId(id);
-		setProducto(ProductoEntity.obtenerValorDefecto());
-		setCategoria(CategoriaEntity.obtenerValorDefecto());
-	}
-	
 	public CategoriaProductoEntity(final UUID id, final ProductoEntity producto, final CategoriaEntity categoria) {
 		setId(id);
 		setProducto(producto);
