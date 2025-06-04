@@ -17,6 +17,12 @@ public final class CategoriaDomain {
 		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
 	}
 	
+	public CategoriaDomain(final UUID id, final String nombre) {
+		setId(id);
+		setNombre(nombre);
+		setDescripcion(UtilTexto.getInstance().obtenerValorDefecto());
+	}
+	
 	public CategoriaDomain(final String nombre) {
 		setId(UtilUUID.obtenerValorDefecto());
 		setNombre(nombre);

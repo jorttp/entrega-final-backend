@@ -26,8 +26,8 @@ public class CategoriaProductoBusinessLogicImpl implements CategoriaProductoBusi
 	private void validarIntegridadInformacionCategoriaProducto(CategoriaProductoDomain categoriaProducto) throws LilfacException{
 		validarIntegridadNombreProducto(categoriaProducto.getProducto().getNombre());
 		validarIntegridadNombreCategoria(categoriaProducto.getCategoria().getNombre());
-		validarProductoExistente(categoriaProducto.getProducto().getId());
-		validarCategoriaExistente(categoriaProducto.getCategoria().getId());
+		validarProductoExistente(categoriaProducto.getProducto().getNombre());
+		validarCategoriaExistente(categoriaProducto.getCategoria().getNombre());
 	}
 	
 	private void validarIntegridadNombreProducto(String nombreProducto) throws LilfacException {
@@ -60,18 +60,18 @@ public class CategoriaProductoBusinessLogicImpl implements CategoriaProductoBusi
 		}
 	}
 	
-	private void validarProductoExistente(UUID id) throws LilfacException {
+	private void validarProductoExistente(String nombre) throws LilfacException {
 		var filtro = new ProductoEntity();
-		filtro.setId(id);
+		filtro.setNombre(nombre);
 		var listaResultados = factory.getProductoDAO().listByFIlter(filtro);
 		if (listaResultados.isEmpty()) {
 			throw BusinessLogicLilfacException.reportar("producto no existente");
 		}
 	}
 	
-	private void validarCategoriaExistente(UUID id) throws LilfacException {
+	private void validarCategoriaExistente(String nombre) throws LilfacException {
 		var filtro = new CategoriaEntity();
-		filtro.setId(id);
+		filtro.setNombre(nombre);
 		var listaResultados = factory.getCategoriaDAO().listByFIlter(filtro);
 		if (listaResultados.isEmpty()) {
 			throw BusinessLogicLilfacException.reportar("categoria no existente");

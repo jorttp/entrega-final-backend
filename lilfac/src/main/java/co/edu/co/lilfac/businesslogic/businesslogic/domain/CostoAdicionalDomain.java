@@ -2,10 +2,10 @@ package co.edu.co.lilfac.businesslogic.businesslogic.domain;
 
 import java.util.UUID;
 
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class CostoAdicionalDomain {
 	private UUID id;

@@ -2,10 +2,10 @@ package co.edu.co.lilfac.entity;
 
 import java.util.UUID;
 
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
-import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilFloat;
 import co.edu.co.lilfac.crosscutting.utilitarios.UtilObjeto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilTexto;
+import co.edu.co.lilfac.crosscutting.utilitarios.UtilUUID;
 
 public class CostoAdicionalEntity {
 	private UUID id;

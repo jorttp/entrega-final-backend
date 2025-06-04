@@ -22,18 +22,53 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	public CategoriaProductoPostgreSQLDAO(Connection conexion) {
 		this.conexion=conexion;
 	}
+	
+	private UUID obtenerIdProductoPorNombre(String nombreProducto) throws SQLException {
+	    var sql = "SELECT id FROM producto WHERE nombre = ?";
+	    
+	    try (var sentencia = conexion.prepareStatement(sql)) {
+	        sentencia.setString(1, nombreProducto);
+
+	        try (var resultado = sentencia.executeQuery()) {
+	            if (resultado.next()) {
+	                return UUID.fromString(resultado.getString("id"));
+	            } else {
+	                throw new SQLException("No se encontró ningun producto con el nombre brindado");
+	            }
+	        }
+	    }
+	}
+	
+	private UUID obtenerIdCategoriaPorNombre(String nombreCategoria) throws SQLException {
+	    var sql = "SELECT id FROM categoria WHERE nombre = ?";
+	    
+	    try (var sentencia = conexion.prepareStatement(sql)) {
+	        sentencia.setString(1, nombreCategoria);
+
+	        try (var resultado = sentencia.executeQuery()) {
+	            if (resultado.next()) {
+	                return UUID.fromString(resultado.getString("id"));
+	            } else {
+	                throw new SQLException("No se encontró ninguna categoria con el nombre brindado");
+	            }
+	        }
+	    }
+	}
 
 	@Override
 	public void create(CategoriaProductoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("INSERT INTO categoriaProducto (id, producto, categoria) VALUES (?, ?, ?)");
+		sentenciaSQL.append("INSERT INTO categoriaproducto (id, producto, categoria) VALUES (?, ?, ?)");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
+			UUID idProducto = obtenerIdProductoPorNombre(entity.getProducto().getNombre());
+			UUID idCategoria = obtenerIdCategoriaPorNombre(entity.getCategoria().getNombre());
+			
 			sentenciaPreparada.setObject(1, entity.getId());
-			sentenciaPreparada.setObject(2, entity.getProducto().getId());
-			sentenciaPreparada.setObject(3, entity.getCategoria().getId());
+			sentenciaPreparada.setObject(2, idProducto);
+			sentenciaPreparada.setObject(3, idCategoria);
 			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {
@@ -162,7 +197,9 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 		var categoriaProductoEntityRetorno=new CategoriaProductoEntity();
 		var sentenciaSQL = new StringBuilder();
 		
-		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria FROM categoriaProducto CP JOIN producto P ON CP.producto = P.id JOIN categoria C ON CP.categoria = C.id WHERE id = ?");
+		sentenciaSQL.append("SELECT CP.id, P.nombre AS nombre_producto, C.nombre AS nombre_categoria "
+				+ "FROM categoriaproducto CP JOIN producto P ON CP.producto = P.id "
+				+ "JOIN categoria C ON CP.categoria = C.id WHERE CP.id = ?");
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			

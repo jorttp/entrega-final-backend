@@ -57,7 +57,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 		sentenciaSQL.append("SELECT id, nombre, descripcion FROM categoria WHERE 1=1");
 		
 		if (!UtilObjeto.getInstance().esNulo(filter)) {
-			if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getId()) && !UtilUUID.esValorDefecto(filter.getId())) {
 				sentenciaSQL.append(" AND id = ?");
 			}
 			if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
@@ -73,7 +73,7 @@ public class CategoriaPostgreSQLDAO implements CategoriaDAO{
 			var indiceParametro = 1;
 			
 			if (!UtilObjeto.getInstance().esNulo(filter)) {
-				if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getId()) && !UtilUUID.esValorDefecto(filter.getId())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
 				if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {

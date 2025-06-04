@@ -23,7 +23,6 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		this.conexion=conexion;
 	}
 
-
 	@Override
 	public void create(ProductoEntity entity) throws LilfacException {
 		var sentenciaSQL = new StringBuilder();
@@ -60,7 +59,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto WHERE 1=1");
 		
 		if (!UtilObjeto.getInstance().esNulo(filter)) {
-			if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
+			if (!UtilObjeto.getInstance().esNulo(filter.getId()) && !UtilUUID.esValorDefecto(filter.getId())) {
 				sentenciaSQL.append(" AND id = ?");
 			}
 			if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {
@@ -82,7 +81,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 			var indiceParametro = 1;
 			
 			if (!UtilObjeto.getInstance().esNulo(filter)) {
-				if (!UtilObjeto.getInstance().esNulo(filter.getId())) {
+				if (!UtilObjeto.getInstance().esNulo(filter.getId()) && !UtilUUID.esValorDefecto(filter.getId())) {
 					sentenciaPreparada.setObject(indiceParametro++, filter.getId());
 				}
 				if (!UtilTexto.getInstance().esNula(filter.getNombre()) && !UtilTexto.getInstance().estaVacia(filter.getNombre())) {

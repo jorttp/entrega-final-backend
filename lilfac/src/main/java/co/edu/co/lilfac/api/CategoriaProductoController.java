@@ -1,6 +1,8 @@
 package co.edu.co.lilfac.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -55,10 +57,11 @@ public class CategoriaProductoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> crear(@RequestBody CategoriaProductoDTO categoriaProducto) throws LilfacException {
+	public ResponseEntity<Map<String, String>> crear(@RequestBody CategoriaProductoDTO categoriaProducto) throws LilfacException {
 		categoriaProductoFachada.registrarNuevaCategoriaProducto(categoriaProducto);
-		var mensajeExito = "La categoria de producto se ha registrado correctamente";
-		return new ResponseEntity<>(mensajeExito, HttpStatus.OK);
+	    Map<String, String> respuesta = new HashMap<>();
+	    respuesta.put("mensaje", "La categoria de producto se ha registrado correctamente");
+	    return ResponseEntity.ok(respuesta);
 	}
 	
 	@PutMapping("/{id}")
