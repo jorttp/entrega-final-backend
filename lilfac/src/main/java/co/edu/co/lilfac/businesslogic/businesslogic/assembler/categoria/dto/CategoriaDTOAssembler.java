@@ -44,7 +44,7 @@ public class CategoriaDTOAssembler implements DTOAssembler<CategoriaDTO, Categor
 		for (CategoriaDomain categoriaDomain : domainList) {
 			listaResultado.add(toDto(categoriaDomain));
 		}
-		return null;
+		return listaResultado;
 	}
 
 

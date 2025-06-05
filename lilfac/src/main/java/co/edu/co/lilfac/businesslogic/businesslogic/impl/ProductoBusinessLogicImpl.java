@@ -42,10 +42,16 @@ public class ProductoBusinessLogicImpl implements ProductoBusinessLogic {
 	}
 
 	@Override
-	public List<ProductoDomain> consultarProductos(ProductoDomain filtro) throws LilfacException {
+	public List<ProductoDomain> consultarProductosFiltro(ProductoDomain filtro) throws LilfacException {
 		
-		ProductoEntity productoFilter = ProductoEntityAssembler.getInstance().toEntity(filtro); // MAGIA DE TRADUCIR DE domain-›entity 
+		var productoFilter = ProductoEntityAssembler.getInstance().toEntity(filtro);
 		List<ProductoEntity> productoEntities = factory.getProductoDAO().listByFIlter(productoFilter);
+		return ProductoEntityAssembler.getInstance().toDomain(productoEntities);
+	}
+
+	@Override
+	public List<ProductoDomain> consultarProductos() throws LilfacException {
+		List<ProductoEntity> productoEntities = factory.getProductoDAO().listAll();
 		return ProductoEntityAssembler.getInstance().toDomain(productoEntities);
 	}
 

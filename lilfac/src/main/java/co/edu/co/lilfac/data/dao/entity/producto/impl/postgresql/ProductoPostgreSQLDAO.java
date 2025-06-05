@@ -58,7 +58,7 @@ public class ProductoPostgreSQLDAO implements ProductoDAO{
 		var sentenciaSQL = new StringBuilder();
 		sentenciaSQL.append("SELECT id, nombre, codigo, caracteristicas, estado FROM producto WHERE 1=1");
 		
-		if (!UtilObjeto.getInstance().esNulo(filter)) {
+		if (!UtilObjeto.getInstance().esNulo(filter) && !UtilUUID.esValorDefecto(filter.getId())) {
 			if (!UtilObjeto.getInstance().esNulo(filter.getId()) && !UtilUUID.esValorDefecto(filter.getId())) {
 				sentenciaSQL.append(" AND id = ?");
 			}

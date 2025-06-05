@@ -105,10 +105,10 @@ public class ProductoFacadeImpl implements ProductoFacade{
 	}
 
 	@Override
-	public List<ProductoDTO> consultarProductos(ProductoDTO filtro) throws LilfacException {
+	public List<ProductoDTO> consultarProductosFiltro(ProductoDTO filtro) throws LilfacException {
 		try {
 			var productoFilter = ProductoDTOAssembler.getInstance().toDomain(filtro);
-			List<ProductoDomain> productosDomain = productoBusinessLogic.consultarProductos(productoFilter);
+			List<ProductoDomain> productosDomain = productoBusinessLogic.consultarProductosFiltro(productoFilter);
 			return ProductoDTOAssembler.getInstance().toDto(productosDomain);
 		} catch (LilfacException exception) {
 			daoFactory.cancelarTransaccion();
@@ -118,6 +118,26 @@ public class ProductoFacadeImpl implements ProductoFacade{
 			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los productos";
 			
 			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}
+	}
+
+
+	@Override
+	public List<ProductoDTO> consultarProductos() throws LilfacException {
+		try {
+			daoFactory.abrirConexion();
+			List<ProductoDomain> productosDomain = productoBusinessLogic.consultarProductos();
+			return ProductoDTOAssembler.getInstance().toDto(productosDomain);
+		} catch (LilfacException exception) {
+			daoFactory.cancelarTransaccion();
+			throw exception;
+		}catch (Exception exception) {
+			var mensajeUsuario="Se ha presentado un problema INESPERADO tratando de consultar la información de los productos";
+			var mensajeTecnico="Se presentó una excepción NO CONTROLADA de tipo Exception tratando de consultar la informacion de los productos";
+			
+			throw BusinessLogicLilfacException.reportar(mensajeUsuario, mensajeTecnico, exception);
+		}finally {
+			daoFactory.cerrarConexion();
 		}
 	}
 

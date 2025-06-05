@@ -12,6 +12,6 @@ public interface ProductoBusinessLogic {
 	void modificarProductoExistente(UUID id, ProductoDomain producto)throws LilfacException;
 	void darBajaDefinitivamenteProductoExistente(UUID id)throws LilfacException;
 	ProductoDomain consultarProductoPorId(UUID id)throws LilfacException;
-	List<ProductoDomain> consultarProductos(ProductoDomain filtro)throws LilfacException;
-
+	List<ProductoDomain> consultarProductosFiltro(ProductoDomain filtro)throws LilfacException;
+	List<ProductoDomain>consultarProductos()throws LilfacException;
 }

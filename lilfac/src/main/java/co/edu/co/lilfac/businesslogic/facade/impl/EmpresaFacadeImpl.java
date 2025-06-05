@@ -1,5 +1,6 @@
 package co.edu.co.lilfac.businesslogic.facade.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import co.edu.co.lilfac.businesslogic.businesslogic.EmpresaBusinessLogic;
@@ -81,5 +82,11 @@ public class EmpresaFacadeImpl implements EmpresaFacade{
 			daoFactory.cerrarConexion();
 		}
 
+	}
+
+	@Override
+	public List<EmpresaDTO> consultarEmpresas() throws LilfacException {
+		List<EmpresaDomain> empresaDomain = empresaBusinessLogic.consultarEmpresas();
+		return EmpresaDTOAssembler.getInstance().toDto(empresaDomain);
 	}
 }

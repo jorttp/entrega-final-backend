@@ -42,10 +42,16 @@ public class CategoriaBusinessLogicImpl implements CategoriaBusinessLogic {
 	}
 
 	@Override
-	public List<CategoriaDomain> consultarCategorias(CategoriaDomain filtro) throws LilfacException {
+	public List<CategoriaDomain> consultarCategoriasFiltro(CategoriaDomain filtro) throws LilfacException {
 		
 		var categoriaFilter = CategoriaEntityAssembler.getInstance().toEntity(filtro);
 		List<CategoriaEntity> categoriaEntities = factory.getCategoriaDAO().listByFIlter(categoriaFilter);
+		return CategoriaEntityAssembler.getInstance().toDomain(categoriaEntities);
+	}
+
+	@Override
+	public List<CategoriaDomain> consultarCategorias() throws LilfacException {
+		List<CategoriaEntity> categoriaEntities = factory.getCategoriaDAO().listAll();
 		return CategoriaEntityAssembler.getInstance().toDomain(categoriaEntities);
 	}
 

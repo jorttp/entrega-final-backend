@@ -12,6 +12,6 @@ public interface ProductoFacade {
 	void modificarProductoExistente(UUID id, ProductoDTO producto)throws LilfacException;
 	void darBajaDefinitivamenteProductoExistente(UUID id)throws LilfacException;
 	ProductoDTO consultarProductoPorId(UUID id)throws LilfacException;
-	List<ProductoDTO> consultarProductos(ProductoDTO filtro)throws LilfacException;
-
+	List<ProductoDTO> consultarProductosFiltro(ProductoDTO filtro)throws LilfacException;
+	List<ProductoDTO>consultarProductos()throws LilfacException;
 }

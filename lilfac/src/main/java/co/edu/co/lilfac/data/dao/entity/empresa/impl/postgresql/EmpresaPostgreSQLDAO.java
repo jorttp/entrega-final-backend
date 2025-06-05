@@ -150,7 +150,8 @@ public class EmpresaPostgreSQLDAO implements EmpresaDAO{
 	    List<EmpresaEntity> listaEmpresas = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad FROM empresa E JOIN ciudad C ON E.ciudad = C.id");
+	    sentenciaSQL.append("SELECT E.id, E.nombre, E.nit, E.telefono, E.correo, E.direccion, C.nombre AS nombre_ciudad "
+	    		+ "FROM empresa E JOIN ciudad C ON E.ciudad = C.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {

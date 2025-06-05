@@ -119,7 +119,8 @@ public class CiudadPostgreSQLDAO implements CiudadDAO{
 	    List<CiudadEntity> listaCiudades = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento FROM ciudad C JOIN departamento D ON C.departamento = D.id");
+	    sentenciaSQL.append("SELECT C.id, C.nombre, D.nombre AS nombre_departamento "
+	    		+ "FROM ciudad C JOIN departamento D ON C.departamento = D.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {

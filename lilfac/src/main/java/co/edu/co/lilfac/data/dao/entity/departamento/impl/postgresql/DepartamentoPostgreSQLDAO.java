@@ -118,7 +118,8 @@ public class DepartamentoPostgreSQLDAO implements DepartamentoDAO{
 	    List<DepartamentoEntity> listaDepartamentos = new ArrayList<>();
 	    var sentenciaSQL = new StringBuilder();
 
-	    sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais FROM departamento D JOIN pais P ON D.pais = P.id");
+	    sentenciaSQL.append("SELECT D.id, D.nombre, P.nombre AS nombre_pais "
+	    		+ "FROM departamento D JOIN pais P ON D.pais = P.id");
 
 	    try (var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString());
 	         var resultados = sentenciaPreparada.executeQuery()) {

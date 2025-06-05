@@ -12,6 +12,6 @@ public interface CategoriaBusinessLogic {
 	void modificarCategoriaExistente(UUID id, CategoriaDomain categoria)throws LilfacException;
 	void darBajaDefinitivamenteCategoriaExistente(UUID id)throws LilfacException;
 	CategoriaDomain consultarCategoriaPorId(UUID id)throws LilfacException;
-	List<CategoriaDomain> consultarCategorias(CategoriaDomain filtro)throws LilfacException;
-
+	List<CategoriaDomain> consultarCategoriasFiltro(CategoriaDomain filtro)throws LilfacException;
+	List<CategoriaDomain>consultarCategorias()throws LilfacException;
 }

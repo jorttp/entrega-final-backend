@@ -45,7 +45,7 @@ public class ProductoDTOAssembler implements DTOAssembler<ProductoDTO, ProductoD
 		for (ProductoDomain productoDomain : domainList) {
 			listaResultados.add(toDto(productoDomain));
 		}
-		return null;
+		return listaResultados;
 	}
 
 

@@ -12,6 +12,6 @@ public interface CategoriaFacade {
 	void modificarCategoriaExistente(UUID id, CategoriaDTO categoria)throws LilfacException;
 	void darBajaDefinitivamenteCategoriaExistente(UUID id)throws LilfacException;
 	CategoriaDTO consultarCategoriaPorId(UUID id)throws LilfacException;
-	List<CategoriaDTO> consultarCategorias(CategoriaDTO filtro)throws LilfacException;
-
+	List<CategoriaDTO> consultarCategoriasFiltro(CategoriaDTO filtro)throws LilfacException;
+	List<CategoriaDTO>consultarCategorias()throws LilfacException;
 }
