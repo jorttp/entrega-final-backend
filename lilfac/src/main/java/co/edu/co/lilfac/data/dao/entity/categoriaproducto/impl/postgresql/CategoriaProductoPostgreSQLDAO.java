@@ -21,39 +21,7 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 	
 	public CategoriaProductoPostgreSQLDAO(Connection conexion) {
 		this.conexion=conexion;
-	}
-	
-	private UUID obtenerIdProductoPorNombre(String nombreProducto) throws SQLException {
-	    var sql = "SELECT id FROM producto WHERE nombre = ?";
-	    
-	    try (var sentencia = conexion.prepareStatement(sql)) {
-	        sentencia.setString(1, nombreProducto);
-
-	        try (var resultado = sentencia.executeQuery()) {
-	            if (resultado.next()) {
-	                return UUID.fromString(resultado.getString("id"));
-	            } else {
-	                throw new SQLException("No se encontró ningun producto con el nombre brindado");
-	            }
-	        }
-	    }
-	}
-	
-	private UUID obtenerIdCategoriaPorNombre(String nombreCategoria) throws SQLException {
-	    var sql = "SELECT id FROM categoria WHERE nombre = ?";
-	    
-	    try (var sentencia = conexion.prepareStatement(sql)) {
-	        sentencia.setString(1, nombreCategoria);
-
-	        try (var resultado = sentencia.executeQuery()) {
-	            if (resultado.next()) {
-	                return UUID.fromString(resultado.getString("id"));
-	            } else {
-	                throw new SQLException("No se encontró ninguna categoria con el nombre brindado");
-	            }
-	        }
-	    }
-	}
+	}	
 
 	@Override
 	public void create(CategoriaProductoEntity entity) throws LilfacException {
@@ -63,12 +31,9 @@ public class CategoriaProductoPostgreSQLDAO implements CategoriaProductoDAO{
 		
 		try(var sentenciaPreparada = conexion.prepareStatement(sentenciaSQL.toString())){
 			
-			UUID idProducto = obtenerIdProductoPorNombre(entity.getProducto().getNombre());
-			UUID idCategoria = obtenerIdCategoriaPorNombre(entity.getCategoria().getNombre());
-			
 			sentenciaPreparada.setObject(1, entity.getId());
-			sentenciaPreparada.setObject(2, idProducto);
-			sentenciaPreparada.setObject(3, idCategoria);
+			sentenciaPreparada.setObject(2, entity.getProducto().getId());
+			sentenciaPreparada.setObject(3, entity.getCategoria().getId());
 			sentenciaPreparada.executeUpdate();
 			
 		} catch (SQLException exception) {

@@ -24,57 +24,29 @@ public class CategoriaProductoBusinessLogicImpl implements CategoriaProductoBusi
 	}
 	
 	private void validarIntegridadInformacionCategoriaProducto(CategoriaProductoDomain categoriaProducto) throws LilfacException{
-		validarIntegridadNombreProducto(categoriaProducto.getProducto().getNombre());
-		validarIntegridadNombreCategoria(categoriaProducto.getCategoria().getNombre());
-		validarProductoExistente(categoriaProducto.getProducto().getNombre());
-		validarCategoriaExistente(categoriaProducto.getCategoria().getNombre());
+		validarProductoExistente(categoriaProducto.getProducto().getId());
+		validarCategoriaExistente(categoriaProducto.getCategoria().getId());
 	}
 	
-	private void validarIntegridadNombreProducto(String nombreProducto) throws LilfacException {
-		if (UtilTexto.getInstance().esNula(nombreProducto)) {
-			throw BusinessLogicLilfacException.reportar("El nombre del producto no puede ser un valor nulo");
+	private void validarProductoExistente(UUID idProducto) throws LilfacException {
+		if (UtilUUID.esValorDefecto(idProducto)) {
+			throw BusinessLogicLilfacException.reportar("ID no valido");
 		}
-		if (UtilTexto.getInstance().estaVacia(nombreProducto)) {
-			throw BusinessLogicLilfacException.reportar("el nombre de el producto es un campo obligatorio");
-		}
-		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombreProducto).length() > 100) {
-			throw BusinessLogicLilfacException.reportar("el nombre de el producto supera los 100 caracteres");
-		}
-		if (!UtilTexto.getInstance().ContieneSoloLetrasEspacios(nombreProducto)) {
-			throw BusinessLogicLilfacException.reportar("el nombre de el producto solo puede contener letras y espacios");
+		
+		var producto = factory.getProductoDAO().listById(idProducto);
+		if(UtilUUID.esValorDefecto(producto.getId())) {
+			throw BusinessLogicLilfacException.reportar("el producto no existe");
 		}
 	}
 	
-	private void validarIntegridadNombreCategoria(String nombreCategoria) throws LilfacException {
-		if (UtilTexto.getInstance().esNula(nombreCategoria)) {
-			throw BusinessLogicLilfacException.reportar("El nombre de la categoria no puede ser un valor nulo");
+	private void validarCategoriaExistente(UUID idCategoria) throws LilfacException {
+		if (UtilUUID.esValorDefecto(idCategoria)) {
+			throw BusinessLogicLilfacException.reportar("ID no valido");
 		}
-		if (UtilTexto.getInstance().estaVacia(nombreCategoria)) {
-			throw BusinessLogicLilfacException.reportar("el nombre de la categoria es un campo obligatorio");
-		}
-		if (UtilTexto.getInstance().quitarEspaciosBlancoInicioFin(nombreCategoria).length() > 100) {
-			throw BusinessLogicLilfacException.reportar("el nombre de la categoria supera los 100 caracteres");
-		}
-		if (!UtilTexto.getInstance().ContieneSoloLetrasEspacios(nombreCategoria)) {
-			throw BusinessLogicLilfacException.reportar("el nombre de la categoria solo puede contener letras y espacios");
-		}
-	}
-	
-	private void validarProductoExistente(String nombre) throws LilfacException {
-		var filtro = new ProductoEntity();
-		filtro.setNombre(nombre);
-		var listaResultados = factory.getProductoDAO().listByFIlter(filtro);
-		if (listaResultados.isEmpty()) {
-			throw BusinessLogicLilfacException.reportar("producto no existente");
-		}
-	}
-	
-	private void validarCategoriaExistente(String nombre) throws LilfacException {
-		var filtro = new CategoriaEntity();
-		filtro.setNombre(nombre);
-		var listaResultados = factory.getCategoriaDAO().listByFIlter(filtro);
-		if (listaResultados.isEmpty()) {
-			throw BusinessLogicLilfacException.reportar("categoria no existente");
+		
+		var categoria = factory.getCategoriaDAO().listById(idCategoria);
+		if(UtilUUID.esValorDefecto(categoria.getId())) {
+			throw BusinessLogicLilfacException.reportar("la categoria no existe");
 		}
 	}
 	
